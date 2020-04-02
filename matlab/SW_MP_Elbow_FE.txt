@@ -1,0 +1,31 @@
+Mass properties of selected components
+     Coordinate system: Coordinate System1
+
+Mass = 7.10726178 kilograms
+
+Volume = 0.00101532 cubic meters
+
+Surface area = 0.29614442 square meters
+
+Center of mass: ( meters )
+	X = -0.00932668
+	Y = 0.07272380
+	Z = 0.18779160
+
+Principal axes of inertia and principal moments of inertia: ( kilograms * square meters )
+Taken at the center of mass.
+	 Ix = ( 0.13127690,  0.57810290,  0.80533435)   	Px = 0.01981243
+	 Iy = ( 0.27439297, -0.80181568,  0.53084848)   	Py = 0.13959884
+	 Iz = ( 0.95261476,  0.15128995, -0.26388725)   	Pz = 0.14157141
+
+Moments of inertia: ( kilograms * square meters )
+Taken at the center of mass and aligned with the output coordinate system.
+	Lxx = 0.13932454	Lxy = 0.00880649	Lxz = 0.01315990
+	Lyx = 0.00880649	Lyy = 0.09961102	Lyz = 0.05584725
+	Lzx = 0.01315990	Lzy = 0.05584725	Lzz = 0.06204712
+
+Moments of inertia: ( kilograms * square meters )
+Taken at the output coordinate system.
+	Ixx = 0.42755554	Ixy = 0.00398584	Ixz = 0.00071174
+	Iyx = 0.00398584	Iyy = 0.35087171	Iyz = 0.15291055
+	Izx = 0.00071174	Izy = 0.15291055	Izz = 0.10025390
