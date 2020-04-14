@@ -12,18 +12,6 @@ function [ T ] = mdhtf( gamma, b, alpha, d, theta, r)
          sin(alpha)*sin(theta),                                   sin(alpha)*cos(theta),                                   cos(alpha),            r*cos(alpha)+b;
          0,                                                       0,                                                       0,                     1];
     
-    for i=1:4
-        for j = 1:4
-            [C,c] = coeffs(T(i,j));
-            for k=1:length(c)
-               if C(k) < 1e-5
-                   C(k) = 0;
-               end
-            end
-            if ~isempty(c)
-                T(i,j) = dot(C,c);
-            end
-        end
-    end
+    T = zeromat(T,1e-10);
 end
 

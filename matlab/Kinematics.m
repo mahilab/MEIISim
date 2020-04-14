@@ -67,19 +67,14 @@ for i = 2:num_of_links
     hold on
 end
 
-% Add a link number to this matrix in order to skip it in plotting
-skip = [12];
-
 % Plot each of the coordinate frames
 for i = 1:num_of_links+1
-    if(~ismember(i,skip))
-        plot3([O(i,1),X(i,1)],[O(i,2),X(i,2)],[O(i,3),X(i,3)],'r')
-        hold on
-        plot3([O(i,1),Y(i,1)],[O(i,2),Y(i,2)],[O(i,3),Y(i,3)],'g')
-        hold on 
-        plot3([O(i,1),Z(i,1)],[O(i,2),Z(i,2)],[O(i,3),Z(i,3)],'b')
-        hold on
-    end
+    plot3([O(i,1),X(i,1)],[O(i,2),X(i,2)],[O(i,3),X(i,3)],'r')
+    hold on
+    plot3([O(i,1),Y(i,1)],[O(i,2),Y(i,2)],[O(i,3),Y(i,3)],'g')
+    hold on 
+    plot3([O(i,1),Z(i,1)],[O(i,2),Z(i,2)],[O(i,3),Z(i,3)],'b')
+    hold on
 end
 xlabel('x')
 ylabel('y')
@@ -91,3 +86,52 @@ zlabel('z')
 
 view(gca,0,0)    % (-z,x)
 camroll(90)
+
+%% Parallel kinematics
+syms px py pz w_alpha w_beta w_gamma r
+
+alpha_13 = 5*pi/180;
+r = 0.05288174521;
+
+r_p = [px py pz].';
+
+R_5_13 = Rz(-alpha_5)*Ry(w_alpha)*Rz(w_beta)*Rx(w_gamma); % PROBABLY NOT RIGHT
+R_5_13 = R_5_13(1:3,1:3);
+
+r_A11 = TRANSx(R)*TRANSy(a56);
+r_A11 = r_A11(1:3,4);
+r_A21 = Rz(2*pi/3)*TRANSx(R)*TRANSy(a56);
+r_A21 = r_A21(1:3,4);
+r_A31 = Rz(4*pi/3)*TRANSx(R)*TRANSy(a56);
+r_A31 = r_A31(1:3,4);
+
+p_r_A16 = Rz(alpha_13)*TRANSx(r);
+p_r_A16 = p_r_A16(1:3,4);
+p_r_A26 = Rz(alpha_13+2*pi/3)*TRANSx(r);
+p_r_A26 = p_r_A26(1:3,4);
+p_r_A36 = Rz(alpha_13+4*pi/3)*TRANSx(r);
+p_r_A36 = p_r_A36(1:3,4);
+
+p_r = [px, py, pz].';
+
+r_A16 = p_r + R_5_13.'*p_r_A16;
+r_A26 = p_r + R_5_13.'*p_r_A26;
+r_A36 = p_r + R_5_13.'*p_r_A36;
+
+h = [(r_A16(1) - r_A11(1))^2 + (r_A16(2) - r_A11(2))^2 + (r_A16(3) - r_A11(3))^2 - q32^2;
+     (r_A26(1) - r_A21(1))^2 + (r_A26(2) - r_A21(2))^2 + (r_A26(3) - r_A21(3))^2 - q42^2;
+     (r_A36(1) - r_A31(1))^2 + (r_A36(2) - r_A31(2))^2 + (r_A36(3) - r_A31(3))^2 - q52^2];
+ 
+vars = [px, py, pz, w_alpha, w_beta, w_gamma];
+var_vals = [0 0 0.1 0 0 0];
+vpa(subs(solve(h(1)==0,q32),vars,var_vals),3)
+vpa(subs(solve(h(2)==0,q42),vars,var_vals),3)
+vpa(subs(solve(h(3)==0,q52),vars,var_vals),3)
+% solve(h(1),q32)
+% solve(h(1),q32)
+
+%% Parallel velocity analysis
+
+for i = 1:2
+    a(i) = 
+end
