@@ -119,10 +119,9 @@ par_sel = [4,5,6];
 ser_sel = [10,11,7];
 qp_0 = [theta_0; theta_0; theta_0; l_0; l_0; l_0; l_0*sin(theta_0); 0; 0; 0; 0; 0 ];
 
-% q_ser = [-0.455173816243597, -0.469953566203639, 0.078685071468735 ]';
-alpha = -25:25;
-beta = -25:25;
-x = 0.08:0.001:0.12;
+alpha = -25:2:25;
+beta = -25:2:25;
+x = 0.08:0.002:0.12;
 
 diffs = zeros(12,size(alpha,2)*size(beta,2)*size(x,2));
 i = 1;
@@ -178,5 +177,5 @@ theta_corr = 2.73495967-pi/2; % rad
 abs(qp_ik(1)-theta_corr)
 abs(qp_ik(4)-l_corr)
 
-vpa(abs(qp_ik_2(1)-theta_corr),12)
-vpa(abs(qp_ik_2(4)-l_corr),12)
+abs(qp_ik_2(1)-theta_corr)
+abs(qp_ik_2(4)-l_corr)

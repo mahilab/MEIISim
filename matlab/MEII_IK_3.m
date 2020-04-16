@@ -16,21 +16,25 @@ c_ = 2*atan((r*cos(a_)*cos(alpha_5)*cos(alpha_13) - (r^2 - 4*a56^2 + r^2*cos(a_)
 yc = (3*r*cos(a_)*cos(alpha_13)*cos(c_))/2 - 2*a56*sin(alpha_5) + (r*cos(alpha_13)*cos(b_)*cos(c_))/2 - (3*r*cos(a_)*sin(alpha_13)*sin(c_))/2 - (r*cos(b_)*sin(alpha_13)*sin(c_))/2 - (3*r*cos(alpha_13)*sin(a_)*sin(b_)*sin(c_))/2 - (3*r*cos(c_)*sin(a_)*sin(alpha_13)*sin(b_))/2 - 2*r*cos(a_)*cos(alpha_5)^2*cos(alpha_13)*cos(c_) + 2*r*cos(a_)*cos(alpha_5)^2*sin(alpha_13)*sin(c_) + 2*r*cos(alpha_5)^2*cos(alpha_13)*sin(a_)*sin(b_)*sin(c_) + 2*r*cos(alpha_5)^2*cos(c_)*sin(a_)*sin(alpha_13)*sin(b_) - 2*r*cos(alpha_5)*cos(alpha_13)*cos(b_)*sin(alpha_5)*sin(c_) - 2*r*cos(alpha_5)*cos(b_)*cos(c_)*sin(alpha_5)*sin(alpha_13);
 zc = 2*a56*cos(alpha_5) + (r*cos(a_)*cos(alpha_13)*sin(c_))/2 + (r*cos(a_)*cos(c_)*sin(alpha_13))/2 - (r*cos(alpha_13)*cos(b_)*sin(c_))/2 - (r*cos(b_)*cos(c_)*sin(alpha_13))/2 + (r*cos(alpha_13)*cos(c_)*sin(a_)*sin(b_))/2 - (r*sin(a_)*sin(alpha_13)*sin(b_)*sin(c_))/2 + 2*r*cos(alpha_5)^2*cos(alpha_13)*cos(b_)*sin(c_) + 2*r*cos(alpha_5)^2*cos(b_)*cos(c_)*sin(alpha_13) - 2*r*cos(a_)*cos(alpha_5)*cos(alpha_13)*cos(c_)*sin(alpha_5) + 2*r*cos(a_)*cos(alpha_5)*sin(alpha_5)*sin(alpha_13)*sin(c_) + 2*r*cos(alpha_5)*cos(alpha_13)*sin(a_)*sin(alpha_5)*sin(b_)*sin(c_) + 2*r*cos(alpha_5)*cos(c_)*sin(a_)*sin(alpha_5)*sin(alpha_13)*sin(b_);
 
-P{1} = [0; R*cos(alpha_5) + a56*sin(alpha_5); R*sin(alpha_5) - a56*cos(alpha_5)];
-P{2} = [0; - R*(cos(alpha_5)/2 - (3^(1/2)*sin(alpha_5))/2) - a56*(sin(alpha_5)/2 + (3^(1/2)*cos(alpha_5))/2);   a56*(cos(alpha_5)/2 - (3^(1/2)*sin(alpha_5))/2) - R*(sin(alpha_5)/2 + (3^(1/2)*cos(alpha_5))/2)];
-P{3} = [0; - R*(cos(alpha_5)/2 + (3^(1/2)*sin(alpha_5))/2) - a56*(sin(alpha_5)/2 - (3^(1/2)*cos(alpha_5))/2);   a56*(cos(alpha_5)/2 + (3^(1/2)*sin(alpha_5))/2) - R*(sin(alpha_5)/2 - (3^(1/2)*cos(alpha_5))/2)];
+P1 = [0; R*cos(alpha_5) + a56*sin(alpha_5); R*sin(alpha_5) - a56*cos(alpha_5)];
+P2 = [0; - R*(cos(alpha_5)/2 - (3^(1/2)*sin(alpha_5))/2) - a56*(sin(alpha_5)/2 + (3^(1/2)*cos(alpha_5))/2);   a56*(cos(alpha_5)/2 - (3^(1/2)*sin(alpha_5))/2) - R*(sin(alpha_5)/2 + (3^(1/2)*cos(alpha_5))/2)];
+P3 = [0; - R*(cos(alpha_5)/2 + (3^(1/2)*sin(alpha_5))/2) - a56*(sin(alpha_5)/2 - (3^(1/2)*cos(alpha_5))/2);   a56*(cos(alpha_5)/2 + (3^(1/2)*sin(alpha_5))/2) - R*(sin(alpha_5)/2 - (3^(1/2)*cos(alpha_5))/2)];
 
-B{1} = [xc + r*cos(alpha_13)*(sin(a_)*sin(c_) - cos(a_)*cos(c_)*sin(b_)) + r*sin(alpha_13)*(cos(c_)*sin(a_) + cos(a_)*sin(b_)*sin(c_)); yc + r*cos(alpha_13)*cos(b_)*cos(c_) - r*cos(b_)*sin(alpha_13)*sin(c_); zc + r*cos(alpha_13)*(cos(a_)*sin(c_) + cos(c_)*sin(a_)*sin(b_)) + r*sin(alpha_13)*(cos(a_)*cos(c_) - sin(a_)*sin(b_)*sin(c_))];
-B{2} = [xc - r*(sin(alpha_13)/2 + (3^(1/2)*cos(alpha_13))/2)*(cos(c_)*sin(a_) + cos(a_)*sin(b_)*sin(c_)) - r*(cos(alpha_13)/2 - (3^(1/2)*sin(alpha_13))/2)*(sin(a_)*sin(c_) - cos(a_)*cos(c_)*sin(b_)); yc - r*cos(b_)*cos(c_)*(cos(alpha_13)/2 - (3^(1/2)*sin(alpha_13))/2) + r*cos(b_)*sin(c_)*(sin(alpha_13)/2 + (3^(1/2)*cos(alpha_13))/2); zc - r*(cos(alpha_13)/2 - (3^(1/2)*sin(alpha_13))/2)*(cos(a_)*sin(c_) + cos(c_)*sin(a_)*sin(b_)) - r*(sin(alpha_13)/2 + (3^(1/2)*cos(alpha_13))/2)*(cos(a_)*cos(c_) - sin(a_)*sin(b_)*sin(c_))];
-B{3} = [xc - r*(sin(alpha_13)/2 - (3^(1/2)*cos(alpha_13))/2)*(cos(c_)*sin(a_) + cos(a_)*sin(b_)*sin(c_)) - r*(cos(alpha_13)/2 + (3^(1/2)*sin(alpha_13))/2)*(sin(a_)*sin(c_) - cos(a_)*cos(c_)*sin(b_)); yc - r*cos(b_)*cos(c_)*(cos(alpha_13)/2 + (3^(1/2)*sin(alpha_13))/2) + r*cos(b_)*sin(c_)*(sin(alpha_13)/2 - (3^(1/2)*cos(alpha_13))/2); zc - r*(cos(alpha_13)/2 + (3^(1/2)*sin(alpha_13))/2)*(cos(a_)*sin(c_) + cos(c_)*sin(a_)*sin(b_)) - r*(sin(alpha_13)/2 - (3^(1/2)*cos(alpha_13))/2)*(cos(a_)*cos(c_) - sin(a_)*sin(b_)*sin(c_))];
+B1 = [xc + r*cos(alpha_13)*(sin(a_)*sin(c_) - cos(a_)*cos(c_)*sin(b_)) + r*sin(alpha_13)*(cos(c_)*sin(a_) + cos(a_)*sin(b_)*sin(c_)); yc + r*cos(alpha_13)*cos(b_)*cos(c_) - r*cos(b_)*sin(alpha_13)*sin(c_); zc + r*cos(alpha_13)*(cos(a_)*sin(c_) + cos(c_)*sin(a_)*sin(b_)) + r*sin(alpha_13)*(cos(a_)*cos(c_) - sin(a_)*sin(b_)*sin(c_))];
+B2 = [xc - r*(sin(alpha_13)/2 + (3^(1/2)*cos(alpha_13))/2)*(cos(c_)*sin(a_) + cos(a_)*sin(b_)*sin(c_)) - r*(cos(alpha_13)/2 - (3^(1/2)*sin(alpha_13))/2)*(sin(a_)*sin(c_) - cos(a_)*cos(c_)*sin(b_)); yc - r*cos(b_)*cos(c_)*(cos(alpha_13)/2 - (3^(1/2)*sin(alpha_13))/2) + r*cos(b_)*sin(c_)*(sin(alpha_13)/2 + (3^(1/2)*cos(alpha_13))/2); zc - r*(cos(alpha_13)/2 - (3^(1/2)*sin(alpha_13))/2)*(cos(a_)*sin(c_) + cos(c_)*sin(a_)*sin(b_)) - r*(sin(alpha_13)/2 + (3^(1/2)*cos(alpha_13))/2)*(cos(a_)*cos(c_) - sin(a_)*sin(b_)*sin(c_))];
+B3 = [xc - r*(sin(alpha_13)/2 - (3^(1/2)*cos(alpha_13))/2)*(cos(c_)*sin(a_) + cos(a_)*sin(b_)*sin(c_)) - r*(cos(alpha_13)/2 + (3^(1/2)*sin(alpha_13))/2)*(sin(a_)*sin(c_) - cos(a_)*cos(c_)*sin(b_)); yc - r*cos(b_)*cos(c_)*(cos(alpha_13)/2 + (3^(1/2)*sin(alpha_13))/2) + r*cos(b_)*sin(c_)*(sin(alpha_13)/2 - (3^(1/2)*cos(alpha_13))/2); zc - r*(cos(alpha_13)/2 + (3^(1/2)*sin(alpha_13))/2)*(cos(a_)*sin(c_) + cos(c_)*sin(a_)*sin(b_)) - r*(sin(alpha_13)/2 - (3^(1/2)*cos(alpha_13))/2)*(cos(a_)*cos(c_) - sin(a_)*sin(b_)*sin(c_))];
 
-q1 = sqrt((P{1}(1)-B{1}(1))^2 + (P{1}(2)-B{1}(2))^2 + (P{1}(3)-B{1}(3))^2);
-q2 = sqrt((P{2}(1)-B{2}(1))^2 + (P{2}(2)-B{2}(2))^2 + (P{2}(3)-B{2}(3))^2);
-q3 = sqrt((P{3}(1)-B{3}(1))^2 + (P{3}(2)-B{3}(2))^2 + (P{3}(3)-B{3}(3))^2);
+q1 = norm(P1-B1);
+q2 = norm(P2-B2);
+q3 = norm(P3-B3);
 
-theta1 = atan2(sqrt((B{1}(1) - P{1}(1))^2),sqrt((B{1}(2) - P{1}(2))^2 + (B{1}(3) - P{1}(3))^2));
-theta2 = atan2(sqrt((B{2}(1) - P{2}(1))^2),sqrt((B{2}(2) - P{2}(2))^2 + (B{2}(3) - P{2}(3))^2));
-theta3 = atan2(sqrt((B{3}(1) - P{3}(1))^2),sqrt((B{3}(2) - P{3}(2))^2 + (B{3}(3) - P{3}(3))^2));
+% theta1 = atan2(sqrt((B1(1) - P1(1))^2),sqrt((B1(2) - P1(2))^2 + (B1(3) - P1(3))^2));
+% theta2 = atan2(sqrt((B2(1) - P2(1))^2),sqrt((B2(2) - P2(2))^2 + (B2(3) - P2(3))^2));
+% theta3 = atan2(sqrt((B3(1) - P3(1))^2),sqrt((B3(2) - P3(2))^2 + (B3(3) - P3(3))^2));
+
+theta1 = atan2(abs(B1(1) - P1(1)),norm(B1(2:3) - P1(2:3)));
+theta2 = atan2(abs(B2(1) - P2(1)),norm(B2(2:3) - P2(2:3)));
+theta3 = atan2(abs(B3(1) - P3(1)),norm(B3(2:3) - P3(2:3)));
 
 qp = [theta1, theta2, theta3, q1, q2, q3, xc, yc, zc, a_, b_, c_];
 
