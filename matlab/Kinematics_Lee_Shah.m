@@ -100,7 +100,7 @@ X = linsolve(A_lin,B_lin);
 
 xc_solved = simplify(expand(X(1)))
 yc_solved = simplify(expand(X(2)))
-soln1 = simplify(expand(subs(sys_eq{1},[xc,yc],[xc_solved,yc_solved])));
+soln1 = subs(sys_eq{1},[xc,yc],[xc_solved,yc_solved]);
 
 soln_c_ = simplify(expand(solve(simplify(expand(soln1)),c_,'Real',true)))
 
@@ -109,7 +109,7 @@ for i = 1:3
     theta{i} = expand(simplify(atan(B{i}(3) - P{i}(3),sqrt((B{i}(1) - P{i}(1))^2 + (B{i}(2) - P{i}(2))^2))));
 end
 
-% vpa((subs(soln_c_(2),[a_,b_],[-0.455173816243597, -0.469953566203639])),12)
+vpa(wrapToPi((subs(soln_c_(2),[a_,b_,variables],[-0.455173816243597, -0.469953566203639,values]))-pi),12)
 %%
 theta_0 = pi/4;
 l_0 = 0.1305;
@@ -131,7 +131,7 @@ for a = alpha
         for xc = x
             q_ser = [deg2rad(a), deg2rad(b), xc];
             qp_ik = rps_solve(qp_0,ser_sel,q_ser,max_iter,tol);
-            qp_ik_2 = MEII_IK(q_ser);
+            qp_ik_2 = MEII_IK_3(q_ser);
             diffs(1:12,i) = abs(qp_ik-qp_ik_2');
             i = i + 1;
         end
@@ -141,3 +141,42 @@ end
 mean_diffs = mean(diffs,2)
 max_diffs = max(diffs,[],2)
 
+%%
+clear all;
+theta_0 = pi/4;
+l_0 = 0.11;
+max_iter = 10;
+tol = 1e-12;
+par_sel = [4,5,6];
+ser_sel = [10,11,7];
+qp_0 = [theta_0; theta_0; theta_0; l_0; l_0; l_0; l_0*sin(theta_0); 0; 0; 0; 0; 0 ];
+
+% q_ser = [-0.455173816243597, -0.469953566203639, 0.078685071468735 ]';
+alpha = 0;
+beta = 0;
+x = 0.11985873568;
+
+diffs = zeros(12,size(alpha,2)*size(beta,2)*size(x,2));
+i = 1;
+for a = alpha
+    for b = beta
+        for xc = x
+            q_ser = [deg2rad(a), deg2rad(b), xc];
+            qp_ik = rps_solve(qp_0,ser_sel,q_ser,max_iter,tol);
+            qp_ik_2 = MEII_IK_3(q_ser);
+            diffs(1:12,i) = abs(qp_ik-qp_ik_2');
+            i = i + 1;
+        end
+    end
+end
+
+mean_diffs = mean(diffs,2)
+% max_diffs = max(diffs,[],2)
+
+l_corr = 0.13050000000; % m
+theta_corr = 2.73495967-pi/2; % rad
+abs(qp_ik(1)-theta_corr)
+abs(qp_ik(4)-l_corr)
+
+vpa(abs(qp_ik_2(1)-theta_corr),12)
+vpa(abs(qp_ik_2(4)-l_corr),12)

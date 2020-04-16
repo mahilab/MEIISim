@@ -1,11 +1,12 @@
 function [qp] = MEII_IK(q_ser)
-
+format long
 % parameters
 R = 0.1044956; % [m]
 r = 0.05288174521; % [m]
 a5 = 0.0268986; % [m]
 a6 = 0.0272820; % [m]
 a56 = -(a5-a6); % [m]
+% a56 = -0.00038340001;
 alpha_5 = 0.094516665054824; % [rad]
 alpha_13 = 5*pi/180; % [rad]
 
