@@ -114,13 +114,13 @@ vpa(wrapToPi((subs(soln_c_(2),[a_,b_,variables],[-0.455173816243597, -0.46995356
 theta_0 = pi/4;
 l_0 = 0.1305;
 max_iter = 10;
-tol = 1e-50;
+tol = 1e-12;
 par_sel = [4,5,6];
 ser_sel = [10,11,7];
 qp_0 = [theta_0; theta_0; theta_0; l_0; l_0; l_0; l_0*sin(theta_0); 0; 0; 0; 0; 0 ];
 
-alpha = -25:2:25;
-beta = -25:2:25;
+alpha = -35:2:35;
+beta = -35:2:35;
 x = 0.08:0.002:0.12;
 
 diffs = zeros(12,size(alpha,2)*size(beta,2)*size(x,2));
@@ -131,7 +131,7 @@ for a = alpha
             q_ser = [deg2rad(a), deg2rad(b), xc];
             qp_ik = rps_solve(qp_0,ser_sel,q_ser,max_iter,tol);
             qp_ik_2 = MEII_IK_3(q_ser);
-            diffs(1:12,i) = abs(qp_ik-qp_ik_2');
+            diffs(1:12,i) = abs(qp_ik-qp_ik_2);
             i = i + 1;
         end
     end

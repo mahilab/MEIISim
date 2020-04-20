@@ -8,7 +8,7 @@ a56 = -(a5-a6); % [m]
 alpha_5 = 0.094516665; % [rad]
 alpha_13 = 5*pi/180; % [rad]
 
-a_ = q_ser(1);cd 
+a_ = q_ser(1);
 b_ = q_ser(2);
 xc = q_ser(3);
 
@@ -28,14 +28,10 @@ q1 = norm(P1-B1);
 q2 = norm(P2-B2);
 q3 = norm(P3-B3);
 
-% theta1 = atan2(sqrt((B1(1) - P1(1))^2),sqrt((B1(2) - P1(2))^2 + (B1(3) - P1(3))^2));
-% theta2 = atan2(sqrt((B2(1) - P2(1))^2),sqrt((B2(2) - P2(2))^2 + (B2(3) - P2(3))^2));
-% theta3 = atan2(sqrt((B3(1) - P3(1))^2),sqrt((B3(2) - P3(2))^2 + (B3(3) - P3(3))^2));
-
 theta1 = atan2(abs(B1(1) - P1(1)),norm(B1(2:3) - P1(2:3)));
 theta2 = atan2(abs(B2(1) - P2(1)),norm(B2(2:3) - P2(2:3)));
 theta3 = atan2(abs(B3(1) - P3(1)),norm(B3(2:3) - P3(2:3)));
 
-qp = [theta1, theta2, theta3, q1, q2, q3, xc, yc, zc, a_, b_, c_];
+qp = [theta1, theta2, theta3, q1, q2, q3, xc, yc, zc, a_, b_, c_].';
 
 end
