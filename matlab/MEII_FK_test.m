@@ -30,36 +30,35 @@
 % % vpa(subs(t1_solved,variables,values),12)
 % vpa(2.73495967-pi/2-thetas(1),12)
 
-%%
-syms n1 n2 n3 o1 o2 o3 a1 a2 a3 R r a56 alpha_5 alpha_13 l1 l2 l3 theta1 theta2 theta3
+%% GENERATE SYMBOLIC EXPRESSIONS
+syms n1 n2 n3 o1 o2 o3 a1 a2 a3 R r a56 alpha_5 alpha_13 l1 l2 l3 theta1 theta2 theta3 px py pz
   
 T = [n1 o1 a1;
      n2 o2 a2;
      n3 o3 a3];
 
-R = 0.1044956; % [m]
-r = 0.05288174521; % [m]
-a5 = 0.0268986; % [m]
-a6 = 0.0272820; % [m]
-a56 = -(a5-a6); % [m]
-alpha_5 = 0.094516665; % [rad]
-alpha_13 = 5*pi/180; % [rad]
+% R = 0.1044956; % [m]
+% r = 0.05288174521; % [m]
+% a5 = 0.0268986; % [m]
+% a6 = 0.0272820; % [m]
+% a56 = -(a5-a6); % [m]
+% alpha_5 = 0.094516665; % [rad]
+% alpha_13 = 5*pi/180; % [rad]
 
 gamma = [0, -2*pi/3, 2*pi/3];
 
-theta = [1.06554686464; 1.0871646663; 0.582798766322];
-l = [0.119273272676; 0.101143787974; 0.0837368660614];
+% theta = [1.06554686464; 1.0871646663; 0.582798766322];
+% l = [0.119273272676; 0.101143787974; 0.0837368660614];
 % theta = ones(3,1)*pi-(1.164174936153484886976163989065+pi/2);
 
-% l = [l1 l2 l3];
-% theta = [theta1 theta2 theta3];
+l = [l1 l2 l3];
+theta = [theta1 theta2 theta3];
 
 for i = 1:3
-    B_temp = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-theta(i))*TRANSx(l(i));
-    B{i} = B_temp(1:3,4);
+    B_temp{i} = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-theta(i))*TRANSx(l(i));
+    B{i} = B_temp{i}(1:3,4);
     b_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
     b{i} = b_temp{i}(1:3,4);
-    
 end
 
 P_c = (B{1} + B{2} + B{3})/3
@@ -83,11 +82,11 @@ o2_ = X(5);
 o3_ = X(6);
 n1_ =  o2_*a3_ - a2_*o3_;
 n2_ = -o1_*a3_ + a1_*o3_;
-% n3_ =  o1_*a2_ - o2_*a1_;
+n3_ =  o1_*a2_ - o2_*a1_;
 
-beta = vpa(asin(n2_),4)
-alpha = vpa(acos(n1_/cos(beta)),4)
-gamma = vpa(acos(o2_/cos(beta)),4)
+alpha = atan2(-n3_,n1_)
+beta = atan2(n2_,sqrt(n3_^2+n1_^2))
+gamma = atan2(-a2_,o2_)
 
 %%
 % l1 = 0.1305; l2 = 0.1305; l3 = 0.1305;
@@ -184,8 +183,8 @@ end
 vpa(pi-2.73495967-thetas(1),12)
 
 %%
-alpha = -25:0.5:25;
-beta = -25:0.5:25;
+alpha = -26:1:26;
+beta = -26:1:26;
 x = 0.08:0.002:0.13;
 
 diffs = zeros(12,size(alpha,2)*size(beta,2)*size(x,2));
@@ -198,9 +197,9 @@ for a = alpha
             q_ik = MEII_IK_3([deg2rad(a),deg2rad(b),x]);
             q_par = q_ik(4:6);
             q_fk = MEII_FK_2(q_par);
-            diffs(1:12,i+1) = q_fk-q_ik;
+            diffs(1:12,i+1) = abs(q_fk-q_ik);
             if abs(sum(diffs(1:12,i+1))) > 1e-5
-%                 incorr = incorr + 1;
+                incorr = incorr + 1;
 %                 [a b xc]
 %                 [q_ik q_fk diffs(1:12,i+1)]
             end
@@ -211,3 +210,40 @@ end
 
 mean_diffs = mean(diffs,2)
 max_diffs = max(diffs,[],2)
+incorr
+%% TESTING CRAIGS METHOD
+alpha = -26:1:26;
+beta = -26:1:26;
+x = 0.08:0.002:0.13;
+
+theta_0 = pi/4;
+l_0 = 0.11;
+max_iter = 10;
+tol = 1e-12;
+par_sel = [4,5,6];
+ser_sel = [10,11,7];
+qp_0 = [theta_0; theta_0; theta_0; l_0; l_0; l_0; l_0*sin(theta_0); 0; 0; 0; 0; 0 ];
+
+diffs = zeros(12,size(alpha,2)*size(beta,2)*size(x,2));
+i = 0;
+incorr = 0;
+for a = alpha
+    for b = beta
+        for xc = x
+            q_ser = [deg2rad(a), deg2rad(b), xc];
+            qp_ik = rps_solve(qp_0,ser_sel,q_ser,max_iter,tol);
+            qp_fk  = rps_solve(qp_0,par_sel,qp_ik(4:6),max_iter,tol);
+            diffs(1:12,i+1) = abs(qp_ik-qp_fk);
+            if abs(sum(diffs(1:12,i+1))) > 1e-5
+                incorr = incorr + 1;
+%                 [a b xc]
+%                 [q_ik q_fk diffs(1:12,i+1)]
+            end
+            i = i + 1;
+        end
+    end
+end
+
+mean_diffs = mean(diffs,2)
+max_diffs = max(diffs,[],2)
+incorr

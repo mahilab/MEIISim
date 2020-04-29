@@ -51,12 +51,9 @@ n1_ =  o2_*a3_ - a2_*o3_;
 n2_ = -o1_*a3_ + a1_*o3_;
 n3_ =  o1_*a2_ - o2_*a1_;
 
-% beta = asin(n2_); % CHECK THIS SIGN DO ATAN2S
-gamma = atan2(-a2_,o2_);
-% alpha = acos(n1_/cos(beta)); % CHECK THIS SIGN DO ATAN2S
 alpha = atan2(-n3_,n1_);
-% gamma = acos(o2_/cos(beta)); % CHECK THIS SIGN DO ATAN2S
 beta = atan2(n2_,sqrt(n3_^2+n1_^2));
+gamma = atan2(-a2_,o2_);
 
 q_out = [pi/2-theta1 pi/2-theta2 pi/2-theta3 l1 l2 l3 px py pz alpha beta gamma].';
 end

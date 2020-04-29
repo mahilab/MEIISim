@@ -1,5 +1,4 @@
 clc; clear all; close all;
-
 % Variables that can be controlled
 syms q11 q21 q12 q22 q13 q23...
      q11d q21d q12d q22d q13d q23d...
@@ -8,11 +7,11 @@ syms q11 q21 q12 q22 q13 q23...
      px  py  pz  a b c...
      d1 dp
      
-gamma = [0, 2*pi/3, 4*pi/3;
+gamma = [0, 4*pi/3, 2*pi/3;
          0, 0,      0];
  
-q = [q11 q12 q13; 
-     q21 q22 q23];
+q = [q11 q12 q13; % ls
+     q21 q22 q23];% thetas
 
 q_dot = [q11d q12d q13d; 
          q21d q22d q23d];
@@ -21,9 +20,63 @@ qa = [q11, q12, q13].';
 
 qa_dot = [q11d, q12d, q13d].';
 
+
+
+%% 
+%%%%%%%%% TRANSFORMATION MATRIX CALC %%%%%%%%%%
+syms n1 n2 n3 s1 s2 s3 a1 a2 a3 px py pz
+  
+T = [s1 n1 a1;
+     s2 n2 a2;
+     s3 n3 a3];
+
+gamma = [0, 2*pi/3, -2*pi/3];
+
+for i = 1:3
+    B_temp{i} = Rz(gamma(1,i))*TRANSx(d1)*Ry(q(2,i))*TRANSz(q(1,i));
+    B{i} = B_temp{i}(1:3,4);
+    b_temp{i} = Rz(gamma(1,i))*TRANSx(dp);
+    b_{i} = b_temp{i}(1:3,4);
+end
+
+P_c = (B{1} + B{2} + B{3})/3;
+
+P_c = [px py pz].';
+
+for i = 1:2
+    eqs_(-2+3*i:0+3*i) = T*b_{i} + P_c == B{i};
+end
+
+[A_lin,B_lin] = equationsToMatrix(eqs_, [s1 s2 s3 n1 n2 n3]);
+
+X = linsolve(A_lin,B_lin);
+
+X(1:3) = X(1:3)/norm(X(1:3));
+X(4:6) = X(4:6)/norm(X(4:6));
+
+s1_ = X(1);
+s2_ = X(2);
+s3_ = X(3);
+n1_ = X(4);
+n2_ = X(5);
+n3_ = X(6);
+a1_ =  s2_*n3_ - n2_*s3_;
+a2_ = -s1_*n3_ + n1_*s3_;
+a3_ =  s1_*n2_ - s2_*n1_;
+
+s = [s1_ s2_ s3_].';
+n = [n1_ n2_ n3_].';
+a = [a1_ a2_ a3_].';
+
+%% 
 %%%%%%%%% KINEMATIC MODEL %%%%%%%%%%%%%
 
-R_0_P = Rx(a)*Ry(b)*Rz(c);
+% R_0_P = Rx(a)*Ry(b)*Rz(c);
+s = [s1 s2 s3].';
+n = [n1 n2 n3].';
+a = [a1 a2 a3].';
+
+R_0_P = [s n a];
 P_0 = [px, py, pz].';
 
 % Eqn 5 NOT SURE ABOUT THIS
@@ -57,7 +110,8 @@ for i = 1:3
     P_0_{i} = [cos(gamma(1,i))*dp, sin(gamma(1,i))*dp, 0].';
     
     % Eqn 12 (intermediate calc)
-    PP_0_{i} = P_0_{i} - P_0;
+    PP_0_temp = T_0_P*([P_0_{i} - P_0;1]);
+    PP_0_{i} = PP_0_temp(1:3);
  
     % Eqn 12 (intermediate calc)
     PP_hat_0_{i} = crossprodmat(PP_0_{i});
@@ -126,7 +180,6 @@ J_0_p = [J_0_r;
 
 syms Mp MXp MYp MZp...
 Ipxx Ipyy Ipzz Ipxy Ipxz Ipyz...
-H11 H12 H13 H21 H22 H23...
 T1 T2 T3...
 g_
 
@@ -207,19 +260,36 @@ vp_dot = inv(A_robot)*(J_0_r_inv.'*Gamma - h_robot);
 
 %% %%%%%%%%% SECOND ORDER KINEMATIC MODEL %%%%%%%%%%%%%
      
-% for i = 1:3
-%     % Eqn 32
-%     J_1i_di_dot{i} = [-q_dot(2,i)*q_dot(1,i),0].';
-% end
+for i = 1:3
+    % Eqn 32
+    J_1i_di_dot{i} = [-q_dot(2,i)*q_dot(1,i),0].';
+end
 
 % Eqn 34
 V_dot_0_p = a_0_r*vp_dot + a_dot_0_r*v_0_p;
 
-simplified = simplify(expand(V_dot_0_p(5)))
+% simplified = simplify(expand(V_dot_0_p(5)))
 
-% for i = 1:3
-%     % Eqn 33
-%     v_dot_1i_{i} = R_1_0{i}*([eye(3), crossprodmat(PP_hat_0_{i})]*V_dot_0_p + cross(w_0_p,cross(w_0_p,PP_0_{i})));
-%     
-%     qdd(1:2,i) = J_1i_di_inv{i}*(v_dot_1i_{i}(1:2) - J_1i_di_dot{i});
-% end
+for i = 1:3
+    % Eqn 33
+    v_dot_1i_{i} = R_1_0{i}*([eye(3), crossprodmat(PP_hat_0_{i})]*V_dot_0_p + cross(w_0_p,cross(w_0_p,PP_0_{i})));
+    
+    qdd(1:2,i) = J_1i_di_inv{i}*(v_dot_1i_{i}(1:2) - J_1i_di_dot{i});
+end
+
+%% SAVE TO FILE
+qdd1_write = char(qdd(1,1));
+qdd2_write = char(qdd(2,1));
+qdd3_write = char(qdd(1,2));
+qdd4_write = char(qdd(2,2));
+qdd5_write = char(qdd(1,3));
+qdd6_write = char(qdd(2,3));
+
+fileID1 = fopen('dynamics1_meii.txt','w');
+fileID2 = fopen('dynamics2_meii.txt','w');
+fileID3 = fopen('dynamics3_meii.txt','w');
+fileID4 = fopen('dynamics4_meii.txt','w');
+fileID5 = fopen('dynamics5_meii.txt','w');
+fileID6 = fopen('dynamics6_meii.txt','w');
+
+fprintf(fileID,qdd_write)
