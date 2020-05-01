@@ -113,18 +113,18 @@ phi_z{3} = [ sqrt(3)/2; -1/2; 0];
 for i = 1:3
     r_temp{i} = Rz(gamma(i))*TRANSx(r);
     r_comp{i} = r_temp{i}(1:3,4);
-    R_0_2{i} = Rz(gamma(i))*Ry(-pi/2-(pi/2-theta(i)));
-    phi_l_comp{i} = R_0_2{i}(1:3,1);
+    R_0_2{i} = Rz(gamma(i))*Ry(-pi/2+theta(i));
+    phi_l_comp{i} = R_0_2{i}(1:3,3);
     phi_z_comp{i} = R_0_2{i}(1:3,2);
 end
 
 for i = 1:3
     % Eqn 28
-    Vbi_1{i} = Tinv(1:3,1:3)*(l_dot(i)*phi_l{i} + cross(theta_dot(i)*phi_z{i},l(i)*phi_l{i}));
+    Vbi_1{i} = Tinv(1:3,1:3)*(l_dot(i)*phi_l{i} + cross(theta_dot(i)*phi_z_comp{i},l(i)*phi_l_comp{i}));
 %     Temp{i} = T*[r{i};1];
     
     % Eqn 26
-    Vbi_2{i} = Tinv(1:3,1:3)*Vc + cross(w,r{i});
+    Vbi_2{i} = Tinv(1:3,1:3)*Vc + cross(w,r_comp{i});
     
     % Equaliy between eqn 26 and eqn 28
     eq{i} = Vbi_1{i} == Vbi_2{i};
@@ -133,7 +133,7 @@ end
 % Solving linear system of equations, choosing X relation for first joint,
 % Y relation for second joint, and Z relation for third joint. Here, if I
 % choose X,Y,Z relations for same joint, there is no solution.
-wy_solved = solve(eq{1}(3),wy);
+wy_solved = solve(eq{1}(3),wy)
 % wz_solved = simplify(w_solved(3))
 
 % wz_solved = solve(eq{1}(2),wz)

@@ -8,7 +8,7 @@ using Eigen::Vector3d;
 
 int main(){
     // std::vector<double> qs = {0.1, 0.1, 0.11, 1.0390, 0.9300, 1.0663, 0.001, 0.0001, -0.0003, 0.001, 0.001, -0.003};
-    std::vector<double> qs = {0.1, 0.1, 0.1, 1.0284, 1.0284, 1.0284, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000};
+    std::vector<double> qs = {0.1, 0.1, 0.1, 1.0284, 1.0284, 1.0284, -0.002, -0.002, -0.002, 0.000, 0.000, 0.000};
 
     Clock functime;
     // Mass Matrix
@@ -36,8 +36,8 @@ int main(){
     // Gravity vector
     Vector3d G;
     G[0] = get_G1(qs);
-    G[1] = get_G1(qs);
-    G[2] = get_G1(qs);
+    G[1] = get_G2(qs);
+    G[2] = get_G3(qs);
 
     Vector3d Tau;
     Tau[0] = 0.0;
@@ -53,6 +53,12 @@ int main(){
     Vector3d b = Tau - V*Qdot - G;// - B - Fk;
     Vector3d x = A.householderQr().solve(b);
     std::cout << functime.get_elapsed_time().as_microseconds() << std::endl;
+    // std::cout << M << std::endl;
+    std::cout << V*Qdot << std::endl;
+    std::cout << G << std::endl;
+    std::cout << M(0,0) << " " << M(0,1) << " " << M(0,2) << std::endl;
+    std::cout << M(1,0) << " " << M(1,1) << " " << M(1,2) << std::endl;
+    std::cout << M(2,0) << " " << M(2,1) << " " << M(2,2) << std::endl;
     std::cout << x << std::endl;
     // std::cout << G2 << std::endl;
     // std::cout << G3 << std::endl;
