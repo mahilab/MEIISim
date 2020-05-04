@@ -1,13 +1,24 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(OpenWristSim VERSION 0.1.0)
+project(MeiiSim VERSION 0.1.0)
 
 include(FetchContent) 
-FetchContent_Declare(mahi-util GIT_REPOSITORY https://github.com/mahilab/mahi-util.git) 
-FetchContent_MakeAvailable(mahi-util)
+FetchContent_Declare(mahi-com GIT_REPOSITORY https://github.com/mahilab/mahi-com.git) 
+FetchContent_MakeAvailable(mahi-com)
 FetchContent_Declare(mahi-robo GIT_REPOSITORY https://github.com/mahilab/mahi-robo.git) 
 FetchContent_MakeAvailable(mahi-robo)
+FetchContent_Declare(mahi-gui GIT_REPOSITORY https://github.com/mahilab/mahi-gui.git) 
+FetchContent_MakeAvailable(mahi-gui)
 
 include_directories(include)
 
-add_executable(test src/test.cpp)
+add_executable(test src/test.cpp src/MeiiModel.cpp)
 target_link_libraries(test mahi::util mahi::robo)
+
+add_executable(sim src/sim.cpp include/MeiiModel.hpp src/MeiiModel.cpp)
+target_link_libraries(sim mahi::robo mahi::com)
+
+# add_library(meii_model SHARED include/MeiiModel.hpp src/MeiiModel.cpp src/dll.cpp)
+# target_link_libraries(meii_model mahi::robo mahi::com)
+
+# add_executable(tuner src/tuner.cpp src/MeiiSim.hpp src/MeiiSim.cpp)
+# target_link_libraries(tuner mahi::gui mahi::com mahi::robo mahi::gui)

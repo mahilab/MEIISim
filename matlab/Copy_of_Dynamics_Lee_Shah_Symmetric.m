@@ -40,9 +40,9 @@ w = [wx wy wz].';
 %%
 
 for i = 1:3
-    B_temp{i} = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(ls(i));
+    B_temp{i} = Rz(gamma(i))*TRANSx(R)*Ry(-pi/2+thetas(i))*TRANSz(ls(i));
     B{i} = B_temp{i}(1:3,4);
-    b_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
+    b_temp{i} = Rz(gamma(i))*TRANSx(r);
     b{i} = b_temp{i}(1:3,4);
 end
 
@@ -52,24 +52,24 @@ for i = 1:2
     eqs_(-2+3*i:0+3*i) = T(1:3,1:3)*b{i} + P_c == B{i};
 end
 
-[A_lin,B_lin] = equationsToMatrix(eqs_, [a1 a2 a3 o1 o2 o3]);
+[A_lin,B_lin] = equationsToMatrix(eqs_, [n1 n2 n3 o1 o2 o3]);
 
 X = linsolve(A_lin,B_lin);
 
 X(1:3) = X(1:3)/norm(X(1:3));
 X(4:6) = X(4:6)/norm(X(4:6));
 
-a1_ = X(1);
-a2_ = X(2);
-a3_ = X(3);
+n1_ = X(1);
+n2_ = X(2);
+n3_ = X(3);
 o1_ = X(4);
 o2_ = X(5);
 o3_ = X(6);
-n1_ =  o2_*a3_ - a2_*o3_;
-n2_ = -o1_*a3_ + a1_*o3_;
-n3_ =  o1_*a2_ - o2_*a1_;
+a1_ =  n2_*o3_ - o2_*n3_;
+a2_ = -n1_*o3_ + o1_*n3_;
+a3_ =  n1_*o2_ - n2_*o1_;
 
-unit_vecs = [a1_ a2_ a3_ o1_ o2_ o3_ n1_ n2_ n3_];
+unit_vecs = [n1_ n2_ n3_ o1_ o2_ o3_ a1_ a2_ a3_];
 
 %%
 
@@ -86,11 +86,11 @@ end
 vx = V_c(1); vy = V_c(2); vz = V_c(3);
 
 for i = 1:3
-    r_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
+    r_temp{i} = Rz(gamma(i))*TRANSx(r);
     r_{i} = r_temp{i}(1:3,4);
-    R_0_2{i} = Rx(alpha_5 + gamma(i))*Rz(-pi/2+thetas(i));
-    phi_l{i} = R_0_2{i}(1:3,1);
-    phi_z{i} = R_0_2{i}(1:3,3);
+    R_0_2{i} = Rz(gamma(i))*Ry(-pi/2+thetas(i));
+    phi_l{i} = R_0_2{i}(1:3,3);
+    phi_z{i} = R_0_2{i}(1:3,2);
 end
 
 for i = 1:3
@@ -256,16 +256,16 @@ Gpar = subs(Gpar);
 %%
 mass_props = [Ixx Iyy Izz Mp Ml l_offset g];
 mass_values = [0.00091827 0.00080377 0.00138661 0.36486131 0.14820004 0.08803884 9.81];
-q_q_dot_vals = [0.11 0.1 0.09 1.0284, 1.0284, 1.0284, -0.002, -0.002, -0.002, 0.001 0.001 0.001];
+q_q_dot_vals = [0.1 0.1 0.1 1.0284, 1.0284, 1.0284, -0.002, -0.002, -0.002, 0.001 0.001 0.001];
 q_ddot_vals = [0.02 0.01 -0.01 0.03 -0.002 0.04];
 variables = [r R alpha_5 alpha_13 a56];
 values = [0.05288174521 0.1044956 0.094516665 5*pi/180 3.8340e-04];
-test = subs(subs(Mpar),[qs q_dots q_d_dots variables mass_props], [q_q_dot_vals q_ddot_vals values mass_values]);
+test = subs(subs(M),[qs q_dots q_d_dots variables mass_props], [q_q_dot_vals q_ddot_vals values mass_values]);
 
 vpa(test,4)
 
 %% Write parallel structure to file
-% 
+
 % for i = 1:3
 %     for j = 1:3
 %         M_write = ccode(vpa(Mpar(i,j),3));

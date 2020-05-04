@@ -40,9 +40,9 @@ w = [wx wy wz].';
 %%
 
 for i = 1:3
-    B_temp{i} = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(ls(i));
+    B_temp{i} = Rz(gamma(i))*TRANSx(R)*Ry(-pi/2+thetas(i))*TRANSz(ls(i));
     B{i} = B_temp{i}(1:3,4);
-    b_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
+    b_temp{i} = Rz(gamma(i))*TRANSx(r);
     b{i} = b_temp{i}(1:3,4);
 end
 
@@ -52,24 +52,24 @@ for i = 1:2
     eqs_(-2+3*i:0+3*i) = T(1:3,1:3)*b{i} + P_c == B{i};
 end
 
-[A_lin,B_lin] = equationsToMatrix(eqs_, [a1 a2 a3 o1 o2 o3]);
+[A_lin,B_lin] = equationsToMatrix(eqs_, [n1 n2 n3 o1 o2 o3]);
 
 X = linsolve(A_lin,B_lin);
 
 X(1:3) = X(1:3)/norm(X(1:3));
 X(4:6) = X(4:6)/norm(X(4:6));
 
-a1_ = X(1);
-a2_ = X(2);
-a3_ = X(3);
+n1_ = X(1);
+n2_ = X(2);
+n3_ = X(3);
 o1_ = X(4);
 o2_ = X(5);
 o3_ = X(6);
-n1_ =  o2_*a3_ - a2_*o3_;
-n2_ = -o1_*a3_ + a1_*o3_;
-n3_ =  o1_*a2_ - o2_*a1_;
+a1_ =  n2_*o3_ - o2_*n3_;
+a2_ = -n1_*o3_ + o1_*n3_;
+a3_ =  n1_*o2_ - n2_*o1_;
 
-unit_vecs = [a1_ a2_ a3_ o1_ o2_ o3_ n1_ n2_ n3_];
+unit_vecs = [n1_ n2_ n3_ o1_ o2_ o3_ a1_ a2_ a3_];
 
 %%
 
@@ -86,11 +86,11 @@ end
 vx = V_c(1); vy = V_c(2); vz = V_c(3);
 
 for i = 1:3
-    r_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
+    r_temp{i} = Rz(gamma(i))*TRANSx(r);
     r_{i} = r_temp{i}(1:3,4);
-    R_0_2{i} = Rx(alpha_5 + gamma(i))*Rz(-pi/2-thetas(i));
-    phi_l{i} = R_0_2{i}(1:3,1);
-    phi_z{i} = R_0_2{i}(1:3,3);
+    R_0_2{i} = Rz(gamma(i))*Ry(-pi/2-thetas(i));
+    phi_l{i} = R_0_2{i}(1:3,3);
+    phi_z{i} = R_0_2{i}(1:3,2);
 end
 
 for i = 1:3
@@ -100,8 +100,8 @@ for i = 1:3
 end
 
 wx_solved = simplify(solve(eq{1}(2),wx));
-[A,B] = equationsToMatrix([eq{1}(1);eq{2}(1)], [wy wz]);
-wy_wz = A\B;
+[Alin,Blin] = equationsToMatrix([eq{1}(1);eq{2}(1)], [wy wz]);
+wy_wz = Alin\Blin;
 wy_solved = simplify(wy_wz(1));
 wz_solved = simplify(wy_wz(2));
 
@@ -120,8 +120,8 @@ sum_By  = 0;
 for i = 1:3
     d{i} = (ls(i) - l_offset);
     sum_d_thetadot2 = sum_d_thetadot2 + d{i}^2*theta_dots(i)^2;
-    B_temp{i} = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(d{i});
-    By{i} = B_temp{i}(2,4);
+    B_temp_y{i} = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(d{i});
+    By{i} = B_temp_y{i}(2,4);
     sum_By = sum_By + By{i};
 end
 

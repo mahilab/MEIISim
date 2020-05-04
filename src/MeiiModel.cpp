@@ -1,12 +1,29 @@
 #include "MeiiModel.hpp"
+#include "Eqns.hpp"
 #include <Eigen/Dense>
 
 using Eigen::Matrix3d;
+using Eigen::MatrixXd;
 using Eigen::Vector3d;
+using Eigen::VectorXd;
 
 using namespace mahi::util;
 
-MeiiModel::OpenWristModel() : 
+inline double hardstop_torque(double q, double qd, double qmin, double qmax, double K, double B) {
+    if (q < qmin)
+        return K * (qmin - q) - B * qd;
+    else if (q > qmax){
+        std::cout << K * (qmax - q) - B * qd << std::endl;
+        return K * (qmax - q) - B * qd;
+    }
+    else
+        return 0;
+}
+
+MeiiModel::MeiiModel() : 
+    lim1(tau1_mot_cont * eta1, tau1_mot_max * eta1, seconds(2)),
+    lim2(tau2_mot_cont * eta2, tau2_mot_max * eta2, seconds(2)),
+    lim3(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2))
 {
     reset();
 }
@@ -14,12 +31,14 @@ MeiiModel::OpenWristModel() :
 void MeiiModel::update(Time t)
 {
     // limit torques
-    tau1 = lim1.limit(tau1);
-    tau2 = lim2.limit(tau2);
-    tau3 = lim3.limit(tau3);
+    // tau1 = lim1.limit(tau1);
+    // tau2 = lim2.limit(tau2);
+    // tau3 = lim3.limit(tau3);
 
     // get list of qs and q_dots
-    std::vector<double> qs = {q1 q2 q3 q4 q5 q6 q1d q2d q3d q4d q5d q6d}
+    std::vector<double> qs = {q1, q2, q3, q4, q5, q6, q1d, q2d, q3d, q4d, q5d, q6d};
+
+    Vector3d qdot(q1d,q2d,q3d);
 
     // Mass matrix
     Matrix3d M;
@@ -54,8 +73,8 @@ void MeiiModel::update(Time t)
     // Gravity vector
     Vector3d G;
     G[0] = get_G1(qs);
-    G[1] = get_G1(qs);
-    G[2] = get_G1(qs);
+    G[1] = get_G2(qs);
+    G[2] = get_G3(qs);
 
     // Damping
     // Vector3d B;
@@ -71,16 +90,17 @@ void MeiiModel::update(Time t)
 
     // Torque vector
     Vector3d Tau;
-    Tau[0] = tau1;// + hardstop_torque(q1,q1d,q1min,q1max,Khard,Bhard);
-    Tau[1] = tau2;// + hardstop_torque(q2,q2d,q2min,q2max,Khard,Bhard);
-    Tau[2] = tau3;// + hardstop_torque(q3,q3d,q3min,q3max,Khard,Bhard);
+    Tau[0] = tau1 + hardstop_torque(q1,q1d,q1min,q1max,Khard,Bhard);
+    Tau[1] = tau2 + hardstop_torque(q2,q2d,q2min,q2max,Khard,Bhard);
+    Tau[2] = tau3 + hardstop_torque(q3,q3d,q3min,q3max,Khard,Bhard);
 
     // Solved for accelerations
     // 1) Tau = (M + M_mot) * Qdd + V + G + B + Fk
     // 2) (M + M_mot) * Qdd = Tau - V -G - B - Fk
     // 3) A             x   = b
     Matrix3d A = M;// + M_mot;
-    Vector3d b = Tau - V - G;// - B - Fk;
+    Vector3d b = Tau - V*qdot - G;// - B - Fk;
+    std::cout << Tau << std::endl;
     Vector3d x = A.householderQr().solve(b);
 
     q1dd = x[0];
@@ -97,34 +117,84 @@ void MeiiModel::update(Time t)
     q2 = q2d_q2.update(q2d, t);
     q3 = q3d_q3.update(q3d, t);
 
+    calc_dependent_joint_values();
 }
 
-void OpenWristModel::set_torques(double _tau1, double _tau2, double _tau3) {
+void MeiiModel::set_torques(double _tau1, double _tau2, double _tau3) {
     tau1 = _tau1;
     tau2 = _tau2;
     tau3 = _tau3;
 }
 
-void OpenWristModel::set_positions(double _q1, double _q2, double _q3) {
+void MeiiModel::set_positions(double _q1, double _q2, double _q3, double _q4, double _q5, double _q6) {
     q1 = _q1;
     q2 = _q2;
     q3 = _q3;
     q1d_q1 = Integrator(q1);
     q2d_q2 = Integrator(q2);
     q3d_q3 = Integrator(q3);
+
+    q4 = _q4;
+    q5 = _q5;
+    q6 = _q6;
 }
 
-void OpenWristModel::set_velocities(double _q1d, double _q2d, double _q3d) {
+void MeiiModel::set_velocities(double _q1d, double _q2d, double _q3d, double _q4d, double _q5d, double _q6d) {
     q1d = _q1d;
     q2d = _q2d;
     q3d = _q3d;
     q1dd_q1d = Integrator(q1d);
     q2dd_q2d = Integrator(q2d);
     q3dd_q3d = Integrator(q3d);
+
+    q4d = _q4d;
+    q5d = _q5d;
+    q6d = _q6d;
 }
 
-void OpenWristModel::reset() {
+void MeiiModel::reset() {
     set_torques(0,0,0);
-    set_positions(0,0,0);
-    set_velocities(0,0,0);
+    set_positions(0.1,0.1,0.1,1.0284436869069115694230731605785,1.0284436869069115694230731605785,1.0284436869069115694230731605785);
+    set_velocities(0,0,0,0,0,0);
+}
+
+void MeiiModel::calc_dependent_joint_values() {
+    Vector3d thetas(PI/4, PI/4, PI/4);
+    Vector3d old_thetas(PI, PI, PI);
+    size_t iter = 0;
+    Matrix3d jac;
+    Vector3d eq;
+
+    while (rms(old_thetas-thetas) > 1e-12 && iter < 20){
+        old_thetas = thetas;
+        double t1 = thetas[0]; double t2 = thetas[1]; double t3 = thetas[2];
+        jac(0,0) = (q1*(3*R*sin(t1)-(3*q2*sin(t1+t2))/2+(q2*sin(t1-t2))/2+sqrt(3)*a56*sin(t1)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q2,2)-(q1*q2*cos(t1-t2))/2+(3*q1*q2*cos(t1+t2))/2-3*R*q1*cos(t1)-3*R*q2*cos(t2)-sqrt(3)*a56*q1*cos(t1)+sqrt(3)*a56*q2*cos(t2)));
+        jac(0,1) = -(q2*((3*q1*sin(t1+t2))/2-3*R*sin(t2)+(q1*sin(t1-t2))/2+sqrt(3)*a56*sin(t2)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q2,2)-(q1*q2*cos(t1-t2))/2+(3*q1*q2*cos(t1+t2))/2-3*R*q1*cos(t1)-3*R*q2*cos(t2)-sqrt(3)*a56*q1*cos(t1)+sqrt(3)*a56*q2*cos(t2)));
+        jac(0,2) = 0;
+        jac(1,0) = 0;
+        jac(1,1) = (q2*(3*R*sin(t2)-(3*q3*sin(t2+t3))/2+(q3*sin(t2-t3))/2+sqrt(3)*a56*sin(t2)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q2,2)+pow(q3,2)-(q2*q3*cos(t2-t3))/2+(3*q2*q3*cos(t2+t3))/2-3*R*q2*cos(t2)-3*R*q3*cos(t3)-sqrt(3)*a56*q2*cos(t2)+sqrt(3)*a56*q3*cos(t3)));
+        jac(1,2) = -(q3*((3*q2*sin(t2+t3))/2-3*R*sin(t3)+(q2*sin(t2-t3))/2+sqrt(3)*a56*sin(t3)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q2,2)+pow(q3,2)-(q2*q3*cos(t2-t3))/2+(3*q2*q3*cos(t2+t3))/2-3*R*q2*cos(t2)-3*R*q3*cos(t3)-sqrt(3)*a56*q2*cos(t2)+sqrt(3)*a56*q3*cos(t3)));
+        jac(2,0) = -(q1*((3*q3*sin(t1+t3))/2-3*R*sin(t1)-(q3*sin(t1-t3))/2+sqrt(3)*a56*sin(t1)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q3,2)-(q1*q3*cos(t1-t3))/2+(3*q1*q3*cos(t1+t3))/2-3*R*q1*cos(t1)-3*R*q3*cos(t3)+sqrt(3)*a56*q1*cos(t1)-sqrt(3)*a56*q3*cos(t3)));
+        jac(2,1) = 0;
+        jac(2,2) = -(q3*((3*q1*sin(t1+t3))/2-3*R*sin(t3)+(q1*sin(t1-t3))/2-sqrt(3)*a56*sin(t3)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q3,2)-(q1*q3*cos(t1-t3))/2+(3*q1*q3*cos(t1+t3))/2-3*R*q1*cos(t1)-3*R*q3*cos(t3)+sqrt(3)*a56*q1*cos(t1)-sqrt(3)*a56*q3*cos(t3)));
+        eq[0] =  sqrt(3*pow(R,2) + 3*pow(a56,2) + pow(q1,2) + pow(q2,2) - (q1*q2*cos(t1 - t2))/2 + (3*q1*q2*cos(t1 + t2))/2 - 3*R*q1*cos(t1) - 3*R*q2*cos(t2) - sqrt(3)*a56*q1*cos(t1) + sqrt(3)*a56*q2*cos(t2)) - sqrt(3)*r;
+        eq[1] = sqrt(3*pow(R,2) + 3*pow(a56,2) + pow(q2,2) + pow(q3,2) - (q2*q3*cos(t2 - t3))/2 + (3*q2*q3*cos(t2 + t3))/2 - 3*R*q2*cos(t2) - 3*R*q3*cos(t3) - sqrt(3)*a56*q2*cos(t2) + sqrt(3)*a56*q3*cos(t3)) - sqrt(3)*r;
+        eq[2] = sqrt(3*pow(R,2) + 3*pow(a56,2) + pow(q1,2) + pow(q3,2) - (q1*q3*cos(t1 - t3))/2 + (3*q1*q3*cos(t1 + t3))/2 - 3*R*q1*cos(t1) - 3*R*q3*cos(t3) + sqrt(3)*a56*q1*cos(t1) - sqrt(3)*a56*q3*cos(t3)) - sqrt(3)*r;
+        thetas = thetas - jac.householderQr().solve(eq);
+        iter = iter + 1;
+    }
+
+    q4 = thetas[0]; q5 = thetas[1]; q6 = thetas[2];
+
+    // Velocity calculation
+    std::vector<double> qs = {q1, q2, q3, q4, q5, q6};
+    Vector3d qds(q1d, q2d, q3d);
+
+    MatrixXd rho = calculate_rho(qs);
+    
+    VectorXd qd = rho*qds;
+
+    q4d = qd[3];
+    q5d = qd[4];
+    q6d = qd[5];
 }
