@@ -1,0 +1,198 @@
+fileFormatVersion: 2
+guid: f42a116e1e9d10a468ac948c536268a6
+timeCreated: 1585257423
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: mesh_10_Surface-Imported17_face
+    100004: mesh_11_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_18-8_STAINLESS_STEEL-4
+    100006: mesh_12_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-3
+    100008: mesh_13_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-3
+    100010: mesh_14_exo_upper_arm-1/FLAT_WASHER_#6_NYLON-2
+    100012: mesh_1_exo_upper_arm-1/REX030_Ball_Bearing_Hold-1
+    100014: mesh_2_Fillet5_face
+    100016: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1
+    100018: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart0
+    100020: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart1
+    100022: mesh_4_#8-32_Tapped_Hole1_face
+    100024: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2
+    100026: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart0
+    100028: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart1
+    100030: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart2
+    100032: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart3
+    100034: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart4
+    100036: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart5
+    100038: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart6
+    100040: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart7
+    100042: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart8
+    100044: mesh_6_exo_upper_arm-1/REX020B_Ground_Ring-1
+    100046: mesh_7_Cut-Extrude2_face
+    100048: mesh_8_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-2
+    100050: mesh_9_exo_upper_arm-1/CUI_amt103-v-1
+    400000: //RootNode
+    400002: mesh_10_Surface-Imported17_face
+    400004: mesh_11_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_18-8_STAINLESS_STEEL-4
+    400006: mesh_12_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-3
+    400008: mesh_13_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-3
+    400010: mesh_14_exo_upper_arm-1/FLAT_WASHER_#6_NYLON-2
+    400012: mesh_1_exo_upper_arm-1/REX030_Ball_Bearing_Hold-1
+    400014: mesh_2_Fillet5_face
+    400016: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1
+    400018: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart0
+    400020: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart1
+    400022: mesh_4_#8-32_Tapped_Hole1_face
+    400024: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2
+    400026: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart0
+    400028: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart1
+    400030: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart2
+    400032: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart3
+    400034: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart4
+    400036: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart5
+    400038: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart6
+    400040: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart7
+    400042: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart8
+    400044: mesh_6_exo_upper_arm-1/REX020B_Ground_Ring-1
+    400046: mesh_7_Cut-Extrude2_face
+    400048: mesh_8_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-2
+    400050: mesh_9_exo_upper_arm-1/CUI_amt103-v-1
+    2300000: mesh_10_Surface-Imported17_face
+    2300002: mesh_11_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_18-8_STAINLESS_STEEL-4
+    2300004: mesh_12_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-3
+    2300006: mesh_13_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-3
+    2300008: mesh_14_exo_upper_arm-1/FLAT_WASHER_#6_NYLON-2
+    2300010: mesh_1_exo_upper_arm-1/REX030_Ball_Bearing_Hold-1
+    2300012: mesh_2_Fillet5_face
+    2300014: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart0
+    2300016: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart1
+    2300018: mesh_4_#8-32_Tapped_Hole1_face
+    2300020: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart0
+    2300022: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart1
+    2300024: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart2
+    2300026: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart3
+    2300028: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart4
+    2300030: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart5
+    2300032: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart6
+    2300034: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart7
+    2300036: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart8
+    2300038: mesh_6_exo_upper_arm-1/REX020B_Ground_Ring-1
+    2300040: mesh_7_Cut-Extrude2_face
+    2300042: mesh_8_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-2
+    2300044: mesh_9_exo_upper_arm-1/CUI_amt103-v-1
+    3300000: mesh_10_Surface-Imported17_face
+    3300002: mesh_11_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_18-8_STAINLESS_STEEL-4
+    3300004: mesh_12_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-3
+    3300006: mesh_13_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-3
+    3300008: mesh_14_exo_upper_arm-1/FLAT_WASHER_#6_NYLON-2
+    3300010: mesh_1_exo_upper_arm-1/REX030_Ball_Bearing_Hold-1
+    3300012: mesh_2_Fillet5_face
+    3300014: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart0
+    3300016: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart1
+    3300018: mesh_4_#8-32_Tapped_Hole1_face
+    3300020: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart0
+    3300022: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart1
+    3300024: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart2
+    3300026: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart3
+    3300028: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart4
+    3300030: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart5
+    3300032: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart6
+    3300034: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart7
+    3300036: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart8
+    3300038: mesh_6_exo_upper_arm-1/REX020B_Ground_Ring-1
+    3300040: mesh_7_Cut-Extrude2_face
+    3300042: mesh_8_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-2
+    3300044: mesh_9_exo_upper_arm-1/CUI_amt103-v-1
+    4300000: mesh_10_Surface-Imported17_face
+    4300002: mesh_11_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_18-8_STAINLESS_STEEL-4
+    4300004: mesh_12_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-3
+    4300006: mesh_13_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-3
+    4300008: mesh_14_exo_upper_arm-1/FLAT_WASHER_#6_NYLON-2
+    4300010: mesh_1_exo_upper_arm-1/REX030_Ball_Bearing_Hold-1_MeshPart0
+    4300012: mesh_2_Fillet5_face_MeshPart0
+    4300014: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart0
+    4300016: mesh_3_exo_upper_arm-1/REX025A_Ground_Side-1_MeshPart1
+    4300018: mesh_4_#8-32_Tapped_Hole1_face
+    4300020: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart0
+    4300022: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart1
+    4300024: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart2
+    4300026: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart3
+    4300028: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart4
+    4300030: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart5
+    4300032: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart6
+    4300034: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart7
+    4300036: mesh_5_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_.625in_BLACK-OXIDE_ALLOY_STEEL-2_MeshPart8
+    4300038: mesh_6_exo_upper_arm-1/REX020B_Ground_Ring-1
+    4300040: mesh_7_Cut-Extrude2_face
+    4300042: mesh_8_exo_upper_arm-1/SOCKET_HEAD_CAP_SCREW_#6-32_1.25in_18-8_STAINLESS_STEEL-2_MeshPart0
+    4300044: mesh_9_exo_upper_arm-1/CUI_amt103-v-1
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
