@@ -29,7 +29,16 @@ public:
     double q1dd, q2dd, q3dd;
 
     // Dependent joint positions [rad]
-    double q4, q5, q6;
+    // q4 -> theta1
+    // q5 -> theta2
+    // q6 -> theta3
+    // q7 -> Px
+    // q8 -> Py
+    // q9 -> Pz
+    // q10 -> alpha (Rx)
+    // q11 -> beta (Ry)
+    // q12 -> gamma (Rz)
+    double q4, q5, q6, q7, q8, q9, q10, q11, q12;
     // Dependent joint positions [rad/s]
     double q4d, q5d, q6d;
 
@@ -41,8 +50,8 @@ public:
     const double q2max = 0.133;
     const double q3max = 0.133;
 
-    const double Khard = 200; // hardstop stiffness
-    const double Bhard = 10;  // hardstop damping
+    const double Khard = 20000; // hardstop stiffness
+    const double Bhard = 1000;  // hardstop damping
 
     // // Joint Mass [kg]
     // const double m1 = 1.79265300000000;

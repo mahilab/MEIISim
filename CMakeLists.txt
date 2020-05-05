@@ -17,8 +17,8 @@ target_link_libraries(test mahi::util mahi::robo)
 add_executable(sim src/sim.cpp include/MeiiModel.hpp src/MeiiModel.cpp)
 target_link_libraries(sim mahi::robo mahi::com)
 
-# add_library(meii_model SHARED include/MeiiModel.hpp src/MeiiModel.cpp src/dll.cpp)
-# target_link_libraries(meii_model mahi::robo mahi::com)
+add_library(meii_model SHARED include/MeiiModel.hpp src/MeiiModel.cpp src/dll.cpp)
+target_link_libraries(meii_model mahi::robo mahi::com)
 
-# add_executable(tuner src/tuner.cpp src/MeiiSim.hpp src/MeiiSim.cpp)
-# target_link_libraries(tuner mahi::gui mahi::com mahi::robo mahi::gui)
+add_executable(tuner src/tuner.cpp)
+target_link_libraries(tuner mahi::gui mahi::com)

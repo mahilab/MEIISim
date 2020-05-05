@@ -62,8 +62,22 @@ int main(){
     // std::cout << M(2,0) << " " << M(2,1) << " " << M(2,2) << std::endl;
     // std::cout << x << std::endl;
     // std::cout << rms(G) << std::endl;
-    // MeiiModel meii;
-    // rho_test(0.1,0.1,0.1);
+    MeiiModel meii;
+    meii.reset();
+    meii.set_positions(0.11,0.1,0.09,1.0663,1.0390,0.930);
+    meii.calc_dependent_joint_values();
+    std::cout << meii.q1 << ", ";
+    std::cout << meii.q2 << ", ";
+    std::cout << meii.q3 << ", ";
+    std::cout << meii.q4 << ", ";
+    std::cout << meii.q5 << ", ";
+    std::cout << meii.q6 << ", ";
+    std::cout << meii.q7 << ", ";
+    std::cout << meii.q8 << ", ";
+    std::cout << meii.q9 << ", ";
+    std::cout << meii.q10 << ", ";
+    std::cout << meii.q11 << ", ";
+    std::cout << meii.q12 << std::endl;
 
     return 0;
 }

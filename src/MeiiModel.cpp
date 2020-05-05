@@ -164,22 +164,23 @@ void MeiiModel::calc_dependent_joint_values() {
     size_t iter = 0;
     Matrix3d jac;
     Vector3d eq;
+    VectorXd UnitVecs(6);
 
     while (rms(old_thetas-thetas) > 1e-12 && iter < 20){
         old_thetas = thetas;
         double t1 = thetas[0]; double t2 = thetas[1]; double t3 = thetas[2];
-        jac(0,0) = (q1*(3*R*sin(t1)-(3*q2*sin(t1+t2))/2+(q2*sin(t1-t2))/2+sqrt(3)*a56*sin(t1)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q2,2)-(q1*q2*cos(t1-t2))/2+(3*q1*q2*cos(t1+t2))/2-3*R*q1*cos(t1)-3*R*q2*cos(t2)-sqrt(3)*a56*q1*cos(t1)+sqrt(3)*a56*q2*cos(t2)));
-        jac(0,1) = -(q2*((3*q1*sin(t1+t2))/2-3*R*sin(t2)+(q1*sin(t1-t2))/2+sqrt(3)*a56*sin(t2)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q2,2)-(q1*q2*cos(t1-t2))/2+(3*q1*q2*cos(t1+t2))/2-3*R*q1*cos(t1)-3*R*q2*cos(t2)-sqrt(3)*a56*q1*cos(t1)+sqrt(3)*a56*q2*cos(t2)));
+        jac(0,0) = (q1*(3*R*sin(t1)-(3*q2*sin(t1+t2))/2+(q2*sin(t1-t2))/2+sqrt(3)*a56*sin(t1)))/(2*sqrt(3*R*R+3*a56*a56+q1*q1+q2*q2-(q1*q2*cos(t1-t2))/2+(3*q1*q2*cos(t1+t2))/2-3*R*q1*cos(t1)-3*R*q2*cos(t2)-sqrt(3)*a56*q1*cos(t1)+sqrt(3)*a56*q2*cos(t2)));
+        jac(0,1) = -(q2*((3*q1*sin(t1+t2))/2-3*R*sin(t2)+(q1*sin(t1-t2))/2+sqrt(3)*a56*sin(t2)))/(2*sqrt(3*R*R+3*a56*a56+q1*q1+q2*q2-(q1*q2*cos(t1-t2))/2+(3*q1*q2*cos(t1+t2))/2-3*R*q1*cos(t1)-3*R*q2*cos(t2)-sqrt(3)*a56*q1*cos(t1)+sqrt(3)*a56*q2*cos(t2)));
         jac(0,2) = 0;
         jac(1,0) = 0;
-        jac(1,1) = (q2*(3*R*sin(t2)-(3*q3*sin(t2+t3))/2+(q3*sin(t2-t3))/2+sqrt(3)*a56*sin(t2)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q2,2)+pow(q3,2)-(q2*q3*cos(t2-t3))/2+(3*q2*q3*cos(t2+t3))/2-3*R*q2*cos(t2)-3*R*q3*cos(t3)-sqrt(3)*a56*q2*cos(t2)+sqrt(3)*a56*q3*cos(t3)));
-        jac(1,2) = -(q3*((3*q2*sin(t2+t3))/2-3*R*sin(t3)+(q2*sin(t2-t3))/2+sqrt(3)*a56*sin(t3)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q2,2)+pow(q3,2)-(q2*q3*cos(t2-t3))/2+(3*q2*q3*cos(t2+t3))/2-3*R*q2*cos(t2)-3*R*q3*cos(t3)-sqrt(3)*a56*q2*cos(t2)+sqrt(3)*a56*q3*cos(t3)));
-        jac(2,0) = -(q1*((3*q3*sin(t1+t3))/2-3*R*sin(t1)-(q3*sin(t1-t3))/2+sqrt(3)*a56*sin(t1)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q3,2)-(q1*q3*cos(t1-t3))/2+(3*q1*q3*cos(t1+t3))/2-3*R*q1*cos(t1)-3*R*q3*cos(t3)+sqrt(3)*a56*q1*cos(t1)-sqrt(3)*a56*q3*cos(t3)));
+        jac(1,1) = (q2*(3*R*sin(t2)-(3*q3*sin(t2+t3))/2+(q3*sin(t2-t3))/2+sqrt(3)*a56*sin(t2)))/(2*sqrt(3*R*R+3*a56*a56+q2*q2+q3*q3-(q2*q3*cos(t2-t3))/2+(3*q2*q3*cos(t2+t3))/2-3*R*q2*cos(t2)-3*R*q3*cos(t3)-sqrt(3)*a56*q2*cos(t2)+sqrt(3)*a56*q3*cos(t3)));
+        jac(1,2) = -(q3*((3*q2*sin(t2+t3))/2-3*R*sin(t3)+(q2*sin(t2-t3))/2+sqrt(3)*a56*sin(t3)))/(2*sqrt(3*R*R+3*a56*a56+q2*q2+q3*q3-(q2*q3*cos(t2-t3))/2+(3*q2*q3*cos(t2+t3))/2-3*R*q2*cos(t2)-3*R*q3*cos(t3)-sqrt(3)*a56*q2*cos(t2)+sqrt(3)*a56*q3*cos(t3)));
+        jac(2,0) = -(q1*((3*q3*sin(t1+t3))/2-3*R*sin(t1)-(q3*sin(t1-t3))/2+sqrt(3)*a56*sin(t1)))/(2*sqrt(3*R*R+3*a56*a56+q1*q1+q3*q3-(q1*q3*cos(t1-t3))/2+(3*q1*q3*cos(t1+t3))/2-3*R*q1*cos(t1)-3*R*q3*cos(t3)+sqrt(3)*a56*q1*cos(t1)-sqrt(3)*a56*q3*cos(t3)));
         jac(2,1) = 0;
-        jac(2,2) = -(q3*((3*q1*sin(t1+t3))/2-3*R*sin(t3)+(q1*sin(t1-t3))/2-sqrt(3)*a56*sin(t3)))/(2*sqrt(3*pow(R,2)+3*pow(a56,2)+pow(q1,2)+pow(q3,2)-(q1*q3*cos(t1-t3))/2+(3*q1*q3*cos(t1+t3))/2-3*R*q1*cos(t1)-3*R*q3*cos(t3)+sqrt(3)*a56*q1*cos(t1)-sqrt(3)*a56*q3*cos(t3)));
-        eq[0] =  sqrt(3*pow(R,2) + 3*pow(a56,2) + pow(q1,2) + pow(q2,2) - (q1*q2*cos(t1 - t2))/2 + (3*q1*q2*cos(t1 + t2))/2 - 3*R*q1*cos(t1) - 3*R*q2*cos(t2) - sqrt(3)*a56*q1*cos(t1) + sqrt(3)*a56*q2*cos(t2)) - sqrt(3)*r;
-        eq[1] = sqrt(3*pow(R,2) + 3*pow(a56,2) + pow(q2,2) + pow(q3,2) - (q2*q3*cos(t2 - t3))/2 + (3*q2*q3*cos(t2 + t3))/2 - 3*R*q2*cos(t2) - 3*R*q3*cos(t3) - sqrt(3)*a56*q2*cos(t2) + sqrt(3)*a56*q3*cos(t3)) - sqrt(3)*r;
-        eq[2] = sqrt(3*pow(R,2) + 3*pow(a56,2) + pow(q1,2) + pow(q3,2) - (q1*q3*cos(t1 - t3))/2 + (3*q1*q3*cos(t1 + t3))/2 - 3*R*q1*cos(t1) - 3*R*q3*cos(t3) + sqrt(3)*a56*q1*cos(t1) - sqrt(3)*a56*q3*cos(t3)) - sqrt(3)*r;
+        jac(2,2) = -(q3*((3*q1*sin(t1+t3))/2-3*R*sin(t3)+(q1*sin(t1-t3))/2-sqrt(3)*a56*sin(t3)))/(2*sqrt(3*R*R+3*a56*a56+q1*q1+q3*q3-(q1*q3*cos(t1-t3))/2+(3*q1*q3*cos(t1+t3))/2-3*R*q1*cos(t1)-3*R*q3*cos(t3)+sqrt(3)*a56*q1*cos(t1)-sqrt(3)*a56*q3*cos(t3)));
+        eq[0] =  sqrt(3*R*R + 3*a56*a56 + q1*q1 + q2*q2 - (q1*q2*cos(t1 - t2))/2 + (3*q1*q2*cos(t1 + t2))/2 - 3*R*q1*cos(t1) - 3*R*q2*cos(t2) - sqrt(3)*a56*q1*cos(t1) + sqrt(3)*a56*q2*cos(t2)) - sqrt(3)*r;
+        eq[1] = sqrt(3*R*R + 3*a56*a56 + q2*q2 + q3*q3 - (q2*q3*cos(t2 - t3))/2 + (3*q2*q3*cos(t2 + t3))/2 - 3*R*q2*cos(t2) - 3*R*q3*cos(t3) - sqrt(3)*a56*q2*cos(t2) + sqrt(3)*a56*q3*cos(t3)) - sqrt(3)*r;
+        eq[2] = sqrt(3*R*R + 3*a56*a56 + q1*q1 + q3*q3 - (q1*q3*cos(t1 - t3))/2 + (3*q1*q3*cos(t1 + t3))/2 - 3*R*q1*cos(t1) - 3*R*q3*cos(t3) + sqrt(3)*a56*q1*cos(t1) - sqrt(3)*a56*q3*cos(t3)) - sqrt(3)*r;
         thetas = thetas - jac.householderQr().solve(eq);
         iter = iter + 1;
     }
@@ -197,4 +198,39 @@ void MeiiModel::calc_dependent_joint_values() {
     q4d = qd[3];
     q5d = qd[4];
     q6d = qd[5];
+
+    double px = q1*sin(q4)*(1.0/3.0)+q2*sin(q5)*(1.0/3.0)+q3*sin(q6)*(1.0/3.0);
+    double py = R*cos(alpha_5)*(1.0/3.0)+a56*sin(alpha_5)*(1.0/3.0)-R*(cos(alpha_5)*(1.0/2.0)-sqrt(3.0)*sin(alpha_5)*(1.0/2.0))*(1.0/3.0)-R*(cos(alpha_5)*(1.0/2.0)+sqrt(3.0)*sin(alpha_5)*(1.0/2.0))*(1.0/3.0)-a56*(sin(alpha_5)*(1.0/2.0)-sqrt(3.0)*cos(alpha_5)*(1.0/2.0))*(1.0/3.0)-a56*(sin(alpha_5)*(1.0/2.0)+sqrt(3.0)*cos(alpha_5)*(1.0/2.0))*(1.0/3.0)-q1*cos(alpha_5)*cos(q4)*(1.0/3.0)+q2*cos(q5)*(cos(alpha_5)*(1.0/2.0)-sqrt(3.0)*sin(alpha_5)*(1.0/2.0))*(1.0/3.0)+q3*cos(q6)*(cos(alpha_5)*(1.0/2.0)+sqrt(3.0)*sin(alpha_5)*(1.0/2.0))*(1.0/3.0);
+    double pz = a56*cos(alpha_5)*(-1.0/3.0)+R*sin(alpha_5)*(1.0/3.0)-R*(sin(alpha_5)*(1.0/2.0)-sqrt(3.0)*cos(alpha_5)*(1.0/2.0))*(1.0/3.0)-R*(sin(alpha_5)*(1.0/2.0)+sqrt(3.0)*cos(alpha_5)*(1.0/2.0))*(1.0/3.0)+a56*(cos(alpha_5)*(1.0/2.0)-sqrt(3.0)*sin(alpha_5)*(1.0/2.0))*(1.0/3.0)+a56*(cos(alpha_5)*(1.0/2.0)+sqrt(3.0)*sin(alpha_5)*(1.0/2.0))*(1.0/3.0)-q1*sin(alpha_5)*cos(q4)*(1.0/3.0)+q2*cos(q5)*(sin(alpha_5)*(1.0/2.0)+sqrt(3.0)*cos(alpha_5)*(1.0/2.0))*(1.0/3.0)+q3*cos(q6)*(sin(alpha_5)*(1.0/2.0)-sqrt(3.0)*cos(alpha_5)*(1.0/2.0))*(1.0/3.0);
+
+    UnitVecs[0] = -(px*cos(alpha_13)*-3.0+sqrt(3.0)*px*sin(alpha_13)+q1*cos(alpha_13)*sin(q4)+q2*cos(alpha_13)*sin(q5)*2.0-sqrt(3.0)*q1*sin(alpha_13)*sin(q4))/(r*(sqrt(3.0)*pow(cos(alpha_13),2.0)+sqrt(3.0)*pow(sin(alpha_13),2.0)));
+    UnitVecs[1] = (py*cos(alpha_13)*3.0-sqrt(3.0)*py*sin(alpha_13)+q1*cos(alpha_5)*cos(alpha_13)*cos(q4)-q2*cos(alpha_5)*cos(alpha_13)*cos(q5)+sqrt(3.0)*a56*cos(alpha_5)*cos(alpha_13)+sqrt(3.0)*R*cos(alpha_5)*sin(alpha_13)-sqrt(3.0)*R*cos(alpha_13)*sin(alpha_5)+sqrt(3.0)*a56*sin(alpha_5)*sin(alpha_13)-sqrt(3.0)*q1*cos(alpha_5)*sin(alpha_13)*cos(q4)+sqrt(3.0)*q2*cos(alpha_13)*sin(alpha_5)*cos(q5))/(r*(sqrt(3.0)*pow(cos(alpha_13),2.0)+sqrt(3.0)*pow(sin(alpha_13),2.0)));
+    UnitVecs[2] = (pz*cos(alpha_13)*3.0-sqrt(3.0)*pz*sin(alpha_13)+q1*cos(alpha_13)*sin(alpha_5)*cos(q4)-q2*cos(alpha_13)*sin(alpha_5)*cos(q5)+sqrt(3.0)*R*cos(alpha_5)*cos(alpha_13)-sqrt(3.0)*a56*cos(alpha_5)*sin(alpha_13)+sqrt(3.0)*a56*cos(alpha_13)*sin(alpha_5)+sqrt(3.0)*R*sin(alpha_5)*sin(alpha_13)-sqrt(3.0)*q2*cos(alpha_5)*cos(alpha_13)*cos(q5)-sqrt(3.0)*q1*sin(alpha_5)*sin(alpha_13)*cos(q4))/(r*(sqrt(3.0)*pow(cos(alpha_13),2.0)+sqrt(3.0)*pow(sin(alpha_13),2.0)));
+    UnitVecs[3] = (px*sin(alpha_13)*-3.0+q1*sin(alpha_13)*sin(q4)+q2*sin(alpha_13)*sin(q5)*2.0-sqrt(3.0)*px*cos(alpha_13)+sqrt(3.0)*q1*cos(alpha_13)*sin(q4))/(r*(sqrt(3.0)*pow(cos(alpha_13),2.0)+sqrt(3.0)*pow(sin(alpha_13),2.0)));
+    UnitVecs[4] = -(py*sin(alpha_13)*3.0+sqrt(3.0)*py*cos(alpha_13)+q1*cos(alpha_5)*sin(alpha_13)*cos(q4)-q2*cos(alpha_5)*sin(alpha_13)*cos(q5)-sqrt(3.0)*R*cos(alpha_5)*cos(alpha_13)+sqrt(3.0)*a56*cos(alpha_5)*sin(alpha_13)-sqrt(3.0)*a56*cos(alpha_13)*sin(alpha_5)-sqrt(3.0)*R*sin(alpha_5)*sin(alpha_13)+sqrt(3.0)*q1*cos(alpha_5)*cos(alpha_13)*cos(q4)+sqrt(3.0)*q2*sin(alpha_5)*sin(alpha_13)*cos(q5))/(r*(sqrt(3.0)*pow(cos(alpha_13),2.0)+sqrt(3.0)*pow(sin(alpha_13),2.0)));
+    UnitVecs[5] = -(pz*sin(alpha_13)*3.0+sqrt(3.0)*pz*cos(alpha_13)+q1*sin(alpha_5)*sin(alpha_13)*cos(q4)-q2*sin(alpha_5)*sin(alpha_13)*cos(q5)+sqrt(3.0)*a56*cos(alpha_5)*cos(alpha_13)+sqrt(3.0)*R*cos(alpha_5)*sin(alpha_13)-sqrt(3.0)*R*cos(alpha_13)*sin(alpha_5)+sqrt(3.0)*a56*sin(alpha_5)*sin(alpha_13)+sqrt(3.0)*q1*cos(alpha_13)*sin(alpha_5)*cos(q4)-sqrt(3.0)*q2*cos(alpha_5)*sin(alpha_13)*cos(q5))/(r*(sqrt(3.0)*pow(cos(alpha_13),2.0)+sqrt(3.0)*pow(sin(alpha_13),2.0)));
+
+    UnitVecs.head(3) = UnitVecs.head(3)/UnitVecs.head(3).norm();
+    UnitVecs.tail<3>() = UnitVecs.tail<3>()/UnitVecs.tail<3>().norm();
+
+    double a1 = UnitVecs(0);
+    double a2 = UnitVecs(1);
+    double a3 = UnitVecs(2);
+    double o1 = UnitVecs(3);
+    double o2 = UnitVecs(4);
+    double o3 = UnitVecs(5);
+    double n1 =  o2*a3 - a2*o3;
+    double n2 = -o1*a3 + a1*o3;
+    double n3 =  o1*a2 - o2*a1;
+
+    double alpha = atan2(-n3,n1);
+    double beta = atan2(n2,sqrt(n3*n3+n1*n1));
+    double gamma = atan2(-a2,o2);
+
+    q7  = px;
+    q8  = py;
+    q9  = pz;
+    q10 = alpha;
+    q11 = beta;
+    q12 = gamma;
 }

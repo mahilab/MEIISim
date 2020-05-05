@@ -62,28 +62,43 @@ using namespace mahi::robo;
 // }
 
 int main(){
+    MelShare ms_in("new_ms");
+    std::vector<double> ms_in_data(5, 0);
     g_model.reset();
     Timer timer(hertz(500), Timer::Hybrid);
     Time t;
-    double q_ref = 0.1;
-    double kp = 5000;
+    Time sim_time = seconds(0);
+    double kp = 500;
     double kd = 10;
+    double q_ref1 = 0.1;
+    double q_ref2 = 0.1;
+    double q_ref3 = 0.1;
+
     while (true)
     {
-        
-        double tau1 = kp * (q_ref - g_model.q1) - kd * g_model.q1d;
-        double tau2 = kp * (q_ref - g_model.q2) - kd * g_model.q2d;
-        double tau3 = kp * (q_ref - g_model.q3) - kd * g_model.q3d;
+        std::cout << "here" << std::endl;
+        ms_in_data = ms_in.read_data();
+        q_ref1 = ms_in_data[2];
+        q_ref2 = ms_in_data[3];
+        q_ref3 = ms_in_data[4]; 
+        kp = ms_in_data[0];
+        kd = ms_in_data[1];
+        std::cout << q_ref1 << std::endl;
+
+        double tau1 = kp * (q_ref1 - g_model.q1) - kd * g_model.q1d;
+        double tau2 = kp * (q_ref2 - g_model.q2) - kd * g_model.q2d;
+        double tau3 = kp * (q_ref3 - g_model.q3) - kd * g_model.q3d;
         g_model.set_torques(tau1,tau2,tau3);
-        // g_model.set_torques(0.0,0.0,0.0);
-        g_model.update(t);
-        std::cout << t << ", ";
+        // g_model.set_torques(0.0,0.0,0.0)
+        g_model.update(sim_time);
+        std::cout << sim_time << ", ";
         std::cout << g_model.q1 << ", ";
         std::cout << g_model.q2 << ", ";
         std::cout << g_model.q3 << ", ";
         std::cout << g_model.q4 << ", ";
         std::cout << g_model.q5 << ", ";
         std::cout << g_model.q6 << std::endl;
+        sim_time += 1_ms;
         t = timer.wait();
     }
     

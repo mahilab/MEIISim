@@ -1,4 +1,3 @@
-#pragma once
 #include "MeiiModel.hpp"
 #include <Mahi/Com.hpp>
 #include <Mahi/Util.hpp>
@@ -25,36 +24,33 @@ using namespace mahi::robo;
 
 void simulation()
 {
-    MelShare ms_in("meii_sim_in");
-    MelShare ms_out("meii_sim_out");
-    std::vector<double> ms_in_data(3, 0);
-    std::vector<double> ms_out_data(12, 0);
-    ms_in.write_data(ms_in_data);
-    ms_out.write_data(ms_out_data);
+    MelShare ms_in("meii_sim");
+    std::vector<double> ms_in_data(5, 0);
+    double kp = 500;
+    double kd = 10;
+    double q_ref1 = 0.1;
+    double q_ref2 = 0.1;
+    double q_ref3 = 0.1;
     Timer timer(hertz(500), Timer::Hybrid);
     Time t;
+    Time sim_time = 0_ms;
     while (!g_stop)
     {
         ms_in_data = ms_in.read_data();
+        q_ref1 = ms_in_data[2];
+        q_ref2 = ms_in_data[3];
+        q_ref3 = ms_in_data[4]; 
+        kp = ms_in_data[0];
+        kd = ms_in_data[1];
         {
             std::lock_guard<std::mutex> lock(g_mtx);
-            // g_model.set_torques(ms_in_data[0], ms_in_data[1], ms_in_data[2]);
-            g_model.set_torques(0.0,0.0,0.0);
-            g_model.update(t);
-            ms_out_data[0] = g_model.q1;
-            ms_out_data[1] = g_model.q2;
-            ms_out_data[2] = g_model.q3;
-            ms_out_data[3] = g_model.q1d;
-            ms_out_data[4] = g_model.q2d;
-            ms_out_data[5] = g_model.q3d;
-            ms_out_data[6] = g_model.q1dd;
-            ms_out_data[7] = g_model.q2dd;
-            ms_out_data[8] = g_model.q3dd;
-            ms_out_data[9] = g_model.tau1;
-            ms_out_data[10] = g_model.tau2;
-            ms_out_data[11] = g_model.tau3;
+            double tau1 = kp * (q_ref1 - g_model.q1) - kd * g_model.q1d;
+            double tau2 = kp * (q_ref2 - g_model.q2) - kd * g_model.q2d;
+            double tau3 = kp * (q_ref3 - g_model.q3) - kd * g_model.q3d;
+            g_model.set_torques(tau1,tau2,tau3);
+            g_model.update(sim_time);
         }
-        ms_out.write_data(ms_out_data);
+        sim_time += 1_ms;
         t = timer.wait();
     }
 };
@@ -80,16 +76,16 @@ EXPORT void set_torques(double tau1, double tau2, double tau3)
     g_model.set_torques(tau1, tau2, tau3);
 }
 
-EXPORT void set_positions(double q1, double q2, double q3)
+EXPORT void set_positions(double q1, double q2, double q3, double q4, double q5, double q6)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
-    g_model.set_positions(q1, q2, q3);
+    g_model.set_positions(q1, q2, q3, q4, q5, q6);
 }
 
-EXPORT void set_velocities(double q1d, double q2d, double q3d)
+EXPORT void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
-    g_model.set_velocities(q1d, q2d, q3d);
+    g_model.set_velocities(q1d, q2d, q3d, q4d, q5d, q6d);
 }
 
 EXPORT void get_positions(double *positions)
@@ -98,4 +94,13 @@ EXPORT void get_positions(double *positions)
     positions[0] = g_model.q1;
     positions[1] = g_model.q2;
     positions[2] = g_model.q3;
+    positions[3] = g_model.q4;
+    positions[4] = g_model.q5;
+    positions[5] = g_model.q6;
+    positions[6] = g_model.q7;
+    positions[7] = g_model.q8;
+    positions[8] = g_model.q9;
+    positions[9] = g_model.q10;
+    positions[10] = g_model.q11;
+    positions[11] = g_model.q12;
 }
