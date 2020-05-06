@@ -3,7 +3,7 @@
 #include <Mahi/Util/Math/Constants.hpp>
 #include <Mahi/Util/Math/Integrator.hpp>
 #include <Mahi/Robo/Control/Limiter.hpp>
-#include <thread>
+// #include <thread>
 #include <ctpl_stl.h>
 
 /// Dynamic Model of the OpenWrist
@@ -137,15 +137,15 @@ private:
     // Integrators
     mahi::util::Integrator q1dd_q1d, q2dd_q2d, q3dd_q3d, q1d_q1, q2d_q2, q3d_q3;
 
-    double v00 = 0;
-    double v01 = 0;
-    double v02 = 0;
-    double v10 = 0;
-    double v11 = 0;
-    double v12 = 0;
-    double v20 = 0;
-    double v21 = 0;
-    double v22 = 0;
+    // double v00 = 0;
+    // double v01 = 0;
+    // double v02 = 0;
+    // double v10 = 0;
+    // double v11 = 0;
+    // double v12 = 0;
+    // double v20 = 0;
+    // double v21 = 0;
+    // double v22 = 0;
     
     bool threadpool = false;
 

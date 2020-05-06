@@ -24,8 +24,8 @@ using namespace mahi::robo;
 
 void simulation()
 {
-    MelShare ms_in("meii_sim_kp_kd_ref");
-    MelShare ms_out("meii_sim_rate_tau");
+    MelShare ms_in("sim1");
+    MelShare ms_out("sim2");
     std::vector<double> ms_in_data(7, 0);
     double kp = 500;
     double kd = 10;

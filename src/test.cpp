@@ -12,7 +12,7 @@ int main(){
     ctpl::thread_pool p(2);
     // std::vector<double> qs = {0.1, 0.1, 0.11, 1.0390, 0.9300, 1.0663, 0.001, 0.0001, -0.0003, 0.001, 0.001, -0.003};
     std::vector<double> qs = {0.11, 0.1, 0.09, 1.0284, 1.0284, 1.0284, 0.002, 0.002, 0.002, 0.000, 0.000, 0.000};
-    double v00, v01, v02, v10, v11, v12, v20, v21, v22;
+    double v01, v02, v10, v11, v12, v20, v21, v22;
 
     Clock functime;
     int num_iters = 1000;
@@ -30,25 +30,8 @@ int main(){
         M(2,2) = get_M33(qs);
         // Coriolis vector
         Matrix3d V;
-        p.push( [&v00, &qs] (int id) {v00 = get_V11(qs); });
-        p.push( [&v01, &qs] (int id) {v01 = get_V12(qs); });
-        p.push( [&v02, &qs] (int id) {v02 = get_V13(qs); });
-        p.push( [&v10, &qs] (int id) {v10 = get_V21(qs); });
-        p.push( [&v11, &qs] (int id) {v11 = get_V22(qs); });
-        p.push( [&v12, &qs] (int id) {v12 = get_V23(qs); });
-        p.push( [&v20, &qs] (int id) {v20 = get_V31(qs); });
-        p.push( [&v21, &qs] (int id) {v21 = get_V32(qs); });
-        p.push( [&v22, &qs] (int id) {v22 = get_V33(qs); });
-
-        V(0,0) = v00;
-        V(0,1) = v01;
-        V(0,2) = v02;
-        V(1,0) = v10;
-        V(1,1) = v11;
-        V(1,2) = v12;
-        V(2,0) = v20;
-        V(2,1) = v21;
-        V(2,2) = v22;
+        auto v00 = p.push([&qs](int){return get_V11(qs);});
+        std::cout << v00.get();
 
         V(0,0) = get_V11(qs);
         V(0,1) = get_V12(qs);

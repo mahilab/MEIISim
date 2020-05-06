@@ -60,9 +60,8 @@ public:
         ImGui::DragDouble("q1",&q1,0.0001f,0.03,0.15,"%.4f");
         ImGui::DragDouble("q2",&q2,0.0001f,0.03,0.15,"%.4f");    
         ImGui::DragDouble("q3",&q3,0.0001f,0.03,0.15,"%.4f");    
-        // ImGui::InputDouble2("t",&t_dub);    
 
-        if(!ms_in_data.empty()) 
+        if(!ms_in_data.empty()) {
             sim_rate.AddPoint(t,ms_in_data[0]);
             tau1.AddPoint(t,ms_in_data[1]);
             tau2.AddPoint(t,ms_in_data[2]);
@@ -70,7 +69,7 @@ public:
             q1 = ms_in_data[4];
             q2 = ms_in_data[5];
             q3 = ms_in_data[6];
-        // sim_rate.AddPoint(t,1.0f);
+        }
         ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
         ImGui::SetNextPlotRangeY(1500,3500);
         ImGui::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,200}, ImPlotFlags_Default, rt_axis, rt_axis);
@@ -86,7 +85,6 @@ public:
         ImGui::EndPlot();
 
         t += ImGui::GetIO().DeltaTime;
-        std::cout << t << std::endl;
         ImGui::End();
         std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3, k_hard, b_hard};
         ms_out.write_data(data);
@@ -110,8 +108,8 @@ public:
     double q1 = 0.1;
     double q2 = 0.1;
     double q3 = 0.1;
-    MelShare ms_out = MelShare("meii_sim_kp_kd_ref");
-    MelShare ms_in = MelShare("meii_sim_rate_tau");
+    MelShare ms_out = MelShare("sim1");
+    MelShare ms_in = MelShare("sim2");
     std::atomic_bool stop = false;
     std::mutex mtx;
 };
