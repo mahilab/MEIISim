@@ -11,7 +11,7 @@ FetchContent_MakeAvailable(mahi-gui)
 
 include_directories(include)
 
-add_executable(test src/test.cpp src/MeiiModel.cpp)
+add_executable(test src/test.cpp)
 target_link_libraries(test mahi::util mahi::robo)
 
 add_executable(sim src/sim.cpp include/MeiiModel.hpp src/MeiiModel.cpp)

@@ -1,6 +1,7 @@
 #include "MeiiModel.hpp"
 #include "Eqns.hpp"
 #include <Eigen/Dense>
+#include <thread>
 
 using Eigen::Matrix3d;
 using Eigen::MatrixXd;
@@ -13,7 +14,6 @@ inline double hardstop_torque(double q, double qd, double qmin, double qmax, dou
     if (q < qmin)
         return K * (qmin - q) - B * qd;
     else if (q > qmax){
-        std::cout << K * (qmax - q) - B * qd << std::endl;
         return K * (qmax - q) - B * qd;
     }
     else
@@ -26,10 +26,14 @@ MeiiModel::MeiiModel() :
     lim3(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2))
 {
     reset();
+    std::cout << "here1";
+    ctpl::thread_pool p(4);
+    std::cout << "here2";
 }
 
 void MeiiModel::update(Time t)
 {
+    std::cout << "here3";
     // limit torques
     // tau1 = lim1.limit(tau1);
     // tau2 = lim2.limit(tau2);
@@ -39,6 +43,45 @@ void MeiiModel::update(Time t)
     std::vector<double> qs = {q1, q2, q3, q4, q5, q6, q1d, q2d, q3d, q4d, q5d, q6d};
 
     Vector3d qdot(q1d,q2d,q3d);
+    std::cout << "here";
+    // Coriolis vector
+    Matrix3d V;
+    if(threadpool){
+        p.push( [this, &qs] (int id) {v00 = get_V11(qs); });
+        p.push( [this, &qs] (int id) {v01 = get_V12(qs); });
+        p.push( [this, &qs] (int id) {v02 = get_V13(qs); });
+        p.push( [this, &qs] (int id) {v10 = get_V21(qs); });
+        p.push( [this, &qs] (int id) {v11 = get_V22(qs); });
+        p.push( [this, &qs] (int id) {v12 = get_V23(qs); });
+        p.push( [this, &qs] (int id) {v20 = get_V31(qs); });
+        p.push( [this, &qs] (int id) {v21 = get_V32(qs); });
+        p.push( [this, &qs] (int id) {v22 = get_V33(qs); });
+
+        V(0,0) = v00;
+        V(0,1) = v01;
+        V(0,2) = v02;
+        V(1,0) = v10;
+        V(1,1) = v11;
+        V(1,2) = v12;
+        V(2,0) = v20;
+        V(2,1) = v21;
+        V(2,2) = v22;
+    }
+    else{
+        V(0,0) = get_V11(qs);
+        V(0,1) = get_V12(qs);
+        V(0,2) = get_V13(qs);
+        V(1,0) = get_V21(qs);
+        V(1,1) = get_V22(qs);
+        V(1,2) = get_V23(qs);
+        V(2,0) = get_V31(qs);
+        V(2,1) = get_V32(qs);
+        V(2,2) = get_V33(qs);
+    }
+    
+    std::cout << V(0,0) << " " << V(0,1) << " " << V(0,2) << std::endl;
+    std::cout << V(1,0) << " " << V(1,1) << " " << V(1,2) << std::endl;
+    std::cout << V(2,0) << " " << V(2,1) << " " << V(2,2) << std::endl;
 
     // Mass matrix
     Matrix3d M;
@@ -58,17 +101,16 @@ void MeiiModel::update(Time t)
     // M_mot(1,1) = Jm2*eta2*eta2;
     // M_mot(2,2) = Jm3*eta3*eta3;
 
-    // Coriolis vector
-    Matrix3d V;
-    V(0,0) = get_V11(qs);
-    V(0,1) = get_V12(qs);
-    V(0,2) = get_V13(qs);
-    V(1,0) = get_V21(qs);
-    V(1,1) = get_V22(qs);
-    V(1,2) = get_V23(qs);
-    V(2,0) = get_V31(qs);
-    V(2,1) = get_V32(qs);
-    V(2,2) = get_V33(qs);
+
+    // V(0,0) = get_V11(qs);
+    // V(0,1) = get_V12(qs);
+    // V(0,2) = get_V13(qs);
+    // V(1,0) = get_V21(qs);
+    // V(1,1) = get_V22(qs);
+    // V(1,2) = get_V23(qs);
+    // V(2,0) = get_V31(qs);
+    // V(2,1) = get_V32(qs);
+    // V(2,2) = get_V33(qs);
    
     // Gravity vector
     Vector3d G;
@@ -98,6 +140,19 @@ void MeiiModel::update(Time t)
     // 1) Tau = (M + M_mot) * Qdd + V + G + B + Fk
     // 2) (M + M_mot) * Qdd = Tau - V -G - B - Fk
     // 3) A             x   = b
+
+
+    
+    // t11.join();
+    // t12.join();
+    // t13.join();
+    // t21.join();
+    // t22.join();
+    // t23.join();
+    // t31.join();
+    // t32.join();
+    // t33.join();
+
     Matrix3d A = M;// + M_mot;
     Vector3d b = Tau - V*qdot - G;// - B - Fk;
     std::cout << Tau << std::endl;

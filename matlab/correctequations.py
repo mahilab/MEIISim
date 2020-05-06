@@ -1,6 +1,6 @@
 import string
 
-fileheader = ["#include <Mahi/Util.hpp>\n","using namespace mahi::util;\n","\n"]
+fileheader = ["#pragma once\n","#include <Mahi/Util.hpp>\n","using namespace mahi::util;\n","\n"]
 
 variables = ["\tdouble l1 = qs[0];\n","\tdouble l2 = qs[1];\n","\tdouble l3 = qs[2];\n","\tdouble theta1 = qs[3];\n","\tdouble theta2 = qs[4];\n","\tdouble theta3 = qs[5];\n","\tdouble l1_dot = qs[6];\n","\tdouble l2_dot = qs[7];\n","\tdouble l3_dot = qs[8];\n","\tdouble theta1_dot = qs[9];\n","\tdouble theta2_dot = qs[10];\n","\tdouble theta3_dot = qs[11];\n","\tdouble sintheta1 = sin(theta1);\n","\tdouble costheta1 = cos(theta1);\n","\tdouble sintheta2 = sin(theta2);\n","\tdouble costheta2 = cos(theta2);\n","\tdouble sintheta3 = sin(theta3);\n","\tdouble costheta3 = cos(theta3);\n","\n"]
 

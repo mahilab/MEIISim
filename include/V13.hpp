@@ -1,3 +1,4 @@
+#pragma once
 #include <Mahi/Util.hpp>
 using namespace mahi::util;
 

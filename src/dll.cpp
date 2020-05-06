@@ -26,16 +26,19 @@ void simulation()
 {
     MelShare ms_in("meii_sim_kp_kd_ref");
     MelShare ms_out("meii_sim_rate_tau");
-    std::vector<double> ms_in_data(5, 0);
+    std::vector<double> ms_in_data(7, 0);
     double kp = 500;
     double kd = 10;
     double q_ref1 = 0.1;
     double q_ref2 = 0.1;
     double q_ref3 = 0.1;
+    double q1, q2, q3;
     double tau1 = 0;
     double tau2 = 0;
     double tau3 = 0;
-    Timer timer(hertz(500), Timer::Hybrid);
+    double k_hard = 100;
+    double b_hard = 10;
+    Timer timer(hertz(2000), Timer::Hybrid);
     Time t;
     Time t_last;
     Time sim_time = 0_ms;
@@ -43,22 +46,29 @@ void simulation()
     {
         ms_in_data = ms_in.read_data();
         if (!ms_in_data.empty()){
+            kp = ms_in_data[0];
+            kd = ms_in_data[1];
             q_ref1 = ms_in_data[2];
             q_ref2 = ms_in_data[3];
             q_ref3 = ms_in_data[4]; 
-            kp = ms_in_data[0];
-            kd = ms_in_data[1];
+            k_hard = ms_in_data[5];
+            b_hard = ms_in_data[6];
         }
         {
             std::lock_guard<std::mutex> lock(g_mtx);
             tau1 = kp * (q_ref1 - g_model.q1) - kd * g_model.q1d;
             tau2 = kp * (q_ref2 - g_model.q2) - kd * g_model.q2d;
             tau3 = kp * (q_ref3 - g_model.q3) - kd * g_model.q3d;
+            g_model.Khard = k_hard;
+            g_model.Bhard = b_hard;
             g_model.set_torques(tau1,tau2,tau3);
             g_model.update(sim_time);
+            q1 = g_model.q1;
+            q2 = g_model.q2;
+            q3 = g_model.q3;
         }
         sim_time += 1_ms;
-        ms_out.write_data({double((t-t_last).as_microseconds()),tau1,tau2,tau3});
+        ms_out.write_data({double((t-t_last).as_microseconds()),tau1,tau2,tau3,q1,q2,q3});
         t_last = t;
         t = timer.wait();
     }

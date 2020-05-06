@@ -52,9 +52,14 @@ public:
         ImGui::Begin("PD Tuner");
         ImGui::DragDouble("Kp",&kp,0,0,1000);
         ImGui::DragDouble("Kd",&kd,0,0,100);
-        ImGui::DragDouble("q_ref 1",&q_ref1,0.0001f,0.03,0.15);
-        ImGui::DragDouble("q_ref 2",&q_ref2,0.0001f,0.03,0.15);    
-        ImGui::DragDouble("q_ref 3",&q_ref3,0.0001f,0.03,0.15);    
+        ImGui::DragDouble("Khard",&k_hard,0,0,20000);
+        ImGui::DragDouble("Bhard",&b_hard,0,0,2000);
+        ImGui::DragDouble("q_ref 1",&q_ref1,0.0001f,0.03,0.15,"%.4f");
+        ImGui::DragDouble("q_ref 2",&q_ref2,0.0001f,0.03,0.15,"%.4f");    
+        ImGui::DragDouble("q_ref 3",&q_ref3,0.0001f,0.03,0.15,"%.4f");    
+        ImGui::DragDouble("q1",&q1,0.0001f,0.03,0.15,"%.4f");
+        ImGui::DragDouble("q2",&q2,0.0001f,0.03,0.15,"%.4f");    
+        ImGui::DragDouble("q3",&q3,0.0001f,0.03,0.15,"%.4f");    
         // ImGui::InputDouble2("t",&t_dub);    
 
         if(!ms_in_data.empty()) 
@@ -62,6 +67,9 @@ public:
             tau1.AddPoint(t,ms_in_data[1]);
             tau2.AddPoint(t,ms_in_data[2]);
             tau3.AddPoint(t,ms_in_data[3]);
+            q1 = ms_in_data[4];
+            q2 = ms_in_data[5];
+            q3 = ms_in_data[6];
         // sim_rate.AddPoint(t,1.0f);
         ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
         ImGui::SetNextPlotRangeY(1500,3500);
@@ -80,7 +88,7 @@ public:
         t += ImGui::GetIO().DeltaTime;
         std::cout << t << std::endl;
         ImGui::End();
-        std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3};
+        std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3, k_hard, b_hard};
         ms_out.write_data(data);
     }
 
@@ -92,11 +100,16 @@ public:
     ScrollingData tau3;
     float t = 0;
     bool enabled = false;
+    double k_hard = 100;
+    double b_hard = 10;
     double kp = 400;
     double kd = 8;
     double q_ref1 = 0.1;
     double q_ref2 = 0.1;
     double q_ref3 = 0.1;
+    double q1 = 0.1;
+    double q2 = 0.1;
+    double q3 = 0.1;
     MelShare ms_out = MelShare("meii_sim_kp_kd_ref");
     MelShare ms_in = MelShare("meii_sim_rate_tau");
     std::atomic_bool stop = false;

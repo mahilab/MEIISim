@@ -3,6 +3,8 @@
 #include <Mahi/Util/Math/Constants.hpp>
 #include <Mahi/Util/Math/Integrator.hpp>
 #include <Mahi/Robo/Control/Limiter.hpp>
+#include <thread>
+#include <ctpl_stl.h>
 
 /// Dynamic Model of the OpenWrist
 class MeiiModel {
@@ -46,12 +48,12 @@ public:
     const double q1min = 0.050;
     const double q2min = 0.050;
     const double q3min = 0.050;
-    const double q1max = 0.133;
-    const double q2max = 0.133;
-    const double q3max = 0.133;
+    const double q1max = 0.1305;
+    const double q2max = 0.1305;
+    const double q3max = 0.1305;
 
-    const double Khard = 20000; // hardstop stiffness
-    const double Bhard = 1000;  // hardstop damping
+    double Khard = 20; // hardstop stiffness
+    double Bhard = 1;  // hardstop damping
 
     // // Joint Mass [kg]
     // const double m1 = 1.79265300000000;
@@ -134,4 +136,28 @@ private:
 
     // Integrators
     mahi::util::Integrator q1dd_q1d, q2dd_q2d, q3dd_q3d, q1d_q1, q2d_q2, q3d_q3;
+
+    double v00 = 0;
+    double v01 = 0;
+    double v02 = 0;
+    double v10 = 0;
+    double v11 = 0;
+    double v12 = 0;
+    double v20 = 0;
+    double v21 = 0;
+    double v22 = 0;
+    
+    bool threadpool = false;
+
+    ctpl::thread_pool p;
+
+    // std::thread t11;
+    // std::thread t12;
+    // std::thread t13;
+    // std::thread t21;
+    // std::thread t22;
+    // std::thread t23;
+    // std::thread t31;
+    // std::thread t32;
+    // std::thread t33;
 };

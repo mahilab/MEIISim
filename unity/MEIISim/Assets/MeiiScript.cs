@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+using fts;
+
 public class MeiiScript : MonoBehaviour {
 
     [Header("Positions")]
@@ -101,19 +103,47 @@ public class MeiiScript : MonoBehaviour {
     }
 
     /// Dll Imports
-    public class Dll {
-        [DllImport("meii_model")] 
-        public static extern void start();
-        [DllImport("meii_model")] 
-        public static extern void stop();
-        [DllImport("meii_model")] 
-        public static extern void set_torques(double tau1, double tau2, double tau3);
-        [DllImport("meii_model")]
-        public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6);
-        [DllImport("meii_model")]
-        public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d);
-        [DllImport("meii_model")]
-        public static extern void get_positions(double[] positions);
+    // public class Dll {
+    //     [DllImport("meii_model")] 
+    //     public static extern void start();
+    //     [DllImport("meii_model")] 
+    //     public static extern void stop();
+    //     [DllImport("meii_model")] 
+    //     public static extern void set_torques(double tau1, double tau2, double tau3);
+    //     [DllImport("meii_model")]
+    //     public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6);
+    //     [DllImport("meii_model")]
+    //     public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d);
+    //     [DllImport("meii_model")]
+    //     public static extern void get_positions(double[] positions);
+    // }
+
+    [PluginAttr("meii_model")]
+    public static class Dll
+    {        
+        [PluginFunctionAttr("start")]
+        public static Start start = null;
+        public delegate void Start();
+        
+        [PluginFunctionAttr("stop")]
+        public static Stop stop = null;
+        public delegate void Stop();
+        
+        [PluginFunctionAttr("set_torques")]
+        public static Set_torques set_torques = null;
+        public delegate void Set_torques(double tau1, double tau2, double tau3);
+        
+        [PluginFunctionAttr("set_positions")]
+        public static Set_positions set_positions = null;
+        public delegate void Set_positions(double q1, double q2, double q3, double q4, double q5, double q6);
+        
+        [PluginFunctionAttr("set_velocities")]
+        public static Set_velocities set_velocities = null;
+        public delegate void Set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d);
+        
+        [PluginFunctionAttr("get_positions")]
+        public static Get_positions get_positions = null;
+        public delegate void Get_positions(double[] positions);
     }
 }
 

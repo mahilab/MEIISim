@@ -76,13 +76,15 @@ int main(){
 
     while (true)
     {
-        std::cout << "here" << std::endl;
-        ms_in_data = ms_in.read_data();
-        q_ref1 = ms_in_data[2];
-        q_ref2 = ms_in_data[3];
-        q_ref3 = ms_in_data[4]; 
-        kp = ms_in_data[0];
-        kd = ms_in_data[1];
+        std::vector<double> ms_in_data = ms_in.read_data();
+        if (!ms_in_data.empty())
+        {
+            q_ref1 = ms_in_data[2];
+            q_ref2 = ms_in_data[3];
+            q_ref3 = ms_in_data[4]; 
+            kp = ms_in_data[0];
+            kd = ms_in_data[1];
+        }
         std::cout << q_ref1 << std::endl;
 
         double tau1 = kp * (q_ref1 - g_model.q1) - kd * g_model.q1d;
