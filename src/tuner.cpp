@@ -10,6 +10,21 @@ using namespace mahi::gui;
 using namespace mahi::util;
 using namespace mahi::com;
 
+struct ScrollingData {
+    int MaxSize = 1000;
+    int Offset  = 0;
+    ImVector<ImVec2> Data;
+    ScrollingData() { Data.reserve(MaxSize); }
+    void AddPoint(float x, float y) {
+        if (Data.size() < MaxSize)
+            Data.push_back(ImVec2(x,y));
+        else {
+            Data[Offset] = ImVec2(x,y);
+            Offset =  (Offset + 1) % MaxSize;
+        }
+    }
+};
+
 class PdTuner : public Application {
 public:
     /// Constructor
@@ -26,51 +41,64 @@ public:
         // control_thread = std::thread(&PdTuner::control_loop, this);
     }
 
-    // void roll_point(ImGui::PlotItem& item, Time t, double rads) {
-    //     float tmod = fmod(t.as_seconds(), 10);
-    //     float degs = rads * RAD2DEG;
-    //     if (!item.data.empty() && tmod < item.data.back().x)
-    //         item.data.clear();
-    //     item.data.push_back({tmod, degs});
-    // }
-
     ~PdTuner() {
          stop = true;
      }
 
     /// Override update from Application, called once per frame
     void update() override
-    { 
+    {
+        std::vector<double> ms_in_data = ms_in.read_data();
         ImGui::Begin("PD Tuner");
-        // if (ImGui::Checkbox("Enable", &enabled))
-        //     meii.set_enabled(enabled);
-        // ImGui::SliderInt("Joint", &j, 0, 2);
         ImGui::DragDouble("Kp",&kp,0,0,1000);
         ImGui::DragDouble("Kd",&kd,0,0,100);
         ImGui::DragDouble("q_ref 1",&q_ref1,0.0001f,0.03,0.15);
         ImGui::DragDouble("q_ref 2",&q_ref2,0.0001f,0.03,0.15);    
         ImGui::DragDouble("q_ref 3",&q_ref3,0.0001f,0.03,0.15);    
-        // if (ImGui::RadioButton("Square", traj.type == Waveform::Square))
-            // traj.type = Waveform::Square;
-        // ImGui::SameLine();
-        // if (ImGui::RadioButton("Sin", traj.type == Waveform::Sin))
-            // traj.type = Waveform::Sin;
-        // items[1].color = j == 0 ? Reds::Crimson : j == 1 ? Greens::Chartreuse : Blues::DeepSkyBlue;
-        // ImGui::Plot("Position", plot, items);
+        // ImGui::InputDouble2("t",&t_dub);    
+
+        if(!ms_in_data.empty()) 
+            sim_rate.AddPoint(t,ms_in_data[0]);
+            tau1.AddPoint(t,ms_in_data[1]);
+            tau2.AddPoint(t,ms_in_data[2]);
+            tau3.AddPoint(t,ms_in_data[3]);
+        // sim_rate.AddPoint(t,1.0f);
+        ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
+        ImGui::SetNextPlotRangeY(1500,3500);
+        ImGui::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,200}, ImPlotFlags_Default, rt_axis, rt_axis);
+        ImGui::Plot("Sim Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
+        ImGui::EndPlot();
+
+        ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
+        ImGui::SetNextPlotRangeY(-200,200);
+        ImGui::BeginPlot("##Forces", "Time (s)", "Force (N)", {-1,400}, ImPlotFlags_Default, rt_axis, rt_axis);
+        ImGui::Plot("Tau 1", &tau1.Data[0].x, &tau1.Data[0].y, tau1.Data.size(), tau1.Offset, 2 * sizeof(float));
+        ImGui::Plot("Tau 2", &tau2.Data[0].x, &tau2.Data[0].y, tau2.Data.size(), tau2.Offset, 2 * sizeof(float));
+        ImGui::Plot("Tau 3", &tau3.Data[0].x, &tau3.Data[0].y, tau3.Data.size(), tau3.Offset, 2 * sizeof(float));
+        ImGui::EndPlot();
+
+        t += ImGui::GetIO().DeltaTime;
+        std::cout << t << std::endl;
+        ImGui::End();
         std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3};
         ms_out.write_data(data);
-        // std::cout << kp << ", " << kd << ", " << q_ref1 << ", " << q_ref2 << ", " << q_ref3 << std::endl;
-        ImGui::End();
     }
 
     // Member Variables
+    int rt_axis = ImAxisFlags_Default & ~ImAxisFlags_TickLabels;
+    ScrollingData sim_rate;
+    ScrollingData tau1;
+    ScrollingData tau2;
+    ScrollingData tau3;
+    float t = 0;
     bool enabled = false;
     double kp = 400;
     double kd = 8;
     double q_ref1 = 0.1;
     double q_ref2 = 0.1;
     double q_ref3 = 0.1;
-    MelShare ms_out = MelShare("meii_sim");
+    MelShare ms_out = MelShare("meii_sim_kp_kd_ref");
+    MelShare ms_in = MelShare("meii_sim_rate_tau");
     std::atomic_bool stop = false;
     std::mutex mtx;
 };
