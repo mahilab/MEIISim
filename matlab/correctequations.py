@@ -24,7 +24,7 @@ for filename in filenames:
         
     write_file = open("../include/" + mat_name + ".hpp","w")
     write_file.writelines(fileheader)
-    write_file.write("double get_" + mat_name + "(std::vector<double> qs){\n")
+    write_file.write("inline double get_" + mat_name + "(const std::vector<double>& qs){\n")
     if "V" in mat_name: write_file.writelines(variables)
     else: write_file.writelines(variables_no_dots)
     write_file.write(content + "\n")

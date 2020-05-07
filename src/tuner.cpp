@@ -59,44 +59,56 @@ public:
         ImGui::DragDouble("q_ref 3",&q_ref3,0.0001f,0.03,0.15,"%.4f");    
         ImGui::DragDouble("q1",&q1,0.0001f,0.03,0.15,"%.4f");
         ImGui::DragDouble("q2",&q2,0.0001f,0.03,0.15,"%.4f");    
-        ImGui::DragDouble("q3",&q3,0.0001f,0.03,0.15,"%.4f");    
+        ImGui::DragDouble("q3",&q3,0.0001f,0.03,0.15,"%.4f");
+        ImGui::Checkbox("Threadpooled", &tp);    
 
         if(!ms_in_data.empty()) {
             sim_rate.AddPoint(t,ms_in_data[0]);
+            des_rate.AddPoint(t,1000.0f);
             tau1.AddPoint(t,ms_in_data[1]);
             tau2.AddPoint(t,ms_in_data[2]);
             tau3.AddPoint(t,ms_in_data[3]);
             q1 = ms_in_data[4];
             q2 = ms_in_data[5];
             q3 = ms_in_data[6];
+            calcTime.AddPoint(t,ms_in_data[7]);
+            updateTime.AddPoint(t,ms_in_data[8]);
         }
         ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
         ImGui::SetNextPlotRangeY(1500,3500);
-        ImGui::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,200}, ImPlotFlags_Default, rt_axis, rt_axis);
-        ImGui::Plot("Sim Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
+        ImGui::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis);
+        ImGui::Plot("Loop Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
+        ImGui::Plot("Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
+        ImGui::Plot("Update Time", &updateTime.Data[0].x, &updateTime.Data[0].y, updateTime.Data.size(), updateTime.Offset, 2 * sizeof(float));
+        ImGui::Plot("Desired Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
         ImGui::EndPlot();
 
         ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
-        ImGui::SetNextPlotRangeY(-200,200);
-        ImGui::BeginPlot("##Forces", "Time (s)", "Force (N)", {-1,400}, ImPlotFlags_Default, rt_axis, rt_axis);
-        ImGui::Plot("Tau 1", &tau1.Data[0].x, &tau1.Data[0].y, tau1.Data.size(), tau1.Offset, 2 * sizeof(float));
-        ImGui::Plot("Tau 2", &tau2.Data[0].x, &tau2.Data[0].y, tau2.Data.size(), tau2.Offset, 2 * sizeof(float));
-        ImGui::Plot("Tau 3", &tau3.Data[0].x, &tau3.Data[0].y, tau3.Data.size(), tau3.Offset, 2 * sizeof(float));
+        ImGui::SetNextPlotRangeY(-10,10);
+        ImGui::BeginPlot("##Forces", "Time (s)", "Force (N)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis);
+        ImGui::Plot("Force 1", &tau1.Data[0].x, &tau1.Data[0].y, tau1.Data.size(), tau1.Offset, 2 * sizeof(float));
+        ImGui::Plot("Force 2", &tau2.Data[0].x, &tau2.Data[0].y, tau2.Data.size(), tau2.Offset, 2 * sizeof(float));
+        ImGui::Plot("Force 3", &tau3.Data[0].x, &tau3.Data[0].y, tau3.Data.size(), tau3.Offset, 2 * sizeof(float));
         ImGui::EndPlot();
 
         t += ImGui::GetIO().DeltaTime;
         ImGui::End();
-        std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3, k_hard, b_hard};
+        double tp_double = tp ? 1.0 : 0.0;
+        std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3, k_hard, b_hard, tp_double};
         ms_out.write_data(data);
     }
 
     // Member Variables
     int rt_axis = ImAxisFlags_Default & ~ImAxisFlags_TickLabels;
     ScrollingData sim_rate;
+    ScrollingData des_rate;
     ScrollingData tau1;
     ScrollingData tau2;
     ScrollingData tau3;
+    ScrollingData updateTime;
+    ScrollingData calcTime;
     float t = 0;
+    bool tp = false;
     bool enabled = false;
     double k_hard = 100;
     double b_hard = 10;

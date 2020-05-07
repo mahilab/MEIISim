@@ -21,6 +21,8 @@ public:
 
 public:
 
+    bool threadpool = false;
+
     // Joint torques [Nm]
     double tau1, tau2, tau3;
     // Joint Positions [m]
@@ -54,6 +56,7 @@ public:
 
     double Khard = 20; // hardstop stiffness
     double Bhard = 1;  // hardstop damping
+    double mat_calc_time = 0;
 
     // // Joint Mass [kg]
     // const double m1 = 1.79265300000000;
@@ -146,8 +149,6 @@ private:
     // double v20 = 0;
     // double v21 = 0;
     // double v22 = 0;
-    
-    bool threadpool = false;
 
     ctpl::thread_pool p;
 

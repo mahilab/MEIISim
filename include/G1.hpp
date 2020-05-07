@@ -2,7 +2,7 @@
 #include <Mahi/Util.hpp>
 using namespace mahi::util;
 
-double get_G1(std::vector<double> qs){
+inline double get_G1(const std::vector<double>& qs){
 	double l1 = qs[0];
 	double l2 = qs[1];
 	double l3 = qs[2];

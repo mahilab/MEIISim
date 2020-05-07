@@ -26,7 +26,7 @@ void simulation()
 {
     MelShare ms_in("sim1");
     MelShare ms_out("sim2");
-    std::vector<double> ms_in_data(7, 0);
+    // std::vector<double> ms_in_data(7, 0);
     double kp = 500;
     double kd = 10;
     double q_ref1 = 0.1;
@@ -38,13 +38,16 @@ void simulation()
     double tau3 = 0;
     double k_hard = 100;
     double b_hard = 10;
-    Timer timer(hertz(2000), Timer::Hybrid);
+    double threadpooling = false;
+    double update_time = 0;
+    Timer timer(hertz(1000), Timer::Hybrid);
     Time t;
     Time t_last;
     Time sim_time = 0_ms;
+    double calc_time = 0;
     while (!g_stop)
     {
-        ms_in_data = ms_in.read_data();
+        auto ms_in_data = ms_in.read_data();
         if (!ms_in_data.empty()){
             kp = ms_in_data[0];
             kd = ms_in_data[1];
@@ -53,6 +56,7 @@ void simulation()
             q_ref3 = ms_in_data[4]; 
             k_hard = ms_in_data[5];
             b_hard = ms_in_data[6];
+            threadpooling = ms_in_data[7];
         }
         {
             std::lock_guard<std::mutex> lock(g_mtx);
@@ -62,13 +66,17 @@ void simulation()
             g_model.Khard = k_hard;
             g_model.Bhard = b_hard;
             g_model.set_torques(tau1,tau2,tau3);
+            Clock TimeSim;
             g_model.update(sim_time);
+            update_time = double(TimeSim.get_elapsed_time().as_microseconds());
             q1 = g_model.q1;
             q2 = g_model.q2;
             q3 = g_model.q3;
+            g_model.threadpool = (threadpooling > 0.5) ? true : false;
+            calc_time = g_model.mat_calc_time;
         }
         sim_time += 1_ms;
-        ms_out.write_data({double((t-t_last).as_microseconds()),tau1,tau2,tau3,q1,q2,q3});
+        ms_out.write_data({double((t-t_last).as_microseconds()),tau1,tau2,tau3,q1,q2,q3,calc_time,update_time});
         t_last = t;
         t = timer.wait();
     }
