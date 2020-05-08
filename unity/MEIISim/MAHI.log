@@ -1434,3 +1434,6 @@
 2020-05-08 12:25:27.251 WARN  [21016] Opened an existing mutex when trying to create NamedMutex sim2_mutex
 2020-05-08 12:26:10.268 WARN  [6140] Opened an existing mutex when trying to create NamedMutex sim1_mutex
 2020-05-08 12:26:10.268 WARN  [6140] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 14:52:25.930 INFO  [1404] Logger 0 Initialized
+2020-05-08 14:53:25.578 WARN  [17044] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 14:53:25.578 WARN  [17044] Opened an existing mutex when trying to create NamedMutex sim2_mutex

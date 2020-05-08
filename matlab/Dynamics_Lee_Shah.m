@@ -185,9 +185,6 @@ Gpar = rho.'*G;
 % EOMS_final = [EOMS(1:3).' - BT*gammas; EOMS(4:6).' - AT*gammas];
 %% Substitute in actual values
 
-% Ixx = 0.03990366;
-% Iyy = 0.09672265;
-% Izz = 0.13629088;
 Ixx = 0.00091827;
 Iyy = 0.00080377;
 Izz = 0.00138661;
