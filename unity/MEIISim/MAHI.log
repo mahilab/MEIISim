@@ -1273,3 +1273,164 @@
 2020-05-07 16:57:42.101 INFO  [5668] Logger 0 Initialized
 2020-05-07 16:57:42.401 WARN  [22736] Opened an existing mutex when trying to create NamedMutex sim1_mutex
 2020-05-07 16:57:42.401 WARN  [22736] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 10:17:29.592 INFO  [20196] Logger 0 Initialized
+2020-05-08 10:17:29.989 WARN  [23524] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 10:17:29.990 WARN  [23524] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 10:17:31.075 WARN  [23524] Timer miss rate of 0.0139303 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.095 WARN  [23524] Timer miss rate of 0.0146628 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.097 WARN  [23524] Timer miss rate of 0.015625 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.099 WARN  [23524] Timer miss rate of 0.0165854 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.104 WARN  [23524] Timer miss rate of 0.0174927 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.124 WARN  [23524] Timer miss rate of 0.0181298 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.166 WARN  [23524] Timer miss rate of 0.0184332 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.171 WARN  [23524] Timer miss rate of 0.0192837 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.173 WARN  [23524] Timer miss rate of 0.0201835 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.184 WARN  [23524] Timer miss rate of 0.0209281 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.189 WARN  [23524] Timer miss rate of 0.0217391 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.197 WARN  [23524] Timer miss rate of 0.0225428 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.211 WARN  [23524] Timer miss rate of 0.0232975 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.222 WARN  [23524] Timer miss rate of 0.0239787 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.237 WARN  [23524] Timer miss rate of 0.0246696 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.239 WARN  [23524] Timer miss rate of 0.0255282 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.267 WARN  [23524] Timer miss rate of 0.0259516 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.268 WARN  [23524] Timer miss rate of 0.0267934 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.274 WARN  [23524] Timer miss rate of 0.0275862 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.291 WARN  [23524] Timer miss rate of 0.0280612 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.297 WARN  [23524] Timer miss rate of 0.0287648 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.330 WARN  [23524] Timer miss rate of 0.0291181 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.334 WARN  [23524] Timer miss rate of 0.0298507 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.389 WARN  [23524] Timer miss rate of 0.0295291 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.398 WARN  [23524] Timer miss rate of 0.0301348 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.411 WARN  [23524] Timer miss rate of 0.0307814 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.441 WARN  [23524] Timer miss rate of 0.0309837 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.444 WARN  [23524] Timer miss rate of 0.0316847 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.473 WARN  [23524] Timer miss rate of 0.0318182 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.501 WARN  [23524] Timer miss rate of 0.031994 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.507 WARN  [23524] Timer miss rate of 0.0326652 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.522 WARN  [23524] Timer miss rate of 0.0331126 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.524 WARN  [23524] Timer miss rate of 0.0338235 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.550 WARN  [23524] Timer miss rate of 0.0339841 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.559 WARN  [23524] Timer miss rate of 0.0345572 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.587 WARN  [23524] Timer miss rate of 0.034678 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.628 WARN  [23524] Timer miss rate of 0.0345304 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.635 WARN  [23524] Timer miss rate of 0.0350998 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.659 WARN  [23524] Timer miss rate of 0.0353741 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.670 WARN  [23524] Timer miss rate of 0.035835 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.673 WARN  [23524] Timer miss rate of 0.0364372 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.679 WARN  [23524] Timer miss rate of 0.0370121 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.681 WARN  [23524] Timer miss rate of 0.0376344 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.704 WARN  [23524] Timer miss rate of 0.0377984 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.708 WARN  [23524] Timer miss rate of 0.0384106 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.709 WARN  [23524] Timer miss rate of 0.039047 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.794 WARN  [23524] Timer miss rate of 0.0377121 exceeded acceptable rate of 0.01
+2020-05-08 10:17:31.828 WARN  [23524] Timer miss rate of 0.0376776 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.028 WARN  [23524] Timer miss rate of 0.0344444 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.081 WARN  [23524] Timer miss rate of 0.0340541 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.179 WARN  [23524] Timer miss rate of 0.0330408 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.269 WARN  [23524] Timer miss rate of 0.0321942 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.283 WARN  [23524] Timer miss rate of 0.0324963 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.304 WARN  [23524] Timer miss rate of 0.0327148 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.310 WARN  [23524] Timer miss rate of 0.0331061 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.323 WARN  [23524] Timer miss rate of 0.0333817 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.815 WARN  [23524] Timer miss rate of 0.0274725 exceeded acceptable rate of 0.01
+2020-05-08 10:17:32.892 WARN  [23524] Timer miss rate of 0.0270682 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.352 WARN  [23524] Timer miss rate of 0.0234451 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.357 WARN  [23524] Timer miss rate of 0.0237398 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.621 WARN  [23524] Timer miss rate of 0.0222489 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.673 WARN  [23524] Timer miss rate of 0.0222684 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.690 WARN  [23524] Timer miss rate of 0.0224653 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.707 WARN  [23524] Timer miss rate of 0.0226804 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.709 WARN  [23524] Timer miss rate of 0.0229682 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.715 WARN  [23524] Timer miss rate of 0.0232353 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.744 WARN  [23524] Timer miss rate of 0.023344 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.808 WARN  [23524] Timer miss rate of 0.0232826 exceeded acceptable rate of 0.01
+2020-05-08 10:17:33.837 WARN  [23524] Timer miss rate of 0.0233885 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.057 WARN  [23524] Timer miss rate of 0.0223118 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.069 WARN  [23524] Timer miss rate of 0.0225201 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.083 WARN  [23524] Timer miss rate of 0.022776 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.099 WARN  [23524] Timer miss rate of 0.0230008 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.101 WARN  [23524] Timer miss rate of 0.023262 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.122 WARN  [23524] Timer miss rate of 0.0234604 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.132 WARN  [23524] Timer miss rate of 0.0236702 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.241 WARN  [23524] Timer miss rate of 0.0232859 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.242 WARN  [23524] Timer miss rate of 0.0235385 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.275 WARN  [23524] Timer miss rate of 0.0236018 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.296 WARN  [23524] Timer miss rate of 0.0237487 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.712 WARN  [23524] Timer miss rate of 0.0217391 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.891 WARN  [23524] Timer miss rate of 0.0211111 exceeded acceptable rate of 0.01
+2020-05-08 10:17:34.941 WARN  [23524] Timer miss rate of 0.0212014 exceeded acceptable rate of 0.01
+2020-05-08 10:17:35.587 WARN  [23524] Timer miss rate of 0.0188716 exceeded acceptable rate of 0.01
+2020-05-08 10:17:35.593 WARN  [23524] Timer miss rate of 0.0190587 exceeded acceptable rate of 0.01
+2020-05-08 10:17:35.594 WARN  [23524] Timer miss rate of 0.0192495 exceeded acceptable rate of 0.01
+2020-05-08 10:17:36.242 WARN  [23524] Timer miss rate of 0.0173702 exceeded acceptable rate of 0.01
+2020-05-08 10:17:37.905 WARN  [23524] Timer miss rate of 0.0136597 exceeded acceptable rate of 0.01
+2020-05-08 10:21:40.609 INFO  [21464] Logger 0 Initialized
+2020-05-08 10:21:40.955 WARN  [23584] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 10:21:40.955 WARN  [23584] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 10:33:22.475 INFO  [3688] Logger 0 Initialized
+2020-05-08 10:35:17.959 INFO  [13588] Logger 0 Initialized
+2020-05-08 10:38:36.110 INFO  [23888] Logger 0 Initialized
+2020-05-08 10:41:01.320 INFO  [6552] Logger 0 Initialized
+2020-05-08 10:41:01.620 WARN  [5036] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 10:41:01.620 WARN  [5036] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 10:43:33.414 INFO  [2288] Logger 0 Initialized
+2020-05-08 10:43:33.733 WARN  [8468] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 10:43:33.733 WARN  [8468] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 10:54:38.807 INFO  [2784] Logger 0 Initialized
+2020-05-08 10:57:50.570 INFO  [15196] Logger 0 Initialized
+2020-05-08 10:58:50.033 WARN  [22824] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 10:58:50.033 WARN  [22824] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:01:28.374 INFO  [14324] Logger 0 Initialized
+2020-05-08 11:01:28.700 WARN  [5028] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:01:28.700 WARN  [5028] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:02:08.767 INFO  [10752] Logger 0 Initialized
+2020-05-08 11:02:09.069 WARN  [6516] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:02:09.069 WARN  [6516] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:02:42.368 INFO  [3564] Logger 0 Initialized
+2020-05-08 11:02:42.705 WARN  [23580] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:02:42.705 WARN  [23580] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:04:47.080 INFO  [11856] Logger 0 Initialized
+2020-05-08 11:04:47.372 WARN  [11000] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:04:47.372 WARN  [11000] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:06:15.954 INFO  [15764] Logger 0 Initialized
+2020-05-08 11:06:16.325 WARN  [17940] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:06:16.325 WARN  [17940] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:07:02.087 INFO  [11088] Logger 0 Initialized
+2020-05-08 11:07:02.377 WARN  [15924] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:07:02.377 WARN  [15924] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:09:16.180 INFO  [732] Logger 0 Initialized
+2020-05-08 11:09:16.504 WARN  [6732] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:09:16.504 WARN  [6732] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:13:00.034 WARN  [20656] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:13:00.034 WARN  [20656] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:29:55.576 WARN  [18368] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:29:55.576 WARN  [18368] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:36:09.212 WARN  [1632] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:36:09.212 WARN  [1632] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:40:40.109 INFO  [23808] Logger 0 Initialized
+2020-05-08 11:40:40.411 WARN  [19788] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:40:40.411 WARN  [19788] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:44:28.021 INFO  [11952] Logger 0 Initialized
+2020-05-08 11:44:28.324 WARN  [23888] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 11:44:28.324 WARN  [23888] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 11:56:13.117 WARN  [24520] Timer miss rate of 0.0106525 exceeded acceptable rate of 0.01
+2020-05-08 11:56:13.123 WARN  [24520] Timer miss rate of 0.0112732 exceeded acceptable rate of 0.01
+2020-05-08 11:56:13.127 WARN  [24520] Timer miss rate of 0.0119126 exceeded acceptable rate of 0.01
+2020-05-08 11:56:13.139 WARN  [24520] Timer miss rate of 0.0124918 exceeded acceptable rate of 0.01
+2020-05-08 11:56:13.141 WARN  [24520] Timer miss rate of 0.0131406 exceeded acceptable rate of 0.01
+2020-05-08 12:12:32.473 INFO  [20020] Logger 0 Initialized
+2020-05-08 12:13:39.185 WARN  [8744] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 12:13:39.185 WARN  [8744] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 12:13:52.646 WARN  [1452] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 12:13:52.647 WARN  [1452] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 12:14:08.556 WARN  [20284] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 12:14:08.556 WARN  [20284] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 12:14:42.577 WARN  [19120] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 12:14:42.578 WARN  [19120] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 12:24:08.023 INFO  [32] Logger 0 Initialized
+2020-05-08 12:24:08.340 WARN  [23948] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 12:24:08.340 WARN  [23948] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 12:25:27.250 WARN  [21016] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 12:25:27.251 WARN  [21016] Opened an existing mutex when trying to create NamedMutex sim2_mutex
+2020-05-08 12:26:10.268 WARN  [6140] Opened an existing mutex when trying to create NamedMutex sim1_mutex
+2020-05-08 12:26:10.268 WARN  [6140] Opened an existing mutex when trying to create NamedMutex sim2_mutex

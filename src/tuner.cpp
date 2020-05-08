@@ -1,4 +1,4 @@
-// #define MAHI_GUI_NO_CONSOLE
+#define MAHI_GUI_NO_CONSOLE
 #include <Mahi/Gui.hpp>
 #include <Mahi/Util.hpp>
 #include <Mahi/Com.hpp>
@@ -25,23 +25,16 @@ struct ScrollingData {
     }
 };
 
-class PdTuner : public Application {
+class SimTuner : public Application {
 public:
     /// Constructor
-    PdTuner() : Application(500,500,"PD Tuner") 
+    SimTuner() : Application(500,500,"Sim Tuner"),
+    calc_times_1s(60)
     { 
-        // ImGui::DisableViewports();
-        // plot.x_axis.minimum = 0;   plot.x_axis.maximum = 10;
-        // plot.y_axis.minimum = -50; plot.y_axis.maximum = 50;
-        // items.resize(2);
-        // items[0].color = Grays::Gray50;
-        // items[0].data.reserve(20000);
-        // items[1].color = Blues::DeepSkyBlue;
-        // items[1].data.reserve(20000);
-        // control_thread = std::thread(&PdTuner::control_loop, this);
+
     }
 
-    ~PdTuner() {
+    ~SimTuner() {
          stop = true;
      }
 
@@ -49,6 +42,20 @@ public:
     void update() override
     {
         std::vector<double> ms_in_data = ms_in.read_data();
+        if(!ms_in_data.empty()) {
+            sim_rate.AddPoint(t,ms_in_data[0]);
+            des_rate.AddPoint(t,1000.0f);
+            tau1.AddPoint(t,ms_in_data[1]);
+            tau2.AddPoint(t,ms_in_data[2]);
+            tau3.AddPoint(t,ms_in_data[3]);
+            q1 = ms_in_data[4];
+            q2 = ms_in_data[5];
+            q3 = ms_in_data[6];
+            calcTime.AddPoint(t,ms_in_data[7]);
+            calc_times_1s.push_back(ms_in_data[7]);
+            setupTime.AddPoint(t,ms_in_data[8]);
+            compTime.AddPoint(t,ms_in_data[9]);
+        }
         ImGui::Begin("PD Tuner");
         ImGui::DragDouble("Kp",&kp,0,0,1000);
         ImGui::DragDouble("Kd",&kd,0,0,100);
@@ -61,26 +68,18 @@ public:
         ImGui::DragDouble("q2",&q2,0.0001f,0.03,0.15,"%.4f");    
         ImGui::DragDouble("q3",&q3,0.0001f,0.03,0.15,"%.4f");
         ImGui::Checkbox("Threadpooled", &tp);    
+        ImGui::SliderInt("Number of Threads", &nthread, 1, 20);
+        double mean_calc_time = mean(calc_times_1s.get_vector());
+        ImGui::InputDouble("Mean Calc Time",&mean_calc_time);
 
-        if(!ms_in_data.empty()) {
-            sim_rate.AddPoint(t,ms_in_data[0]);
-            des_rate.AddPoint(t,1000.0f);
-            tau1.AddPoint(t,ms_in_data[1]);
-            tau2.AddPoint(t,ms_in_data[2]);
-            tau3.AddPoint(t,ms_in_data[3]);
-            q1 = ms_in_data[4];
-            q2 = ms_in_data[5];
-            q3 = ms_in_data[6];
-            calcTime.AddPoint(t,ms_in_data[7]);
-            updateTime.AddPoint(t,ms_in_data[8]);
-        }
         ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
-        ImGui::SetNextPlotRangeY(1500,3500);
+        ImGui::SetNextPlotRangeY(0,1500);
         ImGui::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis);
         ImGui::Plot("Loop Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
-        ImGui::Plot("Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
-        ImGui::Plot("Update Time", &updateTime.Data[0].x, &updateTime.Data[0].y, updateTime.Data.size(), updateTime.Offset, 2 * sizeof(float));
-        ImGui::Plot("Desired Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
+        ImGui::Plot("Desired Loop Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
+        ImGui::Plot("Total Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
+        ImGui::Plot("Setup Time (thread)", &setupTime.Data[0].x, &setupTime.Data[0].y, setupTime.Data.size(), setupTime.Offset, 2 * sizeof(float));
+        ImGui::Plot("Comp Time (thread)", &compTime.Data[0].x, &compTime.Data[0].y, compTime.Data.size(), compTime.Offset, 2 * sizeof(float));
         ImGui::EndPlot();
 
         ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
@@ -94,7 +93,7 @@ public:
         t += ImGui::GetIO().DeltaTime;
         ImGui::End();
         double tp_double = tp ? 1.0 : 0.0;
-        std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3, k_hard, b_hard, tp_double};
+        std::vector<double> data = {kp, kd, q_ref1, q_ref2, q_ref3, k_hard, b_hard, tp_double, double(nthread)};
         ms_out.write_data(data);
     }
 
@@ -105,18 +104,20 @@ public:
     ScrollingData tau1;
     ScrollingData tau2;
     ScrollingData tau3;
-    ScrollingData updateTime;
     ScrollingData calcTime;
+    ScrollingData setupTime;
+    ScrollingData compTime;
     float t = 0;
     bool tp = false;
     bool enabled = false;
-    double k_hard = 100;
-    double b_hard = 10;
-    double kp = 400;
-    double kd = 8;
+    double k_hard = 20000;
+    double b_hard = 100;
+    double kp = 600;
+    double kd = 15;
     double q_ref1 = 0.1;
     double q_ref2 = 0.1;
     double q_ref3 = 0.1;
+    int nthread = 5;
     double q1 = 0.1;
     double q2 = 0.1;
     double q3 = 0.1;
@@ -124,11 +125,12 @@ public:
     MelShare ms_in = MelShare("sim2");
     std::atomic_bool stop = false;
     std::mutex mtx;
+    RingBuffer<double> calc_times_1s;
 };
 
 int main(int argc, char const *argv[])
 {
-    PdTuner tuner;
+    SimTuner tuner;
     tuner.run();
     return 0;
 }

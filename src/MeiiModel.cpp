@@ -24,7 +24,7 @@ MeiiModel::MeiiModel() :
     lim1(tau1_mot_cont * eta1, tau1_mot_max * eta1, seconds(2)),
     lim2(tau2_mot_cont * eta2, tau2_mot_max * eta2, seconds(2)),
     lim3(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2)),
-    p(2)
+    p(12)
 {
     reset();
     // std::cout << "here1";
@@ -50,61 +50,118 @@ void MeiiModel::update(Time t)
     Vector3d Tau;
     Clock MatCalcClock;
     if(threadpool){
+
+        // V Matrix
+        Clock SetupTime;
+
         std::vector<double> qs1 = qs;
         auto v00 = p.push([&qs1](int){return get_V11(qs1);});
-        int padding1[16];
+        int padding1[32];
 
         std::vector<double> qs2 = qs;
         auto v01 = p.push([&qs2](int){return get_V12(qs2);});
-        int padding2[16];
+        int padding2[32];
 
         std::vector<double> qs3 = qs;
         auto v02 = p.push([&qs3](int){return get_V13(qs3);});
-        int padding3[16];
+        int padding3[32];
 
         std::vector<double> qs4 = qs;
         auto v10 = p.push([&qs4](int){return get_V21(qs4);});
-        int padding4[16];
+        int padding4[32];
 
         std::vector<double> qs5 = qs;
         auto v11 = p.push([&qs5](int){return get_V22(qs5);});
-        int padding5[16];
+        int padding5[32];
 
         std::vector<double> qs6 = qs;
         auto v12 = p.push([&qs6](int){return get_V23(qs6);});
-        int padding6[16];
+        int padding6[32];
 
         std::vector<double> qs7 = qs;
         auto v20 = p.push([&qs7](int){return get_V31(qs7);});
-        int padding7[16];
+        int padding7[32];
 
         std::vector<double> qs8 = qs;
         auto v21 = p.push([&qs8](int){return get_V32(qs8);});
-        int padding8[16];
+        int padding8[32];
 
         std::vector<double> qs9 = qs;
         auto v22 = p.push([&qs9](int){return get_V33(qs9);});
-        int padding9[16];
+        int padding9[32];
 
-        M(0,0) = get_M11(qs);
-        M(0,1) = get_M12(qs);
-        M(0,2) = get_M13(qs);
-        M(1,0) = get_M21(qs);
-        M(1,1) = get_M22(qs);
-        M(1,2) = get_M23(qs);
-        M(2,0) = get_M31(qs);
-        M(2,1) = get_M32(qs);
-        M(2,2) = get_M33(qs);
+        // M Matrix
 
-        
-        G[0] = get_G1(qs);
-        G[1] = get_G2(qs);
-        G[2] = get_G3(qs);
+        std::vector<double> qs10 = qs;
+        auto m00 = p.push([&qs10](int){return get_M11(qs10);});
+        int padding10[32];
 
-        
+        std::vector<double> qs11 = qs;
+        auto m01 = p.push([&qs11](int){return get_M12(qs11);});
+        int padding11[32];
+
+        std::vector<double> qs12 = qs;
+        auto m02 = p.push([&qs12](int){return get_M13(qs12);});
+        int padding12[32];
+
+        std::vector<double> qs13 = qs;
+        auto m10 = p.push([&qs13](int){return get_M21(qs13);});
+        int padding13[32];
+
+        std::vector<double> qs14 = qs;
+        auto m11 = p.push([&qs14](int){return get_M22(qs14);});
+        int padding14[32];
+
+        std::vector<double> qs15 = qs;
+        auto m12 = p.push([&qs15](int){return get_M23(qs15);});
+        int padding15[32];
+
+        std::vector<double> qs16 = qs;
+        auto m20 = p.push([&qs16](int){return get_M31(qs16);});
+        int padding16[32];
+
+        std::vector<double> qs17 = qs;
+        auto m21 = p.push([&qs17](int){return get_M32(qs17);});
+        int padding17[32];
+
+        std::vector<double> qs18 = qs;
+        auto m22 = p.push([&qs18](int){return get_M33(qs18);});
+        int padding18[32];
+
+        // G Vector
+
+        std::vector<double> qs19 = qs;
+        auto g0 = p.push([&qs19](int){return get_G1(qs19);});
+        int padding19[32];
+
+        std::vector<double> qs20 = qs;
+        auto g1 = p.push([&qs20](int){return get_G2(qs20);});
+        int padding20[32];
+
+        std::vector<double> qs21 = qs;
+        auto g2 = p.push([&qs21](int){return get_G3(qs21);});
+        int padding21[32];
+
+        setup_time = double(SetupTime.get_elapsed_time().as_microseconds());
+        Clock CompTime;
+
         Tau[0] = tau1 + hardstop_torque(q1,q1d,q1min,q1max,Khard,Bhard);
         Tau[1] = tau2 + hardstop_torque(q2,q2d,q2min,q2max,Khard,Bhard);
         Tau[2] = tau3 + hardstop_torque(q3,q3d,q3min,q3max,Khard,Bhard);
+
+        G(0) = g0.get();
+        G(1) = g1.get();
+        G(2) = g2.get();
+        
+        M(0,0) = m00.get();
+        M(0,1) = m01.get();
+        M(0,2) = m02.get();
+        M(1,0) = m10.get();
+        M(1,1) = m11.get();
+        M(1,2) = m12.get();
+        M(2,0) = m20.get();
+        M(2,1) = m21.get();
+        M(2,2) = m22.get();
 
         V(0,0) = v00.get();
         V(0,1) = v01.get();
@@ -115,6 +172,8 @@ void MeiiModel::update(Time t)
         V(2,0) = v20.get();
         V(2,1) = v21.get();
         V(2,2) = v22.get();
+
+        comp_time = double(CompTime.get_elapsed_time().as_microseconds());
     }
     else{
         V(0,0) = get_V11(qs);
@@ -126,7 +185,6 @@ void MeiiModel::update(Time t)
         V(2,0) = get_V31(qs);
         V(2,1) = get_V32(qs);
         V(2,2) = get_V33(qs);
-
         
         M(0,0) = get_M11(qs);
         M(0,1) = get_M12(qs);
@@ -145,7 +203,11 @@ void MeiiModel::update(Time t)
         Tau[0] = tau1 + hardstop_torque(q1,q1d,q1min,q1max,Khard,Bhard);
         Tau[1] = tau2 + hardstop_torque(q2,q2d,q2min,q2max,Khard,Bhard);
         Tau[2] = tau3 + hardstop_torque(q3,q3d,q3min,q3max,Khard,Bhard);
+
+        setup_time = 0.0;
+        comp_time = 0.0;
     }
+
     mat_calc_time = MatCalcClock.get_elapsed_time().as_microseconds();
 
     Matrix3d A = M;// + M_mot;

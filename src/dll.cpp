@@ -26,9 +26,8 @@ void simulation()
 {
     MelShare ms_in("sim1");
     MelShare ms_out("sim2");
-    // std::vector<double> ms_in_data(7, 0);
-    double kp = 500;
-    double kd = 10;
+    double kp = 600;
+    double kd = 15;
     double q_ref1 = 0.1;
     double q_ref2 = 0.1;
     double q_ref3 = 0.1;
@@ -36,15 +35,18 @@ void simulation()
     double tau1 = 0;
     double tau2 = 0;
     double tau3 = 0;
-    double k_hard = 100;
-    double b_hard = 10;
+    double k_hard = 20000;
+    double b_hard = 100;
     double threadpooling = false;
-    double update_time = 0;
     Timer timer(hertz(1000), Timer::Hybrid);
     Time t;
     Time t_last;
     Time sim_time = 0_ms;
     double calc_time = 0;
+    double setup_time = 0;
+    double comp_time = 0;
+    int n_threads = 5;
+    int n_threads_last = n_threads;
     while (!g_stop)
     {
         auto ms_in_data = ms_in.read_data();
@@ -57,26 +59,29 @@ void simulation()
             k_hard = ms_in_data[5];
             b_hard = ms_in_data[6];
             threadpooling = ms_in_data[7];
+            n_threads = int(ms_in_data[8]);
         }
         {
             std::lock_guard<std::mutex> lock(g_mtx);
+            if (n_threads != n_threads_last) g_model.p.resize(n_threads);
+            n_threads_last = n_threads;
             tau1 = kp * (q_ref1 - g_model.q1) - kd * g_model.q1d;
             tau2 = kp * (q_ref2 - g_model.q2) - kd * g_model.q2d;
             tau3 = kp * (q_ref3 - g_model.q3) - kd * g_model.q3d;
             g_model.Khard = k_hard;
             g_model.Bhard = b_hard;
             g_model.set_torques(tau1,tau2,tau3);
-            Clock TimeSim;
             g_model.update(sim_time);
-            update_time = double(TimeSim.get_elapsed_time().as_microseconds());
             q1 = g_model.q1;
             q2 = g_model.q2;
             q3 = g_model.q3;
             g_model.threadpool = (threadpooling > 0.5) ? true : false;
             calc_time = g_model.mat_calc_time;
+            setup_time = g_model.setup_time;
+            comp_time = g_model.comp_time;
         }
         sim_time += 1_ms;
-        ms_out.write_data({double((t-t_last).as_microseconds()),tau1,tau2,tau3,q1,q2,q3,calc_time,update_time});
+        ms_out.write_data({double((t-t_last).as_microseconds()),tau1,tau2,tau3,q1,q2,q3,calc_time,setup_time,comp_time});
         t_last = t;
         t = timer.wait();
     }

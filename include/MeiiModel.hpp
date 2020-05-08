@@ -57,6 +57,8 @@ public:
     double Khard = 20; // hardstop stiffness
     double Bhard = 1;  // hardstop damping
     double mat_calc_time = 0;
+    double setup_time = 0;
+    double comp_time = 0;
 
     // // Joint Mass [kg]
     // const double m1 = 1.79265300000000;
@@ -133,6 +135,8 @@ public:
     // Gravity Constant [m/s^2]
     const double g = 9.80665;
 
+    ctpl::thread_pool p;
+
 private:
     // torque limiters
     mahi::robo::Limiter lim1, lim2, lim3;
@@ -149,8 +153,6 @@ private:
     // double v20 = 0;
     // double v21 = 0;
     // double v22 = 0;
-
-    ctpl::thread_pool p;
 
     // std::thread t11;
     // std::thread t12;
