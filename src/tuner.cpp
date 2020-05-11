@@ -29,7 +29,7 @@ class SimTuner : public Application {
 public:
     /// Constructor
     SimTuner() : Application(500,500,"Sim Tuner"),
-    calc_times_1s(60)
+    calc_times_1s(300)
     { 
         sim_rate.AddPoint(t,0);
         des_rate.AddPoint(t,0);
@@ -76,8 +76,8 @@ public:
         ImGui::DragDouble("q3",&q3,0.0001f,0.03,0.15,"%.4f");
         ImGui::Checkbox("Threadpooled", &tp);    
         ImGui::SliderInt("Number of Threads", &nthread, 1, 20);
-        double mean_calc_time = mean(calc_times_1s.get_vector());
-        ImGui::InputDouble("Mean Calc Time",&mean_calc_time);
+        int mean_calc_time = int(mean(calc_times_1s.get_vector()));
+        ImGui::InputInt("Mean Calc Time",&mean_calc_time);
 
         ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
         ImGui::SetNextPlotRangeY(0,1500);

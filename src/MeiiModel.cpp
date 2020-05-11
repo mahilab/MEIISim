@@ -1,6 +1,5 @@
 #include "MeiiModel.hpp"
 #include "Eqns.hpp"
-#include <Eigen/Dense>
 // #include <thread>
 
 using Eigen::Matrix3d;
@@ -44,103 +43,36 @@ void MeiiModel::update(Time t)
 
     Vector3d qdot(q1d,q2d,q3d);
     // Coriolis vector
-    Matrix3d V;
-    Matrix3d M;
-    Vector3d G;
-    Vector3d Tau;
     Clock MatCalcClock;
     if(threadpool){
 
         // V Matrix
         Clock SetupTime;
-
-        std::vector<double> qs1 = qs;
-        auto v00 = p.push([&qs1](int){return get_V11(qs1);});
-        int padding1[32];
-
-        std::vector<double> qs2 = qs;
-        auto v01 = p.push([&qs2](int){return get_V12(qs2);});
-        int padding2[32];
-
-        std::vector<double> qs3 = qs;
-        auto v02 = p.push([&qs3](int){return get_V13(qs3);});
-        int padding3[32];
-
-        std::vector<double> qs4 = qs;
-        auto v10 = p.push([&qs4](int){return get_V21(qs4);});
-        int padding4[32];
-
-        std::vector<double> qs5 = qs;
-        auto v11 = p.push([&qs5](int){return get_V22(qs5);});
-        int padding5[32];
-
-        std::vector<double> qs6 = qs;
-        auto v12 = p.push([&qs6](int){return get_V23(qs6);});
-        int padding6[32];
-
-        std::vector<double> qs7 = qs;
-        auto v20 = p.push([&qs7](int){return get_V31(qs7);});
-        int padding7[32];
-
-        std::vector<double> qs8 = qs;
-        auto v21 = p.push([&qs8](int){return get_V32(qs8);});
-        int padding8[32];
-
-        std::vector<double> qs9 = qs;
-        auto v22 = p.push([&qs9](int){return get_V33(qs9);});
-        int padding9[32];
+        v00 = p.push([&qs](int){return get_V11(qs);});
+        v01 = p.push([&qs](int){return get_V12(qs);});
+        v02 = p.push([&qs](int){return get_V13(qs);});
+        v10 = p.push([&qs](int){return get_V21(qs);});
+        v11 = p.push([&qs](int){return get_V22(qs);});
+        v12 = p.push([&qs](int){return get_V23(qs);});
+        v20 = p.push([&qs](int){return get_V31(qs);});
+        v21 = p.push([&qs](int){return get_V32(qs);});
+        v22 = p.push([&qs](int){return get_V33(qs);});
 
         // M Matrix
-
-        std::vector<double> qs10 = qs;
-        auto m00 = p.push([&qs10](int){return get_M11(qs10);});
-        int padding10[32];
-
-        std::vector<double> qs11 = qs;
-        auto m01 = p.push([&qs11](int){return get_M12(qs11);});
-        int padding11[32];
-
-        std::vector<double> qs12 = qs;
-        auto m02 = p.push([&qs12](int){return get_M13(qs12);});
-        int padding12[32];
-
-        std::vector<double> qs13 = qs;
-        auto m10 = p.push([&qs13](int){return get_M21(qs13);});
-        int padding13[32];
-
-        std::vector<double> qs14 = qs;
-        auto m11 = p.push([&qs14](int){return get_M22(qs14);});
-        int padding14[32];
-
-        std::vector<double> qs15 = qs;
-        auto m12 = p.push([&qs15](int){return get_M23(qs15);});
-        int padding15[32];
-
-        std::vector<double> qs16 = qs;
-        auto m20 = p.push([&qs16](int){return get_M31(qs16);});
-        int padding16[32];
-
-        std::vector<double> qs17 = qs;
-        auto m21 = p.push([&qs17](int){return get_M32(qs17);});
-        int padding17[32];
-
-        std::vector<double> qs18 = qs;
-        auto m22 = p.push([&qs18](int){return get_M33(qs18);});
-        int padding18[32];
+        m00 = p.push([&qs](int){return get_M11(qs);});
+        m01 = p.push([&qs](int){return get_M12(qs);});
+        m02 = p.push([&qs](int){return get_M13(qs);});
+        m10 = p.push([&qs](int){return get_M21(qs);});
+        m11 = p.push([&qs](int){return get_M22(qs);});
+        m12 = p.push([&qs](int){return get_M23(qs);});
+        m20 = p.push([&qs](int){return get_M31(qs);});
+        m21 = p.push([&qs](int){return get_M32(qs);});
+        m22 = p.push([&qs](int){return get_M33(qs);});
 
         // G Vector
-
-        std::vector<double> qs19 = qs;
-        auto g0 = p.push([&qs19](int){return get_G1(qs19);});
-        int padding19[32];
-
-        std::vector<double> qs20 = qs;
-        auto g1 = p.push([&qs20](int){return get_G2(qs20);});
-        int padding20[32];
-
-        std::vector<double> qs21 = qs;
-        auto g2 = p.push([&qs21](int){return get_G3(qs21);});
-        int padding21[32];
+        g0 = p.push([&qs](int){return get_G1(qs);});
+        g1 = p.push([&qs](int){return get_G2(qs);});
+        g2 = p.push([&qs](int){return get_G3(qs);});
 
         setup_time = double(SetupTime.get_elapsed_time().as_microseconds());
         Clock CompTime;
@@ -210,9 +142,9 @@ void MeiiModel::update(Time t)
 
     mat_calc_time = MatCalcClock.get_elapsed_time().as_microseconds();
 
-    Matrix3d A = M;// + M_mot;
-    Vector3d b = Tau - V*qdot - G;// - B - Fk;
-    Vector3d x = A.householderQr().solve(b);
+    A = M;// + M_mot;
+    b = Tau - V*qdot - G;// - B - Fk;
+    x = A.householderQr().solve(b);
 
     q1dd = x[0];
     q2dd = x[1];

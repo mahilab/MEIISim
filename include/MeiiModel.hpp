@@ -3,7 +3,7 @@
 #include <Mahi/Util/Math/Constants.hpp>
 #include <Mahi/Util/Math/Integrator.hpp>
 #include <Mahi/Robo/Control/Limiter.hpp>
-// #include <thread>
+#include <Eigen/Dense>
 #include <ctpl_stl.h>
 
 /// Dynamic Model of the OpenWrist
@@ -53,6 +53,13 @@ public:
     const double q1max = 0.1305;
     const double q2max = 0.1305;
     const double q3max = 0.1305;
+
+    // const double q1min = 0.075;
+    // const double q2min = 0.075;
+    // const double q3min = 0.075;
+    // const double q1max = 0.120;
+    // const double q2max = 0.120;
+    // const double q3max = 0.120;
 
     double Khard = 20; // hardstop stiffness
     double Bhard = 1;  // hardstop damping
@@ -144,15 +151,40 @@ private:
     // Integrators
     mahi::util::Integrator q1dd_q1d, q2dd_q2d, q3dd_q3d, q1d_q1, q2d_q2, q3d_q3;
 
-    // double v00 = 0;
-    // double v01 = 0;
-    // double v02 = 0;
-    // double v10 = 0;
-    // double v11 = 0;
-    // double v12 = 0;
-    // double v20 = 0;
-    // double v21 = 0;
-    // double v22 = 0;
+    std::future<double> v00, v01, v02, v10, v11, v12, v20, v21, v22;
+    std::future<double> m00, m01, m02, m10, m11, m12, m20, m21, m22;
+    std::future<double> g0, g1, g2;
+
+    std::vector<double> qs1; int padding1[16];
+    std::vector<double> qs2; int padding2[16];
+    std::vector<double> qs3; int padding3[16];
+    std::vector<double> qs4; int padding4[16];
+    std::vector<double> qs5; int padding5[16];
+    std::vector<double> qs6; int padding6[16];
+    std::vector<double> qs7; int padding7[16];
+    std::vector<double> qs8; int padding8[16];
+    std::vector<double> qs9; int padding9[16];
+    std::vector<double> qs10; int padding10[16];
+    std::vector<double> qs11; int padding11[16];
+    std::vector<double> qs12; int padding12[16];
+    std::vector<double> qs13; int padding13[16];
+    std::vector<double> qs14; int padding14[16];
+    std::vector<double> qs15; int padding15[16];
+    std::vector<double> qs16; int padding16[16];
+    std::vector<double> qs17; int padding17[16];
+    std::vector<double> qs18; int padding18[16];
+    std::vector<double> qs19; int padding19[16];
+    std::vector<double> qs20; int padding20[16];
+    std::vector<double> qs21; int padding21[16];
+
+    Eigen::Matrix3d V;
+    Eigen::Matrix3d M;
+    Eigen::Vector3d G;
+    Eigen::Vector3d Tau;
+
+    Eigen::Matrix3d A;
+    Eigen::Vector3d b;
+    Eigen::Vector3d x;
 
     // std::thread t11;
     // std::thread t12;

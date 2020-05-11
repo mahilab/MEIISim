@@ -81,5 +81,6 @@
         "xutility": "cpp",
         "condition_variable": "cpp",
         "future": "cpp"
-    }
+    },
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }
