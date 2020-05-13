@@ -8,6 +8,7 @@ using fts;
 public class MeiiScript : MonoBehaviour {
 
     [Header("Positions")]
+    public float qf;
     public float l1;
     public float l2;
     public float l3;
@@ -22,6 +23,7 @@ public class MeiiScript : MonoBehaviour {
     public float gamma;
 
     [Header("Inertial Frame References")]
+    public GameObject Forearm;
     public GameObject Rail1;
     public GameObject Rail2;
     public GameObject Rail3;
@@ -36,6 +38,7 @@ public class MeiiScript : MonoBehaviour {
     // public GameObject[] whites;
     // public GameObject[] colors;
 
+    private Vector3 Forearm_Zero;
     private Vector3 Rail1_Zero;
     private Vector3 Rail2_Zero;
     private Vector3 Rail3_Zero;
@@ -46,12 +49,11 @@ public class MeiiScript : MonoBehaviour {
     private Vector3 PlatformZ_Zero;
     private Vector3 PlatformX_Zero;
 
-    double[] qs = new double[12];
-
-
+    double[] qs = new double[13];
 
     // Use this for initialization
     void Start () {
+        Forearm_Zero   = Forearm.transform.localEulerAngles;
         Rail1_Zero     = Rail1.transform.localPosition;
         Rail2_Zero     = Rail2.transform.localPosition;
         Rail3_Zero     = Rail3.transform.localPosition;
@@ -67,19 +69,21 @@ public class MeiiScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Dll.get_positions(qs);
-        l1     = (float)qs[0];
-        l2     = (float)qs[1];
-        l3     = (float)qs[2];
-        theta1 = (float)qs[3];
-        theta2 = (float)qs[4];
-        theta3 = (float)qs[5];
-        px     = (float)qs[6];
-        py     = (float)qs[7];
-        pz     = (float)qs[8];
-        alpha  = (float)qs[9];
-        beta   = (float)qs[10];
-        gamma  = (float)qs[11];
+        qf     = (float)qs[0];
+        l1     = (float)qs[1];
+        l2     = (float)qs[2];
+        l3     = (float)qs[3];
+        theta1 = (float)qs[4];
+        theta2 = (float)qs[5];
+        theta3 = (float)qs[6];
+        px     = (float)qs[7];
+        py     = (float)qs[8];
+        pz     = (float)qs[9];
+        alpha  = (float)qs[10];
+        beta   = (float)qs[11];
+        gamma  = (float)qs[12];
         
+        Forearm.transform.localEulerAngles   = new Vector3(qf*Mathf.Rad2Deg, 0, 0);
         Rail1.transform.localPosition        = new Vector3(-l1, Rail1_Zero.y, Rail1_Zero.z);
         Rail2.transform.localPosition        = new Vector3(-l2, Rail2_Zero.y, Rail2_Zero.z);
         Rail3.transform.localPosition        = new Vector3(-l3, Rail3_Zero.y, Rail3_Zero.z);
@@ -102,48 +106,48 @@ public class MeiiScript : MonoBehaviour {
         Dll.stop();
     }
 
-    /// Dll Imports
-    // public class Dll {
-    //     [DllImport("meii_model")] 
-    //     public static extern void start();
-    //     [DllImport("meii_model")] 
-    //     public static extern void stop();
-    //     [DllImport("meii_model")] 
-    //     public static extern void set_torques(double tau1, double tau2, double tau3);
-    //     [DllImport("meii_model")]
-    //     public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6);
-    //     [DllImport("meii_model")]
-    //     public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d);
-    //     [DllImport("meii_model")]
-    //     public static extern void get_positions(double[] positions);
-    // }
-
-    [PluginAttr("meii_model")]
-    public static class Dll
-    {        
-        [PluginFunctionAttr("start")]
-        public static Start start = null;
-        public delegate void Start();
-        
-        [PluginFunctionAttr("stop")]
-        public static Stop stop = null;
-        public delegate void Stop();
-        
-        [PluginFunctionAttr("set_torques")]
-        public static Set_torques set_torques = null;
-        public delegate void Set_torques(double tau1, double tau2, double tau3);
-        
-        [PluginFunctionAttr("set_positions")]
-        public static Set_positions set_positions = null;
-        public delegate void Set_positions(double q1, double q2, double q3, double q4, double q5, double q6);
-        
-        [PluginFunctionAttr("set_velocities")]
-        public static Set_velocities set_velocities = null;
-        public delegate void Set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d);
-        
-        [PluginFunctionAttr("get_positions")]
-        public static Get_positions get_positions = null;
-        public delegate void Get_positions(double[] positions);
+    // Dll Imports
+    public class Dll {
+        [DllImport("meii_model")] 
+        public static extern void start();
+        [DllImport("meii_model")] 
+        public static extern void stop();
+        [DllImport("meii_model")] 
+        public static extern void set_torques(double tau1, double tau2, double tau3, double tau4);
+        [DllImport("meii_model")]
+        public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7);
+        [DllImport("meii_model")]
+        public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d);
+        [DllImport("meii_model")]
+        public static extern void get_positions(double[] positions);
     }
+
+    // [PluginAttr("meii_model")]
+    // public static class Dll
+    // {        
+    //     [PluginFunctionAttr("start")]
+    //     public static Start start = null;
+    //     public delegate void Start();
+        
+    //     [PluginFunctionAttr("stop")]
+    //     public static Stop stop = null;
+    //     public delegate void Stop();
+        
+    //     [PluginFunctionAttr("set_torques")]
+    //     public static Set_torques set_torques = null;
+    //     public delegate void Set_torques(double tau1, double tau2, double tau3, double tau4);
+        
+    //     [PluginFunctionAttr("set_positions")]
+    //     public static Set_positions set_positions = null;
+    //     public delegate void Set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7);
+        
+    //     [PluginFunctionAttr("set_velocities")]
+    //     public static Set_velocities set_velocities = null;
+    //     public delegate void Set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d);
+        
+    //     [PluginFunctionAttr("get_positions")]
+    //     public static Get_positions get_positions = null;
+    //     public delegate void Get_positions(double[] positions);
+    // }
 }
 

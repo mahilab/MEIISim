@@ -12,9 +12,11 @@ M = sym(zeros(n,n));
 G = sym(zeros(n,1));
 for i = 1:n
     for j = 1:n
+        [i,j]
         M(i,j) = diff(MVG(i),Qdd(j));
     end
     G(i,1) = diff(MVG(i),g) * g;
 end
+"here"
 V = subs(MVG,[Qdd.',g],[zeros(size(Qdd)).',0]);
 end

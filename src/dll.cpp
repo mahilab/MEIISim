@@ -24,17 +24,23 @@ using namespace mahi::robo;
 
 void simulation()
 {
-    MelShare ms_in("sim1");
-    MelShare ms_out("sim2");
+    MelShare ms_gains("gains");
+    MelShare ms_refs("refs");
+    MelShare ms_times_out("times");
+    MelShare ms_qs_out("qs");
     double kp = 600;
     double kd = 15;
-    double q_ref1 = 0.1;
+    double kpf = 10;
+    double kdf = 0.5;
+    double q_ref1 = 0.0;
     double q_ref2 = 0.1;
     double q_ref3 = 0.1;
-    double q1, q2, q3;
+    double q_ref4 = 0.1;
+    double q1, q2, q3, q4;
     double tau1 = 0;
     double tau2 = 0;
     double tau3 = 0;
+    double tau4 = 0;
     double k_hard = 20000;
     double b_hard = 100;
     double threadpooling = false;
@@ -45,43 +51,52 @@ void simulation()
     double calc_time = 0;
     double setup_time = 0;
     double comp_time = 0;
-    int n_threads = 5;
+    int n_threads = 12;
     int n_threads_last = n_threads;
     while (!g_stop)
     {
-        auto ms_in_data = ms_in.read_data();
-        if (!ms_in_data.empty()){
-            kp = ms_in_data[0];
-            kd = ms_in_data[1];
-            q_ref1 = ms_in_data[2];
-            q_ref2 = ms_in_data[3];
-            q_ref3 = ms_in_data[4]; 
-            k_hard = ms_in_data[5];
-            b_hard = ms_in_data[6];
-            threadpooling = ms_in_data[7];
-            n_threads = int(ms_in_data[8]);
+        auto ms_gain_data = ms_gains.read_data();
+        auto ms_ref_data = ms_refs.read_data();
+        if (!ms_gain_data.empty()){
+            kp = ms_gain_data[0];
+            kd = ms_gain_data[1];
+            kpf = ms_gain_data[2];
+            kdf = ms_gain_data[3];
+            k_hard = ms_gain_data[4];
+            b_hard = ms_gain_data[5];
+
+            q_ref1 = ms_ref_data[0];
+            q_ref2 = ms_ref_data[1];
+            q_ref3 = ms_ref_data[2]; 
+            q_ref4 = ms_ref_data[3]; 
+            
+            threadpooling = ms_ref_data[4];
+            n_threads = int(ms_ref_data[5]);
         }
         {
             std::lock_guard<std::mutex> lock(g_mtx);
+            g_model.threadpool = (threadpooling > 0.5) ? true : false;
             if (n_threads != n_threads_last) g_model.p.resize(n_threads);
             n_threads_last = n_threads;
-            tau1 = kp * (q_ref1 - g_model.q1) - kd * g_model.q1d;
-            tau2 = kp * (q_ref2 - g_model.q2) - kd * g_model.q2d;
-            tau3 = kp * (q_ref3 - g_model.q3) - kd * g_model.q3d;
+            tau1 = kpf * (q_ref1 - g_model.q1) - kdf * g_model.q1d;
+            tau2 = kp  * (q_ref2 - g_model.q2) - kd  * g_model.q2d;
+            tau3 = kp  * (q_ref3 - g_model.q3) - kd  * g_model.q3d;
+            tau4 = kp  * (q_ref4 - g_model.q4) - kd  * g_model.q4d;
             g_model.Khard = k_hard;
             g_model.Bhard = b_hard;
-            g_model.set_torques(tau1,tau2,tau3);
+            g_model.set_torques(tau1,tau2,tau3,tau4);
             g_model.update(sim_time);
             q1 = g_model.q1;
             q2 = g_model.q2;
             q3 = g_model.q3;
-            g_model.threadpool = (threadpooling > 0.5) ? true : false;
+            q4 = g_model.q4;
             calc_time = g_model.mat_calc_time;
             setup_time = g_model.setup_time;
             comp_time = g_model.comp_time;
         }
         sim_time += 1_ms;
-        ms_out.write_data({double((t-t_last).as_microseconds()),tau1,tau2,tau3,q1,q2,q3,calc_time,setup_time,comp_time});
+        ms_times_out.write_data({double((t-t_last).as_microseconds()),calc_time,setup_time,comp_time});
+        ms_qs_out.write_data({tau1,tau2,tau3,tau4,q1,q2,q3,q4});
         t_last = t;
         t = timer.wait();
     }
@@ -102,22 +117,22 @@ EXPORT void start()
     g_thread = std::thread(simulation);
 }
 
-EXPORT void set_torques(double tau1, double tau2, double tau3)
+EXPORT void set_torques(double tau1, double tau2, double tau3, double tau4)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
-    g_model.set_torques(tau1, tau2, tau3);
+    g_model.set_torques(tau1, tau2, tau3, tau4);
 }
 
-EXPORT void set_positions(double q1, double q2, double q3, double q4, double q5, double q6)
+EXPORT void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
-    g_model.set_positions(q1, q2, q3, q4, q5, q6);
+    g_model.set_positions(q1, q2, q3, q4, q5, q6, q7);
 }
 
-EXPORT void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d)
+EXPORT void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
-    g_model.set_velocities(q1d, q2d, q3d, q4d, q5d, q6d);
+    g_model.set_velocities(q1d, q2d, q3d, q4d, q5d, q6d, q7d);
 }
 
 EXPORT void get_positions(double *positions)
@@ -135,4 +150,5 @@ EXPORT void get_positions(double *positions)
     positions[9] = g_model.q10;
     positions[10] = g_model.q11;
     positions[11] = g_model.q12;
+    positions[12] = g_model.q13;
 }

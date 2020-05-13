@@ -1,15 +1,62 @@
 import string
 
-fileheader = ["#pragma once\n","#include <Mahi/Util.hpp>\n","using namespace mahi::util;\n","\n"]
+fileheader = ["#pragma once\n",
+              "#include <Mahi/Util.hpp>\n",
+              "using namespace mahi::util;\n",
+              "\n"]
 
-variables = ["\tdouble l1 = qs[0];\n","\tdouble l2 = qs[1];\n","\tdouble l3 = qs[2];\n","\tdouble theta1 = qs[3];\n","\tdouble theta2 = qs[4];\n","\tdouble theta3 = qs[5];\n","\tdouble l1_dot = qs[6];\n","\tdouble l2_dot = qs[7];\n","\tdouble l3_dot = qs[8];\n","\tdouble theta1_dot = qs[9];\n","\tdouble theta2_dot = qs[10];\n","\tdouble theta3_dot = qs[11];\n","\tdouble sintheta1 = sin(theta1);\n","\tdouble costheta1 = cos(theta1);\n","\tdouble sintheta2 = sin(theta2);\n","\tdouble costheta2 = cos(theta2);\n","\tdouble sintheta3 = sin(theta3);\n","\tdouble costheta3 = cos(theta3);\n","\n"]
+variables = ["\tdouble qf = qs[0];\n",
+             "\tdouble l1 = qs[1];\n",
+             "\tdouble l2 = qs[2];\n",
+             "\tdouble l3 = qs[3];\n",
+             "\tdouble theta1 = qs[4];\n",
+             "\tdouble theta2 = qs[5];\n",
+             "\tdouble theta3 = qs[6];\n",
+             "\tdouble qf_dot = qs[7];\n",
+             "\tdouble l1_dot = qs[8];\n",
+             "\tdouble l2_dot = qs[9];\n",
+             "\tdouble l3_dot = qs[10];\n",
+             "\tdouble theta1_dot = qs[11];\n",
+             "\tdouble theta2_dot = qs[12];\n",
+             "\tdouble theta3_dot = qs[13];\n",
+             "\tdouble sinqf = sin(qf);\n",
+             "\tdouble cosqf = cos(qf);\n",
+             "\tdouble sintheta1 = sin(theta1);\n",
+             "\tdouble costheta1 = cos(theta1);\n",
+             "\tdouble sintheta2 = sin(theta2);\n",
+             "\tdouble costheta2 = cos(theta2);\n",
+             "\tdouble sintheta3 = sin(theta3);\n",
+             "\tdouble costheta3 = cos(theta3);\n",
+             "\n"]
 
-variables_no_dots = ["\tdouble l1 = qs[0];\n","\tdouble l2 = qs[1];\n","\tdouble l3 = qs[2];\n","\tdouble theta1 = qs[3];\n","\tdouble theta2 = qs[4];\n","\tdouble theta3 = qs[5];\n","\tdouble sintheta1 = sin(theta1);\n","\tdouble costheta1 = cos(theta1);\n","\tdouble sintheta2 = sin(theta2);\n","\tdouble costheta2 = cos(theta2);\n","\tdouble sintheta3 = sin(theta3);\n","\tdouble costheta3 = cos(theta3);\n","\n"]
+variables_no_dots = ["\tdouble qf = qs[0];\n",
+                     "\tdouble l1 = qs[1];\n",
+                     "\tdouble l2 = qs[2];\n",
+                     "\tdouble l3 = qs[3];\n",
+                     "\tdouble theta1 = qs[4];\n",
+                     "\tdouble theta2 = qs[5];\n",
+                     "\tdouble theta3 = qs[6];\n",
+                     "\tdouble sinqf = sin(qf);\n",
+                     "\tdouble cosqf = cos(qf);\n",
+                     "\tdouble sintheta1 = sin(theta1);\n",
+                     "\tdouble costheta1 = cos(theta1);\n",
+                     "\tdouble sintheta2 = sin(theta2);\n",
+                     "\tdouble costheta2 = cos(theta2);\n",
+                     "\tdouble sintheta3 = sin(theta3);\n",
+                     "\tdouble costheta3 = cos(theta3);\n",
+                     "\n"]
 
-replacements = ["theta1", "theta2", "theta3"]
+replacements = ["qf", "theta1", "theta2", "theta3"]
 
-
-filenames = ["Mpar11", "Mpar12", "Mpar13", "Mpar21", "Mpar22", "Mpar23", "Mpar31", "Mpar32", "Mpar33", "Vpar11", "Vpar12", "Vpar13", "Vpar21", "Vpar22", "Vpar23", "Vpar31", "Vpar32", "Vpar33", "Gpar1", "Gpar2", "Gpar3"]
+filenames = ["Mpar11", "Mpar12", "Mpar13", "Mpar14",
+             "Mpar21", "Mpar22", "Mpar23", "Mpar24",
+             "Mpar31", "Mpar32", "Mpar33", "Mpar34",
+             "Mpar41", "Mpar42", "Mpar43", "Mpar44",
+             "Vpar11", "Vpar12", "Vpar13", "Vpar14",
+             "Vpar21", "Vpar22", "Vpar23", "Vpar24",
+             "Vpar31", "Vpar32", "Vpar33", "Vpar34",
+             "Vpar41", "Vpar42", "Vpar43", "Vpar44",
+             "Gpar1",  "Gpar2",  "Gpar3",  "Gpar4"]
 
 for filename in filenames:
     read_file = open("DynamicEqs/"+filename+".txt")
