@@ -33,22 +33,22 @@ public:
     double q1dd, q2dd, q3dd, q4dd;
 
     // Dependent joint positions [rad]
-    // q4 -> theta1
-    // q5 -> theta2
-    // q6 -> theta3
-    // q7 -> Px
-    // q8 -> Py
-    // q9 -> Pz
-    // q10 -> alpha (Rx)
-    // q11 -> beta (Ry)
-    // q12 -> gamma (Rz)
+    // q5 -> theta1
+    // q6 -> theta2
+    // q7 -> theta3
+    // q8 -> Px
+    // q9 -> Py
+    // q10 -> Pz
+    // q11 -> alpha (Rx)
+    // q12 -> beta (Ry)
+    // q13 -> gamma (Rz)
     double q5, q6, q7, q8, q9, q10, q11, q12, q13;
-    // Dependent joint positions [rad/s]
+    // Dependent joint velocities [rad/s]
     double q5d, q6d, q7d;
 
     // Hardstops
-    const double q1min = -mahi::util::PI;
-    const double q1max = mahi::util::PI;
+    const double q1min = -99 * mahi::util::DEG2RAD;
+    const double q1max = 108 * mahi::util::DEG2RAD;
     const double q2min = 0.050;
     const double q3min = 0.050;
     const double q4min = 0.050;
@@ -99,9 +99,9 @@ public:
     const double b3 = 0.5 * 0.0029; 
 
     // Kinetic Friction [Nm]
-    const double fk1 = 0.5 * 0.1891; 
+    const double fk1 = 0.5 * 0.1891;
     const double fk2 = 0.5 * 0.0541;
-    const double fk3 = 0.5 * 0.1339; 
+    const double fk3 = 0.5 * 0.1339;
 
     // Gravity Constant [m/s^2]
     const double g = 9.80665;
@@ -110,7 +110,7 @@ public:
 
 private:
     // torque limiters
-    mahi::robo::Limiter lim1, lim2, lim3;
+    mahi::robo::Limiter lim1, lim2, lim3, lim4;
 
     // Integrators
     mahi::util::Integrator q1dd_q1d, q2dd_q2d, q3dd_q3d, q4dd_q4d, q1d_q1, q2d_q2, q3d_q3, q4d_q4;
@@ -127,14 +127,4 @@ private:
     Eigen::Matrix4d A;
     Eigen::Vector4d b;
     Eigen::Vector4d x;
-
-    // std::thread t11;
-    // std::thread t12;
-    // std::thread t13;
-    // std::thread t21;
-    // std::thread t22;
-    // std::thread t23;
-    // std::thread t31;
-    // std::thread t32;
-    // std::thread t33;
 };

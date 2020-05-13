@@ -84,7 +84,7 @@ public:
         ImGui::DragDouble("q3",&q3,0.0001f,0.03,0.15,"%.4f");
         ImGui::DragDouble("q4",&q4,0.0001f,0.03,0.15,"%.4f");
         ImGui::Checkbox("Threadpooled", &tp);    
-        ImGui::SliderInt("Number of Threads", &nthread, 1, 20);
+        ImGui::SliderInt("Number of Threads", &nthread, 1, 40);
         int mean_calc_time = int(mean(calc_times_1s.get_vector()));
         ImGui::InputInt("Mean Calc Time",&mean_calc_time);
 
