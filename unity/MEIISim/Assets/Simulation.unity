@@ -1388,6 +1388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08cb1d287e11ebe47b871935c45f41aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  qe: 0
   qf: 0
   l1: 0
   l2: 0
@@ -1401,6 +1402,7 @@ MonoBehaviour:
   alpha: 0
   beta: 0
   gamma: 0
+  Elbow: {fileID: 1755283873}
   Forearm: {fileID: 824979421}
   Rail1: {fileID: 1012557269}
   Rail2: {fileID: 1656756920}

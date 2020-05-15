@@ -8,6 +8,7 @@ using fts;
 public class MeiiScript : MonoBehaviour {
 
     [Header("Positions")]
+    public float qe;
     public float qf;
     public float l1;
     public float l2;
@@ -23,6 +24,7 @@ public class MeiiScript : MonoBehaviour {
     public float gamma;
 
     [Header("Inertial Frame References")]
+    public GameObject Elbow;
     public GameObject Forearm;
     public GameObject Rail1;
     public GameObject Rail2;
@@ -38,6 +40,7 @@ public class MeiiScript : MonoBehaviour {
     // public GameObject[] whites;
     // public GameObject[] colors;
 
+    private Vector3 Elbow_Zero;
     private Vector3 Forearm_Zero;
     private Vector3 Rail1_Zero;
     private Vector3 Rail2_Zero;
@@ -49,10 +52,11 @@ public class MeiiScript : MonoBehaviour {
     private Vector3 PlatformZ_Zero;
     private Vector3 PlatformX_Zero;
 
-    double[] qs = new double[13];
+    double[] qs = new double[14];
 
     // Use this for initialization
     void Start () {
+        Elbow_Zero     = Elbow.transform.localEulerAngles;
         Forearm_Zero   = Forearm.transform.localEulerAngles;
         Rail1_Zero     = Rail1.transform.localPosition;
         Rail2_Zero     = Rail2.transform.localPosition;
@@ -69,20 +73,22 @@ public class MeiiScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Dll.get_positions(qs);
-        qf     = (float)qs[0];
-        l1     = (float)qs[1];
-        l2     = (float)qs[2];
-        l3     = (float)qs[3];
-        theta1 = (float)qs[4];
-        theta2 = (float)qs[5];
-        theta3 = (float)qs[6];
-        px     = (float)qs[7];
-        py     = (float)qs[8];
-        pz     = (float)qs[9];
-        alpha  = (float)qs[10];
-        beta   = (float)qs[11];
-        gamma  = (float)qs[12];
+        qe     = (float)qs[0];
+        qf     = (float)qs[1];
+        l1     = (float)qs[2];
+        l2     = (float)qs[3];
+        l3     = (float)qs[4];
+        theta1 = (float)qs[5];
+        theta2 = (float)qs[6];
+        theta3 = (float)qs[7];
+        px     = (float)qs[8];
+        py     = (float)qs[9];
+        pz     = (float)qs[10];
+        alpha  = (float)qs[11];
+        beta   = (float)qs[12];
+        gamma  = (float)qs[13];
         
+        Elbow.transform.localEulerAngles     = new Vector3(0, 0, -qe*Mathf.Rad2Deg);
         Forearm.transform.localEulerAngles   = new Vector3(qf*Mathf.Rad2Deg, 0, 0);
         Rail1.transform.localPosition        = new Vector3(-l1, Rail1_Zero.y, Rail1_Zero.z);
         Rail2.transform.localPosition        = new Vector3(-l2, Rail2_Zero.y, Rail2_Zero.z);
@@ -113,11 +119,11 @@ public class MeiiScript : MonoBehaviour {
         [DllImport("meii_model")] 
         public static extern void stop();
         [DllImport("meii_model")] 
-        public static extern void set_torques(double tau1, double tau2, double tau3, double tau4);
+        public static extern void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5);
         [DllImport("meii_model")]
-        public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7);
+        public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8);
         [DllImport("meii_model")]
-        public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d);
+        public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d);
         [DllImport("meii_model")]
         public static extern void get_positions(double[] positions);
     }

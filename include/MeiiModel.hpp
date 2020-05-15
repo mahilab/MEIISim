@@ -13,9 +13,9 @@ public:
     MeiiModel();
 
     void update(mahi::util::Time t);
-    void set_torques(double tau1, double tau2, double tau3, double tau4);
-    void set_positions(double _q1, double _q2, double _q3, double _q4, double _q5, double _q6, double _q7);
-    void set_velocities(double _q1d, double _q2d, double _q3d, double _q4d, double _q5d, double _q6d, double _q7d);
+    void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5);
+    void set_positions(double _q1, double _q2, double _q3, double _q4, double _q5, double _q6, double _q7, double _q8);
+    void set_velocities(double _q1d, double _q2d, double _q3d, double _q4d, double _q5d, double _q6d, double _q7d, double _q8d);
     void reset();
     void calc_dependent_joint_values();
 
@@ -24,13 +24,13 @@ public:
     bool threadpool = false;
 
     // Joint torques [Nm]
-    double tau1, tau2, tau3, tau4;
+    double tau1, tau2, tau3, tau4, tau5;
     // Joint Positions [m]
-    double q1, q2, q3, q4;
+    double   q1,   q2,   q3,   q4,   q5;
     // Joint Velocities [m/s]
-    double q1d, q2d, q3d, q4d;
+    double  q1d,  q2d,  q3d,  q4d,  q5d;
     // Joint Accelerations [m/s^2]
-    double q1dd, q2dd, q3dd, q4dd;
+    double q1dd, q2dd, q3dd, q4dd, q5dd;
 
     // Dependent joint positions [rad]
     // q5 -> theta1
@@ -42,38 +42,41 @@ public:
     // q11 -> alpha (Rx)
     // q12 -> beta (Ry)
     // q13 -> gamma (Rz)
-    double q5, q6, q7, q8, q9, q10, q11, q12, q13;
+    double q6, q7, q8, q9, q10, q11, q12, q13, q14;
     // Dependent joint velocities [rad/s]
-    double q5d, q6d, q7d;
+    double q6d, q7d, q8d;
 
     // Hardstops
-    const double q1min = -99 * mahi::util::DEG2RAD;
-    const double q1max = 108 * mahi::util::DEG2RAD;
-    const double q2min = 0.050;
+    const double q1min = -91.5 * mahi::util::DEG2RAD;
+    const double q1max = 3.0 * mahi::util::DEG2RAD;
+    const double q2min = -99 * mahi::util::DEG2RAD;
+    const double q2max = 108 * mahi::util::DEG2RAD;
     const double q3min = 0.050;
     const double q4min = 0.050;
-    const double q2max = 0.1305;
+    const double q5min = 0.050;
     const double q3max = 0.1305;
     const double q4max = 0.1305;
+    const double q5max = 0.1305;
 
     //// Hardstops if you want to see the effect of gravity without instablities
-    // const double q2min = 0.09;
     // const double q3min = 0.09;
     // const double q4min = 0.09;
-    // const double q2max = 0.110;
+    // const double q5min = 0.09;
     // const double q3max = 0.110;
     // const double q4max = 0.110;
+    // const double q5max = 0.110;
 
     double Khard = 20000; // hardstop stiffness
     double Bhard = 100;  // hardstop damping
-    double Khard1 = 50; // hardstop stiffness
-    double Bhard1 = 2;  // hardstop damping
+    double Khard1 = 200; // hardstop stiffness
+    double Bhard1 = 10;  // hardstop damping
     double mat_calc_time = 0;
     double setup_time = 0;
     double comp_time = 0;
 
     const double R = 0.1044956; // m
     const double r = 0.05288174521; // m
+    const double a4 = 0.159385;
     const double a5 = 0.0268986; // m
     const double a6 = 0.0272820; // m
     const double a56 = -(a5-a6); // m
@@ -110,21 +113,21 @@ public:
 
 private:
     // torque limiters
-    mahi::robo::Limiter lim1, lim2, lim3, lim4;
+    mahi::robo::Limiter lim1, lim2, lim3, lim4, lim5;
 
     // Integrators
-    mahi::util::Integrator q1dd_q1d, q2dd_q2d, q3dd_q3d, q4dd_q4d, q1d_q1, q2d_q2, q3d_q3, q4d_q4;
+    mahi::util::Integrator q1dd_q1d, q2dd_q2d, q3dd_q3d, q4dd_q4d, q5dd_q5d, q1d_q1, q2d_q2, q3d_q3, q4d_q4, q5d_q5;
 
-    std::future<double> v00, v01, v02, v03, v10, v11, v12, v13, v20, v21, v22, v23, v30, v31, v32, v33;
-    std::future<double> m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;
-    std::future<double> g0, g1, g2, g3;
+    std::future<double> v00, v01, v02, v03, v04, v10, v11, v12, v13, v14, v20, v21, v22, v23, v24, v30, v31, v32, v33, v34, v40, v41, v42, v43, v44;
+    std::future<double> m00, m01, m02, m03, m04, m10, m11, m12, m13, m14, m20, m21, m22, m23, m24, m30, m31, m32, m33, m34, m40, m41, m42, m43, m44;
+    std::future<double> g0, g1, g2, g3, g4;
 
-    Eigen::Matrix4d V;
-    Eigen::Matrix4d M;
-    Eigen::Vector4d G;
-    Eigen::Vector4d Tau;
+    Eigen::MatrixXd V;
+    Eigen::MatrixXd M;
+    Eigen::VectorXd G;
+    Eigen::VectorXd Tau;
 
-    Eigen::Matrix4d A;
-    Eigen::Vector4d b;
-    Eigen::Vector4d x;
+    Eigen::MatrixXd A;
+    Eigen::VectorXd b;
+    Eigen::VectorXd x;
 };
