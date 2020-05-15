@@ -88,25 +88,23 @@ public:
         int mean_calc_time = int(mean(calc_times_1s.get_vector()));
         ImGui::InputInt("Mean Calc Time",&mean_calc_time);
 
-        ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
-        ImGui::SetNextPlotRangeY(0,1500);
-        if(ImGui::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis)){
-            ImGui::Plot("Sim Loop Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
-            ImGui::Plot("Desired Sim Loop Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
-            ImGui::Plot("Total Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
-            ImGui::Plot("Setup Time (thread only)", &setupTime.Data[0].x, &setupTime.Data[0].y, setupTime.Data.size(), setupTime.Offset, 2 * sizeof(float));
-            ImGui::Plot("Comp Time (thread only)", &compTime.Data[0].x, &compTime.Data[0].y, compTime.Data.size(), compTime.Offset, 2 * sizeof(float));
-            ImGui::EndPlot();
+        ImPlot::SetNextPlotLimits(t-10, t, 0, 1500, ImGuiCond_Always);
+        if(ImPlot::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis)){
+            ImPlot::Plot("Sim Loop Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
+            ImPlot::Plot("Desired Sim Loop Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
+            ImPlot::Plot("Total Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
+            ImPlot::Plot("Setup Time (thread only)", &setupTime.Data[0].x, &setupTime.Data[0].y, setupTime.Data.size(), setupTime.Offset, 2 * sizeof(float));
+            ImPlot::Plot("Comp Time (thread only)", &compTime.Data[0].x, &compTime.Data[0].y, compTime.Data.size(), compTime.Offset, 2 * sizeof(float));
+            ImPlot::EndPlot();
         }
 
-        ImGui::SetNextPlotRangeX(t - 10, t, ImGuiCond_Always);
-        ImGui::SetNextPlotRangeY(-10,10);
-        if(ImGui::BeginPlot("##Forces", "Time (s)", "Force (N)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis)){
-            ImGui::Plot("Force 1", &tau1.Data[0].x, &tau1.Data[0].y, tau1.Data.size(), tau1.Offset, 2 * sizeof(float));
-            ImGui::Plot("Force 2", &tau2.Data[0].x, &tau2.Data[0].y, tau2.Data.size(), tau2.Offset, 2 * sizeof(float));
-            ImGui::Plot("Force 3", &tau3.Data[0].x, &tau3.Data[0].y, tau3.Data.size(), tau3.Offset, 2 * sizeof(float));
-            ImGui::Plot("Force 4", &tau4.Data[0].x, &tau4.Data[0].y, tau4.Data.size(), tau4.Offset, 2 * sizeof(float));
-            ImGui::EndPlot();
+        ImPlot::SetNextPlotLimits(t-10, t, -10, 10, ImGuiCond_Always);
+        if(ImPlot::BeginPlot("##Forces", "Time (s)", "Force (N)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis)){
+            ImPlot::Plot("Force 1", &tau1.Data[0].x, &tau1.Data[0].y, tau1.Data.size(), tau1.Offset, 2 * sizeof(float));
+            ImPlot::Plot("Force 2", &tau2.Data[0].x, &tau2.Data[0].y, tau2.Data.size(), tau2.Offset, 2 * sizeof(float));
+            ImPlot::Plot("Force 3", &tau3.Data[0].x, &tau3.Data[0].y, tau3.Data.size(), tau3.Offset, 2 * sizeof(float));
+            ImPlot::Plot("Force 4", &tau4.Data[0].x, &tau4.Data[0].y, tau4.Data.size(), tau4.Offset, 2 * sizeof(float));
+            ImPlot::EndPlot();
         }
 
         t += ImGui::GetIO().DeltaTime;
@@ -117,7 +115,7 @@ public:
     }
 
     // Member Variables
-    int rt_axis = ImAxisFlags_Default & ~ImAxisFlags_TickLabels;
+    int rt_axis = ImPlotAxisFlags_Default & ~ImPlotAxisFlags_TickLabels;
     ScrollingData sim_rate;
     ScrollingData des_rate;
     ScrollingData tau1;

@@ -37,12 +37,15 @@ Q = [T1 F1 F2 F3 0 0 0];
 
 w = [wx wy wz].';
 
-%% Platform Forward Computation Calcs
+%% Platform Only (No other joints) Forward Computation Calcs
+% This gets the parameters for wx_platform, wy_platform, wz_platform 
+
+fprintf("Calculating forward kinematics\n");
 
 for i = 1:3
-    B_temp{i} = Rx(qf + alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(ls(i));
+    B_temp{i} = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(ls(i));
     B{i} = B_temp{i}(1:3,4);
-    b_temp{i} = Rx(qf + alpha_13 + gamma(i))*TRANSy(r);
+    b_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
     b{i} = b_temp{i}(1:3,4);
 end
 
@@ -59,19 +62,22 @@ X = linsolve(A_lin,B_lin);
 X(1:3) = X(1:3)/norm(X(1:3));
 X(4:6) = X(4:6)/norm(X(4:6));
 
-a1_ = X(1);
-a2_ = X(2);
-a3_ = X(3);
-o1_ = X(4);
-o2_ = X(5);
-o3_ = X(6);
-n1_ =  o2_*a3_ - a2_*o3_;
-n2_ = -o1_*a3_ + a1_*o3_;
-n3_ =  o1_*a2_ - o2_*a1_;
+a1_ = simplify(X(1));
+a2_ = simplify(X(2));
+a3_ = simplify(X(3));
+o1_ = simplify(X(4));
+o2_ = simplify(X(5));
+o3_ = simplify(X(6));
+n1_ = simplify( o2_*a3_ - a2_*o3_);
+n2_ = simplify(-o1_*a3_ + a1_*o3_);
+n3_ = simplify( o1_*a2_ - o2_*a1_);
 
 unit_vecs = [a1_ a2_ a3_ o1_ o2_ o3_ n1_ n2_ n3_];
 
 %%
+
+fprintf("Calculating w_platform\n");
+
 px = P_c(1); py = P_c(2); pz = P_c(3);
 
 V_c = [0 0 0].';
@@ -81,12 +87,11 @@ for i = 1:length(qs)
 end
 
 V_c = simplify(V_c);
-vx = V_c(1); vy = V_c(2); vz = V_c(3);
 
 for i = 1:3
-    r_temp{i} = Rx(qf + alpha_13 + gamma(i))*TRANSy(r);
+    r_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
     r_{i} = r_temp{i}(1:3,4);
-    R_0_2{i} = Rx(qf + alpha_5 + gamma(i))*Rz(-pi/2+thetas(i));
+    R_0_2{i} = Rx(alpha_5 + gamma(i))*Rz(-pi/2+thetas(i));
     phi_l{i} = R_0_2{i}(1:3,1);
     phi_z{i} = R_0_2{i}(1:3,3);
 end
@@ -104,14 +109,34 @@ wy_solved = simplify(wy_wz(1));
 wz_solved = simplify(wy_wz(2));
 
 % substitue in unit vectors to get into a form we can use for dynamics
-wx_solved = subs(wx_solved,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs);
-wy_solved = subs(wy_solved,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs);
-wz_solved = subs(wz_solved,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs);
+wx_solved = simplify(subs(wx_solved,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs));
+wy_solved = simplify(subs(wy_solved,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs));
+wz_solved = simplify(subs(wz_solved,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs));
+
+%% Position and Velocity of the Platform including other links
+
+fprintf("Calculating p_platform, v_platform given other joints\n");
+
+for i = 1:3
+    Bcom_temp{i} = Rx(qf + alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(ls(i));
+    Bcom{i} = Bcom_temp{i}(1:3,4);
+end
+
+P_com = simplify((Bcom{1} + Bcom{2} + Bcom{3})/3);
+
+V_com = [0 0 0].';
+
+for i = 1:length(qs)
+    V_com = V_com + diff(P_com,qs(i))*q_dots(i);
+end
+
+V_com = simplify(V_com);
 
 %%
+fprintf("Calculating Lagrangian\n");
+
 syms Ixx Iyy Izz Mp Ml l_offset Ixxf Iyyf Izzf
 
-% sum_d_thetadot2  = 0;
 sum_By  = 0;
 
 V_l{1} = [0;0;0];
@@ -120,7 +145,6 @@ V_l{3} = [0;0;0];
 
 for i = 1:3
     d{i} = (ls(i) - l_offset);
-%     sum_d_thetadot2 = sum_d_thetadot2 + d{i}^2*theta_dots(i)^2;
     B_temp_y{i} = Rx(qf + alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(d{i});
     By{i} = B_temp_y{i}(2,4);
     sum_By = sum_By + By{i};
@@ -130,11 +154,7 @@ for i = 1:3
     end
 end
 
-wx_solved =  (3^(1/2)*abs(r)*(2*3^(1/2)*l2*l2_dot*sin(alpha_13) - 2*l2*l2_dot*cos(alpha_13) - 2*l3*l3_dot*cos(alpha_13) - 8*l1*l1_dot*cos(alpha_13) - 2*3^(1/2)*l3*l3_dot*sin(alpha_13) + 12*R*l1_dot*cos(alpha_13)*cos(theta1) + 3*R*l2_dot*cos(alpha_13)*cos(theta2) + 3*R*l3_dot*cos(alpha_13)*cos(theta3) - 12*a56*l1_dot*sin(alpha_13)*cos(theta1) - 3*a56*l2_dot*sin(alpha_13)*cos(theta2) - 3*a56*l3_dot*sin(alpha_13)*cos(theta3) - 3*3^(1/2)*a56*l2_dot*cos(alpha_13)*cos(theta2) + 3*3^(1/2)*a56*l3_dot*cos(alpha_13)*cos(theta3) - 3*3^(1/2)*R*l2_dot*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*R*l3_dot*sin(alpha_13)*cos(theta3) - 12*R*l1*theta1_dot*cos(alpha_13)*sin(theta1) - 3*R*l2*theta2_dot*cos(alpha_13)*sin(theta2) - 3*R*l3*theta3_dot*cos(alpha_13)*sin(theta3) + 12*a56*l1*theta1_dot*sin(alpha_13)*sin(theta1) + 3*a56*l2*theta2_dot*sin(alpha_13)*sin(theta2) + 3*a56*l3*theta3_dot*sin(alpha_13)*sin(theta3) - 2*l1*l2_dot*cos(alpha_13)*cos(theta1)*cos(theta2) - 2*l2*l1_dot*cos(alpha_13)*cos(theta1)*cos(theta2) - 2*l1*l3_dot*cos(alpha_13)*cos(theta1)*cos(theta3) - 2*l3*l1_dot*cos(alpha_13)*cos(theta1)*cos(theta3) + l2*l3_dot*cos(alpha_13)*cos(theta2)*cos(theta3) + l3*l2_dot*cos(alpha_13)*cos(theta2)*cos(theta3) + 4*l1*l2_dot*cos(alpha_13)*sin(theta1)*sin(theta2) + 4*l2*l1_dot*cos(alpha_13)*sin(theta1)*sin(theta2) + 4*l1*l3_dot*cos(alpha_13)*sin(theta1)*sin(theta3) + 4*l3*l1_dot*cos(alpha_13)*sin(theta1)*sin(theta3) - 2*l2*l3_dot*cos(alpha_13)*sin(theta2)*sin(theta3) - 2*l3*l2_dot*cos(alpha_13)*sin(theta2)*sin(theta3) + 2*3^(1/2)*l2*l1_dot*sin(alpha_13)*cos(theta1)*cos(theta2) - 2*3^(1/2)*l3*l1_dot*sin(alpha_13)*cos(theta1)*cos(theta3) - 3^(1/2)*l2*l3_dot*sin(alpha_13)*cos(theta2)*cos(theta3) + 3^(1/2)*l3*l2_dot*sin(alpha_13)*cos(theta2)*cos(theta3) + 4*l1*l2*theta1_dot*cos(alpha_13)*cos(theta1)*sin(theta2) + 2*l1*l2*theta1_dot*cos(alpha_13)*cos(theta2)*sin(theta1) + 2*l1*l2*theta2_dot*cos(alpha_13)*cos(theta1)*sin(theta2) + 4*l1*l2*theta2_dot*cos(alpha_13)*cos(theta2)*sin(theta1) + 4*l1*l3*theta1_dot*cos(alpha_13)*cos(theta1)*sin(theta3) + 2*l1*l3*theta1_dot*cos(alpha_13)*cos(theta3)*sin(theta1) + 2*l1*l3*theta3_dot*cos(alpha_13)*cos(theta1)*sin(theta3) + 4*l1*l3*theta3_dot*cos(alpha_13)*cos(theta3)*sin(theta1) - 2*l2*l3*theta2_dot*cos(alpha_13)*cos(theta2)*sin(theta3) - l2*l3*theta2_dot*cos(alpha_13)*cos(theta3)*sin(theta2) - l2*l3*theta3_dot*cos(alpha_13)*cos(theta2)*sin(theta3) - 2*l2*l3*theta3_dot*cos(alpha_13)*cos(theta3)*sin(theta2) - 4*3^(1/2)*l2*l1_dot*sin(alpha_13)*sin(theta1)*sin(theta2) + 4*3^(1/2)*l3*l1_dot*sin(alpha_13)*sin(theta1)*sin(theta3) + 2*3^(1/2)*l2*l3_dot*sin(alpha_13)*sin(theta2)*sin(theta3) - 2*3^(1/2)*l3*l2_dot*sin(alpha_13)*sin(theta2)*sin(theta3) + 3*3^(1/2)*a56*l2*theta2_dot*cos(alpha_13)*sin(theta2) - 3*3^(1/2)*a56*l3*theta3_dot*cos(alpha_13)*sin(theta3) + 3*3^(1/2)*R*l2*theta2_dot*sin(alpha_13)*sin(theta2) - 3*3^(1/2)*R*l3*theta3_dot*sin(alpha_13)*sin(theta3) - 4*3^(1/2)*l1*l2*theta1_dot*sin(alpha_13)*cos(theta1)*sin(theta2) - 2*3^(1/2)*l1*l2*theta1_dot*sin(alpha_13)*cos(theta2)*sin(theta1) + 4*3^(1/2)*l1*l3*theta1_dot*sin(alpha_13)*cos(theta1)*sin(theta3) + 2*3^(1/2)*l1*l3*theta1_dot*sin(alpha_13)*cos(theta3)*sin(theta1) - 2*3^(1/2)*l2*l3*theta2_dot*sin(alpha_13)*cos(theta2)*sin(theta3) - 3^(1/2)*l2*l3*theta2_dot*sin(alpha_13)*cos(theta3)*sin(theta2) + 3^(1/2)*l2*l3*theta3_dot*sin(alpha_13)*cos(theta2)*sin(theta3) + 2*3^(1/2)*l2*l3*theta3_dot*sin(alpha_13)*cos(theta3)*sin(theta2)))/(3*r^2*sin(alpha_13)*(4*abs(3*l3*sin(alpha_13)*sin(theta3) - 3*l2*sin(alpha_13)*sin(theta2) - 2*3^(1/2)*l1*cos(alpha_13)*sin(theta1) + 3^(1/2)*l2*cos(alpha_13)*sin(theta2) + 3^(1/2)*l3*cos(alpha_13)*sin(theta3))^2 + abs(3*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) - 3*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3) - 6*3^(1/2)*R*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*a56*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*a56*cos(alpha_13)*sin(alpha_5) - 6*3^(1/2)*R*sin(alpha_5)*sin(alpha_13) + 4*3^(1/2)*l1*cos(alpha_5)*cos(alpha_13)*cos(theta1) + 3^(1/2)*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) + 3^(1/2)*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) + 3*3^(1/2)*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3))^2 + abs(3*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) - 3*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) - 3*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3) + 6*3^(1/2)*a56*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*R*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*R*cos(alpha_13)*sin(alpha_5) + 6*3^(1/2)*a56*sin(alpha_5)*sin(alpha_13) + 4*3^(1/2)*l1*cos(alpha_13)*sin(alpha_5)*cos(theta1) - 3*3^(1/2)*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3^(1/2)*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*3^(1/2)*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) + 3^(1/2)*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3))^2)^(1/2));
-wy_solved = -(12*abs(r)^2*(3*R^2*l2_dot*sin(alpha_13)*sin(theta2) - 6*R^2*l1_dot*sin(alpha_13)*sin(theta1) + 3*R^2*l3_dot*sin(alpha_13)*sin(theta3) - 6*a56^2*l1_dot*sin(alpha_13)*sin(theta1) + 3*a56^2*l2_dot*sin(alpha_13)*sin(theta2) + 3*a56^2*l3_dot*sin(alpha_13)*sin(theta3) + 4*R*l1^2*theta1_dot*sin(alpha_13) - 2*R*l2^2*theta2_dot*sin(alpha_13) - 2*R*l3^2*theta3_dot*sin(alpha_13) - 2*3^(1/2)*R*l2^2*theta2_dot*cos(alpha_13) + 2*3^(1/2)*R*l3^2*theta3_dot*cos(alpha_13) + 3*3^(1/2)*R^2*l2_dot*cos(alpha_13)*sin(theta2) - 3*3^(1/2)*R^2*l3_dot*cos(alpha_13)*sin(theta3) + 3*3^(1/2)*a56^2*l2_dot*cos(alpha_13)*sin(theta2) - 3*3^(1/2)*a56^2*l3_dot*cos(alpha_13)*sin(theta3) - 6*R^2*l1*theta1_dot*sin(alpha_13)*cos(theta1) + 3*R^2*l2*theta2_dot*sin(alpha_13)*cos(theta2) + 3*R^2*l3*theta3_dot*sin(alpha_13)*cos(theta3) - 6*a56^2*l1*theta1_dot*sin(alpha_13)*cos(theta1) + 3*a56^2*l2*theta2_dot*sin(alpha_13)*cos(theta2) + 3*a56^2*l3*theta3_dot*sin(alpha_13)*cos(theta3) + l1*l2^2*theta2_dot*sin(alpha_13)*cos(theta1) - 2*l1^2*l2*theta1_dot*sin(alpha_13)*cos(theta2) + l1*l3^2*theta3_dot*sin(alpha_13)*cos(theta1) - 2*l1^2*l3*theta1_dot*sin(alpha_13)*cos(theta3) + l2*l3^2*theta3_dot*sin(alpha_13)*cos(theta2) + l2^2*l3*theta2_dot*sin(alpha_13)*cos(theta3) + 3^(1/2)*l1*l2^2*theta2_dot*cos(alpha_13)*cos(theta1) - 3^(1/2)*l1*l3^2*theta3_dot*cos(alpha_13)*cos(theta1) - 3^(1/2)*l2*l3^2*theta3_dot*cos(alpha_13)*cos(theta2) + 3^(1/2)*l2^2*l3*theta2_dot*cos(alpha_13)*cos(theta3) + 3*a56*l1*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta1) + 3*a56*l1*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta1) - 3*a56*l2*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta2) - 3*a56*l3*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta3) - 2*R*l1*l2_dot*sin(alpha_13)*cos(theta1)*sin(theta2) - R*l1*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta1) + 2*R*l2*l1_dot*sin(alpha_13)*cos(theta1)*sin(theta2) + 4*R*l2*l1_dot*sin(alpha_13)*cos(theta2)*sin(theta1) - 2*R*l1*l3_dot*sin(alpha_13)*cos(theta1)*sin(theta3) - R*l1*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta1) + 2*R*l3*l1_dot*sin(alpha_13)*cos(theta1)*sin(theta3) + 4*R*l3*l1_dot*sin(alpha_13)*cos(theta3)*sin(theta1) - 2*R*l2*l3_dot*sin(alpha_13)*cos(theta2)*sin(theta3) - R*l2*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta2) - R*l3*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta3) - 2*R*l3*l2_dot*sin(alpha_13)*cos(theta3)*sin(theta2) + 3*3^(1/2)*R^2*l2*theta2_dot*cos(alpha_13)*cos(theta2) - 3*3^(1/2)*R^2*l3*theta3_dot*cos(alpha_13)*cos(theta3) + 3*3^(1/2)*a56^2*l2*theta2_dot*cos(alpha_13)*cos(theta2) - 3*3^(1/2)*a56^2*l3*theta3_dot*cos(alpha_13)*cos(theta3) + l1*l2*l3_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) + l1*l2*l3_dot*sin(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) + l1*l2*l3_dot*sin(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) + l1*l3*l2_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) + l1*l3*l2_dot*sin(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) + l1*l3*l2_dot*sin(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) - 2*l2*l3*l1_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) - 2*l2*l3*l1_dot*sin(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) - 2*l2*l3*l1_dot*sin(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) - 2*3^(1/2)*R*l1*l2_dot*cos(alpha_13)*cos(theta1)*sin(theta2) - 3^(1/2)*R*l1*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta1) + 2*3^(1/2)*R*l1*l3_dot*cos(alpha_13)*cos(theta1)*sin(theta3) + 3^(1/2)*R*l1*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta1) + 2*3^(1/2)*R*l2*l3_dot*cos(alpha_13)*cos(theta2)*sin(theta3) + 3^(1/2)*R*l2*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta2) - 3^(1/2)*R*l3*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta3) - 2*3^(1/2)*R*l3*l2_dot*cos(alpha_13)*cos(theta3)*sin(theta2) + 4*R*l1*l2*theta1_dot*sin(alpha_13)*cos(theta1)*cos(theta2) - 2*R*l1*l2*theta2_dot*sin(alpha_13)*cos(theta1)*cos(theta2) + 4*R*l1*l3*theta1_dot*sin(alpha_13)*cos(theta1)*cos(theta3) - 2*R*l1*l3*theta3_dot*sin(alpha_13)*cos(theta1)*cos(theta3) - 2*R*l2*l3*theta2_dot*sin(alpha_13)*cos(theta2)*cos(theta3) - 2*R*l2*l3*theta3_dot*sin(alpha_13)*cos(theta2)*cos(theta3) + 3^(1/2)*a56*l1*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta1) + 2*3^(1/2)*a56*l2*l1_dot*sin(alpha_13)*cos(theta1)*sin(theta2) - 3^(1/2)*a56*l1*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta1) - 2*3^(1/2)*a56*l3*l1_dot*sin(alpha_13)*cos(theta1)*sin(theta3) + 3^(1/2)*a56*l2*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta2) - 3^(1/2)*a56*l3*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta3) - 3*a56*l1*l2*theta2_dot*cos(alpha_13)*sin(theta1)*sin(theta2) - 3*a56*l1*l3*theta3_dot*cos(alpha_13)*sin(theta1)*sin(theta3) + 3*a56*l2*l3*theta2_dot*cos(alpha_13)*sin(theta2)*sin(theta3) + 3*a56*l2*l3*theta3_dot*cos(alpha_13)*sin(theta2)*sin(theta3) - 2*R*l1*l2*theta1_dot*sin(alpha_13)*sin(theta1)*sin(theta2) + R*l1*l2*theta2_dot*sin(alpha_13)*sin(theta1)*sin(theta2) - 2*R*l1*l3*theta1_dot*sin(alpha_13)*sin(theta1)*sin(theta3) + R*l1*l3*theta3_dot*sin(alpha_13)*sin(theta1)*sin(theta3) + R*l2*l3*theta2_dot*sin(alpha_13)*sin(theta2)*sin(theta3) + R*l2*l3*theta3_dot*sin(alpha_13)*sin(theta2)*sin(theta3) - 2*3^(1/2)*a56*l1*l2*theta1_dot*sin(alpha_13)*sin(theta1)*sin(theta2) - 3^(1/2)*a56*l1*l2*theta2_dot*sin(alpha_13)*sin(theta1)*sin(theta2) + 2*3^(1/2)*a56*l1*l3*theta1_dot*sin(alpha_13)*sin(theta1)*sin(theta3) + 3^(1/2)*a56*l1*l3*theta3_dot*sin(alpha_13)*sin(theta1)*sin(theta3) + 3^(1/2)*a56*l2*l3*theta2_dot*sin(alpha_13)*sin(theta2)*sin(theta3) - 3^(1/2)*a56*l2*l3*theta3_dot*sin(alpha_13)*sin(theta2)*sin(theta3) - 3^(1/2)*l1*l2*l3_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) - 3^(1/2)*l1*l2*l3_dot*cos(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) - 3^(1/2)*l1*l2*l3_dot*cos(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) + 3^(1/2)*l1*l3*l2_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) + 3^(1/2)*l1*l3*l2_dot*cos(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) + 3^(1/2)*l1*l3*l2_dot*cos(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) - 2*l1*l2*l3*theta1_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + l1*l2*l3*theta2_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + l1*l2*l3*theta3_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + 2*l1*l2*l3*theta1_dot*sin(alpha_13)*cos(theta2)*sin(theta1)*sin(theta3) + 2*l1*l2*l3*theta1_dot*sin(alpha_13)*cos(theta3)*sin(theta1)*sin(theta2) - l1*l2*l3*theta2_dot*sin(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) - l1*l2*l3*theta2_dot*sin(alpha_13)*cos(theta3)*sin(theta1)*sin(theta2) - l1*l2*l3*theta3_dot*sin(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) - l1*l2*l3*theta3_dot*sin(alpha_13)*cos(theta2)*sin(theta1)*sin(theta3) - 2*3^(1/2)*R*l1*l2*theta2_dot*cos(alpha_13)*cos(theta1)*cos(theta2) + 2*3^(1/2)*R*l1*l3*theta3_dot*cos(alpha_13)*cos(theta1)*cos(theta3) - 2*3^(1/2)*R*l2*l3*theta2_dot*cos(alpha_13)*cos(theta2)*cos(theta3) + 2*3^(1/2)*R*l2*l3*theta3_dot*cos(alpha_13)*cos(theta2)*cos(theta3) + 3^(1/2)*R*l1*l2*theta2_dot*cos(alpha_13)*sin(theta1)*sin(theta2) - 3^(1/2)*R*l1*l3*theta3_dot*cos(alpha_13)*sin(theta1)*sin(theta3) + 3^(1/2)*R*l2*l3*theta2_dot*cos(alpha_13)*sin(theta2)*sin(theta3) - 3^(1/2)*R*l2*l3*theta3_dot*cos(alpha_13)*sin(theta2)*sin(theta3) + 3^(1/2)*l1*l2*l3*theta2_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) - 3^(1/2)*l1*l2*l3*theta3_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) - 3^(1/2)*l1*l2*l3*theta2_dot*cos(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) - 3^(1/2)*l1*l2*l3*theta2_dot*cos(alpha_13)*cos(theta3)*sin(theta1)*sin(theta2) + 3^(1/2)*l1*l2*l3*theta3_dot*cos(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) + 3^(1/2)*l1*l2*l3*theta3_dot*cos(alpha_13)*cos(theta2)*sin(theta1)*sin(theta3)))/(r^3*(4*abs(3*l3*sin(alpha_13)*sin(theta3) - 3*l2*sin(alpha_13)*sin(theta2) - 2*3^(1/2)*l1*cos(alpha_13)*sin(theta1) + 3^(1/2)*l2*cos(alpha_13)*sin(theta2) + 3^(1/2)*l3*cos(alpha_13)*sin(theta3))^2 + abs(3*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) - 3*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3) - 6*3^(1/2)*R*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*a56*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*a56*cos(alpha_13)*sin(alpha_5) - 6*3^(1/2)*R*sin(alpha_5)*sin(alpha_13) + 4*3^(1/2)*l1*cos(alpha_5)*cos(alpha_13)*cos(theta1) + 3^(1/2)*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) + 3^(1/2)*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) + 3*3^(1/2)*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3))^2 + abs(3*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) - 3*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) - 3*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3) + 6*3^(1/2)*a56*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*R*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*R*cos(alpha_13)*sin(alpha_5) + 6*3^(1/2)*a56*sin(alpha_5)*sin(alpha_13) + 4*3^(1/2)*l1*cos(alpha_13)*sin(alpha_5)*cos(theta1) - 3*3^(1/2)*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3^(1/2)*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*3^(1/2)*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) + 3^(1/2)*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3))^2)^(1/2)*(4*abs(3*l2*cos(alpha_13)*sin(theta2) - 3*l3*cos(alpha_13)*sin(theta3) - 2*3^(1/2)*l1*sin(alpha_13)*sin(theta1) + 3^(1/2)*l2*sin(alpha_13)*sin(theta2) + 3^(1/2)*l3*sin(alpha_13)*sin(theta3))^2 + abs(3*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) - 3*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) + 3*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) - 3*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3) + 6*3^(1/2)*a56*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*R*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*R*cos(alpha_13)*sin(alpha_5) + 6*3^(1/2)*a56*sin(alpha_5)*sin(alpha_13) - 4*3^(1/2)*l1*cos(alpha_5)*sin(alpha_13)*cos(theta1) - 3^(1/2)*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3^(1/2)*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) + 3*3^(1/2)*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3))^2 + abs(3*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) - 3*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3) - 6*3^(1/2)*R*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*a56*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*a56*cos(alpha_13)*sin(alpha_5) - 6*3^(1/2)*R*sin(alpha_5)*sin(alpha_13) + 3*3^(1/2)*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) + 3*3^(1/2)*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) + 4*3^(1/2)*l1*sin(alpha_5)*sin(alpha_13)*cos(theta1) + 3^(1/2)*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3^(1/2)*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3))^2)^(1/2));
-wz_solved =  (12*abs(r)^2*(3*R^2*l2_dot*cos(alpha_13)*sin(theta2) - 6*R^2*l1_dot*cos(alpha_13)*sin(theta1) + 3*R^2*l3_dot*cos(alpha_13)*sin(theta3) - 6*a56^2*l1_dot*cos(alpha_13)*sin(theta1) + 3*a56^2*l2_dot*cos(alpha_13)*sin(theta2) + 3*a56^2*l3_dot*cos(alpha_13)*sin(theta3) + 4*R*l1^2*theta1_dot*cos(alpha_13) - 2*R*l2^2*theta2_dot*cos(alpha_13) - 2*R*l3^2*theta3_dot*cos(alpha_13) + 2*3^(1/2)*R*l2^2*theta2_dot*sin(alpha_13) - 2*3^(1/2)*R*l3^2*theta3_dot*sin(alpha_13) - 6*R^2*l1*theta1_dot*cos(alpha_13)*cos(theta1) + 3*R^2*l2*theta2_dot*cos(alpha_13)*cos(theta2) + 3*R^2*l3*theta3_dot*cos(alpha_13)*cos(theta3) - 3*3^(1/2)*R^2*l2_dot*sin(alpha_13)*sin(theta2) + 3*3^(1/2)*R^2*l3_dot*sin(alpha_13)*sin(theta3) - 6*a56^2*l1*theta1_dot*cos(alpha_13)*cos(theta1) + 3*a56^2*l2*theta2_dot*cos(alpha_13)*cos(theta2) + 3*a56^2*l3*theta3_dot*cos(alpha_13)*cos(theta3) - 3*3^(1/2)*a56^2*l2_dot*sin(alpha_13)*sin(theta2) + 3*3^(1/2)*a56^2*l3_dot*sin(alpha_13)*sin(theta3) + l1*l2^2*theta2_dot*cos(alpha_13)*cos(theta1) - 2*l1^2*l2*theta1_dot*cos(alpha_13)*cos(theta2) + l1*l3^2*theta3_dot*cos(alpha_13)*cos(theta1) - 2*l1^2*l3*theta1_dot*cos(alpha_13)*cos(theta3) + l2*l3^2*theta3_dot*cos(alpha_13)*cos(theta2) + l2^2*l3*theta2_dot*cos(alpha_13)*cos(theta3) - 3*3^(1/2)*a56^2*l2*theta2_dot*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*a56^2*l3*theta3_dot*sin(alpha_13)*cos(theta3) - 2*R*l1*l2_dot*cos(alpha_13)*cos(theta1)*sin(theta2) - R*l1*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta1) + 2*R*l2*l1_dot*cos(alpha_13)*cos(theta1)*sin(theta2) + 4*R*l2*l1_dot*cos(alpha_13)*cos(theta2)*sin(theta1) - 2*R*l1*l3_dot*cos(alpha_13)*cos(theta1)*sin(theta3) - R*l1*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta1) + 2*R*l3*l1_dot*cos(alpha_13)*cos(theta1)*sin(theta3) + 4*R*l3*l1_dot*cos(alpha_13)*cos(theta3)*sin(theta1) - 2*R*l2*l3_dot*cos(alpha_13)*cos(theta2)*sin(theta3) - R*l2*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta2) - R*l3*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta3) - 2*R*l3*l2_dot*cos(alpha_13)*cos(theta3)*sin(theta2) - 3^(1/2)*l1*l2^2*theta2_dot*sin(alpha_13)*cos(theta1) + 3^(1/2)*l1*l3^2*theta3_dot*sin(alpha_13)*cos(theta1) + 3^(1/2)*l2*l3^2*theta3_dot*sin(alpha_13)*cos(theta2) - 3^(1/2)*l2^2*l3*theta2_dot*sin(alpha_13)*cos(theta3) - 3*a56*l1*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta1) - 3*a56*l1*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta1) + 3*a56*l2*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta2) + 3*a56*l3*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta3) - 3*3^(1/2)*R^2*l2*theta2_dot*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*R^2*l3*theta3_dot*sin(alpha_13)*cos(theta3) + 4*R*l1*l2*theta1_dot*cos(alpha_13)*cos(theta1)*cos(theta2) - 2*R*l1*l2*theta2_dot*cos(alpha_13)*cos(theta1)*cos(theta2) + 4*R*l1*l3*theta1_dot*cos(alpha_13)*cos(theta1)*cos(theta3) - 2*R*l1*l3*theta3_dot*cos(alpha_13)*cos(theta1)*cos(theta3) - 2*R*l2*l3*theta2_dot*cos(alpha_13)*cos(theta2)*cos(theta3) - 2*R*l2*l3*theta3_dot*cos(alpha_13)*cos(theta2)*cos(theta3) + 3^(1/2)*a56*l1*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta1) + 2*3^(1/2)*a56*l2*l1_dot*cos(alpha_13)*cos(theta1)*sin(theta2) - 3^(1/2)*a56*l1*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta1) - 2*3^(1/2)*a56*l3*l1_dot*cos(alpha_13)*cos(theta1)*sin(theta3) + 3^(1/2)*a56*l2*l3_dot*cos(alpha_13)*cos(theta3)*sin(theta2) - 3^(1/2)*a56*l3*l2_dot*cos(alpha_13)*cos(theta2)*sin(theta3) + 2*3^(1/2)*R*l1*l2_dot*sin(alpha_13)*cos(theta1)*sin(theta2) + 3^(1/2)*R*l1*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta1) - 2*3^(1/2)*R*l1*l3_dot*sin(alpha_13)*cos(theta1)*sin(theta3) - 3^(1/2)*R*l1*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta1) - 2*3^(1/2)*R*l2*l3_dot*sin(alpha_13)*cos(theta2)*sin(theta3) - 3^(1/2)*R*l2*l3_dot*sin(alpha_13)*cos(theta3)*sin(theta2) + 3^(1/2)*R*l3*l2_dot*sin(alpha_13)*cos(theta2)*sin(theta3) + 2*3^(1/2)*R*l3*l2_dot*sin(alpha_13)*cos(theta3)*sin(theta2) - 2*R*l1*l2*theta1_dot*cos(alpha_13)*sin(theta1)*sin(theta2) + R*l1*l2*theta2_dot*cos(alpha_13)*sin(theta1)*sin(theta2) - 2*R*l1*l3*theta1_dot*cos(alpha_13)*sin(theta1)*sin(theta3) + R*l1*l3*theta3_dot*cos(alpha_13)*sin(theta1)*sin(theta3) + R*l2*l3*theta2_dot*cos(alpha_13)*sin(theta2)*sin(theta3) + R*l2*l3*theta3_dot*cos(alpha_13)*sin(theta2)*sin(theta3) + 3*a56*l1*l2*theta2_dot*sin(alpha_13)*sin(theta1)*sin(theta2) + 3*a56*l1*l3*theta3_dot*sin(alpha_13)*sin(theta1)*sin(theta3) - 3*a56*l2*l3*theta2_dot*sin(alpha_13)*sin(theta2)*sin(theta3) - 3*a56*l2*l3*theta3_dot*sin(alpha_13)*sin(theta2)*sin(theta3) + l1*l2*l3_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) + l1*l2*l3_dot*cos(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) + l1*l2*l3_dot*cos(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) + l1*l3*l2_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) + l1*l3*l2_dot*cos(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) + l1*l3*l2_dot*cos(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) - 2*l2*l3*l1_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) - 2*l2*l3*l1_dot*cos(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) - 2*l2*l3*l1_dot*cos(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) - 2*3^(1/2)*a56*l1*l2*theta1_dot*cos(alpha_13)*sin(theta1)*sin(theta2) - 3^(1/2)*a56*l1*l2*theta2_dot*cos(alpha_13)*sin(theta1)*sin(theta2) + 2*3^(1/2)*a56*l1*l3*theta1_dot*cos(alpha_13)*sin(theta1)*sin(theta3) + 3^(1/2)*a56*l1*l3*theta3_dot*cos(alpha_13)*sin(theta1)*sin(theta3) + 3^(1/2)*a56*l2*l3*theta2_dot*cos(alpha_13)*sin(theta2)*sin(theta3) - 3^(1/2)*a56*l2*l3*theta3_dot*cos(alpha_13)*sin(theta2)*sin(theta3) - 3^(1/2)*R*l1*l2*theta2_dot*sin(alpha_13)*sin(theta1)*sin(theta2) + 3^(1/2)*R*l1*l3*theta3_dot*sin(alpha_13)*sin(theta1)*sin(theta3) - 3^(1/2)*R*l2*l3*theta2_dot*sin(alpha_13)*sin(theta2)*sin(theta3) + 3^(1/2)*R*l2*l3*theta3_dot*sin(alpha_13)*sin(theta2)*sin(theta3) - 2*l1*l2*l3*theta1_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + l1*l2*l3*theta2_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + l1*l2*l3*theta3_dot*cos(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + 3^(1/2)*l1*l2*l3_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) + 3^(1/2)*l1*l2*l3_dot*sin(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) + 3^(1/2)*l1*l2*l3_dot*sin(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) - 3^(1/2)*l1*l3*l2_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*sin(theta3) - 3^(1/2)*l1*l3*l2_dot*sin(alpha_13)*cos(theta1)*cos(theta3)*sin(theta2) - 3^(1/2)*l1*l3*l2_dot*sin(alpha_13)*cos(theta2)*cos(theta3)*sin(theta1) + 2*l1*l2*l3*theta1_dot*cos(alpha_13)*cos(theta2)*sin(theta1)*sin(theta3) + 2*l1*l2*l3*theta1_dot*cos(alpha_13)*cos(theta3)*sin(theta1)*sin(theta2) - l1*l2*l3*theta2_dot*cos(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) - l1*l2*l3*theta2_dot*cos(alpha_13)*cos(theta3)*sin(theta1)*sin(theta2) - l1*l2*l3*theta3_dot*cos(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) - l1*l2*l3*theta3_dot*cos(alpha_13)*cos(theta2)*sin(theta1)*sin(theta3) + 2*3^(1/2)*R*l1*l2*theta2_dot*sin(alpha_13)*cos(theta1)*cos(theta2) - 2*3^(1/2)*R*l1*l3*theta3_dot*sin(alpha_13)*cos(theta1)*cos(theta3) + 2*3^(1/2)*R*l2*l3*theta2_dot*sin(alpha_13)*cos(theta2)*cos(theta3) - 2*3^(1/2)*R*l2*l3*theta3_dot*sin(alpha_13)*cos(theta2)*cos(theta3) - 3^(1/2)*l1*l2*l3*theta2_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + 3^(1/2)*l1*l2*l3*theta3_dot*sin(alpha_13)*cos(theta1)*cos(theta2)*cos(theta3) + 3^(1/2)*l1*l2*l3*theta2_dot*sin(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) + 3^(1/2)*l1*l2*l3*theta2_dot*sin(alpha_13)*cos(theta3)*sin(theta1)*sin(theta2) - 3^(1/2)*l1*l2*l3*theta3_dot*sin(alpha_13)*cos(theta1)*sin(theta2)*sin(theta3) - 3^(1/2)*l1*l2*l3*theta3_dot*sin(alpha_13)*cos(theta2)*sin(theta1)*sin(theta3)))/(r^3*(4*abs(3*l3*sin(alpha_13)*sin(theta3) - 3*l2*sin(alpha_13)*sin(theta2) - 2*3^(1/2)*l1*cos(alpha_13)*sin(theta1) + 3^(1/2)*l2*cos(alpha_13)*sin(theta2) + 3^(1/2)*l3*cos(alpha_13)*sin(theta3))^2 + abs(3*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) - 3*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3) - 6*3^(1/2)*R*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*a56*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*a56*cos(alpha_13)*sin(alpha_5) - 6*3^(1/2)*R*sin(alpha_5)*sin(alpha_13) + 4*3^(1/2)*l1*cos(alpha_5)*cos(alpha_13)*cos(theta1) + 3^(1/2)*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) + 3^(1/2)*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) + 3*3^(1/2)*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3))^2 + abs(3*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) - 3*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) - 3*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3) + 6*3^(1/2)*a56*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*R*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*R*cos(alpha_13)*sin(alpha_5) + 6*3^(1/2)*a56*sin(alpha_5)*sin(alpha_13) + 4*3^(1/2)*l1*cos(alpha_13)*sin(alpha_5)*cos(theta1) - 3*3^(1/2)*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3^(1/2)*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*3^(1/2)*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) + 3^(1/2)*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3))^2)^(1/2)*(4*abs(3*l2*cos(alpha_13)*sin(theta2) - 3*l3*cos(alpha_13)*sin(theta3) - 2*3^(1/2)*l1*sin(alpha_13)*sin(theta1) + 3^(1/2)*l2*sin(alpha_13)*sin(theta2) + 3^(1/2)*l3*sin(alpha_13)*sin(theta3))^2 + abs(3*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) - 3*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) + 3*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) - 3*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3) + 6*3^(1/2)*a56*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*R*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*R*cos(alpha_13)*sin(alpha_5) + 6*3^(1/2)*a56*sin(alpha_5)*sin(alpha_13) - 4*3^(1/2)*l1*cos(alpha_5)*sin(alpha_13)*cos(theta1) - 3^(1/2)*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3*3^(1/2)*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3^(1/2)*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) + 3*3^(1/2)*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3))^2 + abs(3*l2*cos(alpha_5)*sin(alpha_13)*cos(theta2) + 3*l2*cos(alpha_13)*sin(alpha_5)*cos(theta2) - 3*l3*cos(alpha_5)*sin(alpha_13)*cos(theta3) - 3*l3*cos(alpha_13)*sin(alpha_5)*cos(theta3) - 6*3^(1/2)*R*cos(alpha_5)*cos(alpha_13) + 6*3^(1/2)*a56*cos(alpha_5)*sin(alpha_13) - 6*3^(1/2)*a56*cos(alpha_13)*sin(alpha_5) - 6*3^(1/2)*R*sin(alpha_5)*sin(alpha_13) + 3*3^(1/2)*l2*cos(alpha_5)*cos(alpha_13)*cos(theta2) + 3*3^(1/2)*l3*cos(alpha_5)*cos(alpha_13)*cos(theta3) + 4*3^(1/2)*l1*sin(alpha_5)*sin(alpha_13)*cos(theta1) + 3^(1/2)*l2*sin(alpha_5)*sin(alpha_13)*cos(theta2) + 3^(1/2)*l3*sin(alpha_5)*sin(alpha_13)*cos(theta3))^2)^(1/2));
-
-T = 1/2*Mp*(vx^2 + vy^2 + vz^2)...
+T = 1/2*Mp*(V_com(1)^2 + V_com(2)^2 + V_com(3)^2)...
   + 1/2*(Ixx*(wx_solved+qf_dot)^2 + Iyy*wy_solved^2 + Izz*wz_solved^2)...
   + Ixxf*(qf_dot^2)...
   + 1/2*Ml*(V_l{1}(1)^2 + V_l{1}(2)^2 + V_l{1}(3)^2)...
@@ -147,6 +167,9 @@ L = T-P;
 L = subs(L,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs);
 
 %% COMPUTING EOMS
+
+fprintf("Computing EOMs\n");
+
 for i = 1:length(qs)
     dldqdot{i} = diff(L,q_dots(i));
     dldqdot_t{i} = subs(dldqdot{i},[qs q_dots], [qst q_dotst]);
@@ -156,8 +179,11 @@ for i = 1:length(qs)
     EOMS(i) = d_dldqdot{i} - diff(L,qs(i));
 end
 
-[M V G] = separate_mvg_no_simp(EOMS.',q_d_dots.',g);
+[M, V, G] = separate_mvg_no_simp(EOMS.',q_d_dots.',g);
 %%
+
+fprintf("Converting V vector to a square matrix\n");
+
 Vsquare = sym(zeros(length(qs),length(qs)));
 
 for i = 1:length(qs)
@@ -175,10 +201,12 @@ for i = 1:length(qs)
 end
 
 %%
+fprintf("Computing and incorporating Rho\n");
+
 fk(1,1) = simplify(expand(sqrt((B{1}(1)-B{2}(1))^2+(B{1}(2)-B{2}(2))^2+(B{1}(3)-B{2}(3))^2)-sqrt(3)*r));
 fk(2,1) = simplify(expand(sqrt((B{3}(1)-B{2}(1))^2+(B{3}(2)-B{2}(2))^2+(B{3}(3)-B{2}(3))^2)-sqrt(3)*r));
 fk(3,1) = simplify(expand(sqrt((B{3}(1)-B{1}(1))^2+(B{3}(2)-B{1}(2))^2+(B{3}(3)-B{1}(3))^2)-sqrt(3)*r));
-% fk = [(3*R^2 + 3*a56^2 + l1^2 + l2^2 - (l1*l2*cos(theta1 - theta2))/2 + (3*l1*l2*cos(theta1 + theta2))/2 - 3*R*l1*cos(theta1) - 3*R*l2*cos(theta2) - 3^(1/2)*a56*l1*cos(theta1) + 3^(1/2)*a56*l2*cos(theta2))^(1/2) - 3^(1/2)*r;(3*R^2 + 3*a56^2 + l2^2 + l3^2 - (l2*l3*cos(theta2 - theta3))/2 + (3*l2*l3*cos(theta2 + theta3))/2 - 3*R*l2*cos(theta2) - 3*R*l3*cos(theta3) - 3^(1/2)*a56*l2*cos(theta2) + 3^(1/2)*a56*l3*cos(theta3))^(1/2) - 3^(1/2)*r;(3*R^2 + 3*a56^2 + l1^2 + l3^2 - (l1*l3*cos(theta1 - theta3))/2 + (3*l1*l3*cos(theta1 + theta3))/2 - 3*R*l1*cos(theta1) - 3*R*l3*cos(theta3) + 3^(1/2)*a56*l1*cos(theta1) - 3^(1/2)*a56*l3*cos(theta3))^(1/2) - 3^(1/2)*r];
+
 psi = [fk;qs(1:(length(qs)-3)).'];
 psi_dq = simplify(jacobian(psi,qs));
 rho = simplify(inv(psi_dq)*[zeros(3,(length(qs)-3));eye((length(qs)-3),(length(qs)-3))]);
@@ -189,13 +217,8 @@ Mpar = rho.'*M*rho;
 Vpar = rho.'*Vsquare*rho + rho.'*M*rho_dt;
 Gpar = rho.'*G;
 
-%%
-% AT = simplify(jacobian(fk,[theta1 theta2 theta3]));
-% AinvT = simplify(inv(AT));
-% BT = simplify(jacobian(fk,[l1 l2 l3]).');
-% gammas = AinvT*EOMS(4:6).';
-% EOMS_final = [EOMS(1:3).' - BT*gammas; EOMS(4:6).' - AT*gammas];
 %% Substitute in actual values
+fprintf("Substituting in values\n")
 
 Ixx = 0.00091827;
 Iyy = 0.00080377;
@@ -218,66 +241,20 @@ Mpar = subs(Mpar);
 Vpar = subs(Vpar);
 Gpar = subs(Gpar);
 
-
-% EOMS_vals = vpa(subs(EOMS_final),5);
-
-%% Convert to qdd form
-% [M V G] = separate_mvg_no_simp(EOMS_final,q_d_dots.',g);
-
-% g = 9.80665;
-
-% Mpar = subs(Mpar);
-% Vpar = subs(Vpar);
-% Gpar = subs(Gpar);
-
-%% Save to mat file instead
-% M = vpa(M,3);
-% V = vpa(V,3);
-% G = vpa(G,3);
-% 
-% save('MVG','M','V','G')
-
-%% Testing
-% mass_props = [Ixx Iyy Izz Mp Ml l_offset g];
-% mass_values = [0.03990366 0.09672265 0.13629088 0.36486131 0.14820004 0.08803884 9.81];
-% q_q_dot_vals = [0.1 0.1 0.11 1.0390 0.9300 1.0663 0.001 0.0001 -0.0003 0.001 0.001 -0.003];
+%%
+% mass_props = [Ixxf Ixx Iyy Izz Mp Ml l_offset g];
+% mass_values = [0.01747099 0.00091827 0.00080377 0.00138661 0.36486131 0.14820004 0.08803884 9.81];
+% q_q_dot_vals = [0.0, 0.1, 0.1, 0.1, 1.0284, 1.0284, 1.0284, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+% q_ddot_vals = [0.00 0.00 0.00 0.00 0.00 0.00 0.00];
 % variables = [r R alpha_5 alpha_13 a56];
 % values = [0.05288174521 0.1044956 0.094516665 5*pi/180 3.8340e-04];
-% M_eval = subs(subs(M),[qs q_dots variables mass_props], [q_q_dot_vals values mass_values]);
-% vpa(M_eval,2)
-% V_eval = subs(subs(V),[qs q_dots variables mass_props], [q_q_dot_vals values mass_values]);
-% vpa(V_eval,2)
-% G_eval = subs(subs(G),[qs q_dots variables mass_props], [q_q_dot_vals values mass_values]);
-% vpa(G_eval,2)
-
-%% Write to file
-
-% for i = 1:6
-%     for j = 1:6
-%         M_write = char(M(i,j),3);
-%         fileID = fopen("DynamicEqs/M" + int2str(i) + int2str(j) + ".txt","w");
-%         fprintf(fileID,M_write);
-%     end
-%     V_write = char(V(i));
-%     fileID = fopen("DynamicEqs/V" + int2str(i) + ".txt","w");
-%     fprintf(fileID,V_write);
-%     G_write = char(G(i));
-%     fileID = fopen("DynamicEqs/G" + int2str(i) + ".txt","w");
-%     fprintf(fileID,G_write);
-% end
-
-%%
-mass_props = [Ixxf Ixx Iyy Izz Mp Ml l_offset g];
-mass_values = [0.01747099 0.00091827 0.00080377 0.00138661 0.36486131 0.14820004 0.08803884 9.81];
-q_q_dot_vals = [0.0, 0.1, 0.1, 0.1, 1.0284, 1.0284, 1.0284, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
-q_ddot_vals = [0.00 0.00 0.00 0.00 0.00 0.00 0.00];
-variables = [r R alpha_5 alpha_13 a56];
-values = [0.05288174521 0.1044956 0.094516665 5*pi/180 3.8340e-04];
-test = subs(subs(Gpar),[qs q_dots q_d_dots variables mass_props], [q_q_dot_vals q_ddot_vals values mass_values]);
-
-vpa(test,4)
+% test = subs(subs(Gpar),[qs q_dots q_d_dots variables mass_props], [q_q_dot_vals q_ddot_vals values mass_values]);
+% 
+% vpa(test,4)
 
 %% Write parallel structure to file
+
+fprintf("Writing to file\n");
 
 for i = 1:(length(qs)-3)
     for j = 1:(length(qs)-3)
