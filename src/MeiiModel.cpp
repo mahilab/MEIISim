@@ -25,6 +25,7 @@ MeiiModel::MeiiModel() :
     lim2(tau2_mot_cont * eta2, tau2_mot_max * eta2, seconds(2)),
     lim3(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2)),
     lim4(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2)),
+    lim5(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2)),
     p(12),
     V(5,5),
     M(5,5),

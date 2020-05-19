@@ -104,21 +104,21 @@ public:
 
         ImPlot::SetNextPlotLimits(t-10, t, 0, 1500, ImGuiCond_Always);
         if(ImPlot::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis)){
-            ImPlot::Plot("Sim Loop Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Desired Sim Loop Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Total Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Setup Time (thread only)", &setupTime.Data[0].x, &setupTime.Data[0].y, setupTime.Data.size(), setupTime.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Comp Time (thread only)", &compTime.Data[0].x, &compTime.Data[0].y, compTime.Data.size(), compTime.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Sim Loop Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Desired Sim Loop Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Total Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Setup Time (thread only)", &setupTime.Data[0].x, &setupTime.Data[0].y, setupTime.Data.size(), setupTime.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Comp Time (thread only)", &compTime.Data[0].x, &compTime.Data[0].y, compTime.Data.size(), compTime.Offset, 2 * sizeof(float));
             ImPlot::EndPlot();
         }
 
         ImPlot::SetNextPlotLimits(t-10, t, -10, 10, ImGuiCond_Always);
         if(ImPlot::BeginPlot("##Forces", "Time (s)", "Force (N)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis)){
-            ImPlot::Plot("Force 1", &tau1.Data[0].x, &tau1.Data[0].y, tau1.Data.size(), tau1.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Force 2", &tau2.Data[0].x, &tau2.Data[0].y, tau2.Data.size(), tau2.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Force 3", &tau3.Data[0].x, &tau3.Data[0].y, tau3.Data.size(), tau3.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Force 4", &tau4.Data[0].x, &tau4.Data[0].y, tau4.Data.size(), tau4.Offset, 2 * sizeof(float));
-            ImPlot::Plot("Force 5", &tau5.Data[0].x, &tau5.Data[0].y, tau5.Data.size(), tau5.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Force 1", &tau1.Data[0].x, &tau1.Data[0].y, tau1.Data.size(), tau1.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Force 2", &tau2.Data[0].x, &tau2.Data[0].y, tau2.Data.size(), tau2.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Force 3", &tau3.Data[0].x, &tau3.Data[0].y, tau3.Data.size(), tau3.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Force 4", &tau4.Data[0].x, &tau4.Data[0].y, tau4.Data.size(), tau4.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Force 5", &tau5.Data[0].x, &tau5.Data[0].y, tau5.Data.size(), tau5.Offset, 2 * sizeof(float));
             ImPlot::EndPlot();
         }
 

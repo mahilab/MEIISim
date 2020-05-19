@@ -90,21 +90,31 @@ public:
     const double tau2_mot_max  = 2.560;
     const double tau3_mot_cont = 0.0897; 
     const double tau3_mot_max  = 1.050;
+    const double tau4_mot_cont = 0.187; 
+    const double tau4_mot_max  = 2.560;
+    const double tau5_mot_cont = 0.0897; 
+    const double tau5_mot_max  = 1.050;
 
     // Transmission Rations [rad/m]
     const double eta1 = 0.23*0.0254;
     const double eta2 = 0.23*0.0254;
     const double eta3 = 0.23*0.0254;
+    const double eta4 = 0.23*0.0254;
+    const double eta5 = 0.23*0.0254;
 
     // Damping Coefficients [Nm*s/rad]
     const double b1 = 0.5 * 0.0252;  
     const double b2 = 0.5 * 0.0019;  
     const double b3 = 0.5 * 0.0029; 
+    const double b4 = 0.5 * 0.0019;  
+    const double b5 = 0.5 * 0.0029; 
 
     // Kinetic Friction [Nm]
     const double fk1 = 0.5 * 0.1891;
     const double fk2 = 0.5 * 0.0541;
     const double fk3 = 0.5 * 0.1339;
+    const double fk4 = 0.5 * 0.1339;
+    const double fk5 = 0.5 * 0.1339;
 
     // Gravity Constant [m/s^2]
     const double g = 9.80665;

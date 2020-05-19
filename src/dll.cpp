@@ -60,8 +60,8 @@ void simulation()
         if (!ms_gain_data.empty()){
             kp = ms_gain_data[0];
             kd = ms_gain_data[1];
-            kpf = ms_gain_data[2];
-            kdf = ms_gain_data[3];
+            kpe = ms_gain_data[2];
+            kde = ms_gain_data[3];
             kpf = ms_gain_data[4];
             kdf = ms_gain_data[5];
             k_hard1 = ms_gain_data[6];
@@ -81,8 +81,8 @@ void simulation()
             g_model.threadpool = (threadpooling > 0.5) ? true : false;
             if (n_threads != n_threads_last) g_model.p.resize(n_threads);
             n_threads_last = n_threads;
-            tau1 = kpf * (q_ref1 - g_model.q1) - kdf * g_model.q1d;
-            tau2 = kpe * (q_ref2 - g_model.q2) - kde * g_model.q2d;
+            tau1 = kpe * (q_ref1 - g_model.q1) - kde * g_model.q1d;
+            tau2 = kpf * (q_ref2 - g_model.q2) - kdf * g_model.q2d;
             tau3 = kp  * (q_ref3 - g_model.q3) - kd  * g_model.q3d;
             tau4 = kp  * (q_ref4 - g_model.q4) - kd  * g_model.q4d;
             tau5 = kp  * (q_ref5 - g_model.q5) - kd  * g_model.q5d;
