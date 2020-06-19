@@ -21,7 +21,7 @@ public:
 
 public:
 
-    bool threadpool = false;
+    bool threadpool = true;
 
     // Joint torques [Nm]
     double tau1, tau2, tau3, tau4, tau5;
@@ -136,8 +136,11 @@ private:
     Eigen::MatrixXd M;
     Eigen::VectorXd G;
     Eigen::VectorXd Tau;
+    Eigen::VectorXd B;
+    Eigen::VectorXd Fk;
 
     Eigen::MatrixXd A;
     Eigen::VectorXd b;
     Eigen::VectorXd x;
+
 };

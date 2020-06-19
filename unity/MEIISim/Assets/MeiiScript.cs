@@ -54,6 +54,9 @@ public class MeiiScript : MonoBehaviour {
 
     double[] qs = new double[14];
 
+    const string import_module = "virtual_meii";
+    // const string import_module = "meii_model";
+
     // Use this for initialization
     void Start () {
         Elbow_Zero     = Elbow.transform.localEulerAngles;
@@ -114,17 +117,17 @@ public class MeiiScript : MonoBehaviour {
 
     // Dll Imports
     public class Dll {
-        [DllImport("meii_model")] 
+        [DllImport(import_module)] 
         public static extern void start();
-        [DllImport("meii_model")] 
+        [DllImport(import_module)] 
         public static extern void stop();
-        [DllImport("meii_model")] 
+        [DllImport(import_module)] 
         public static extern void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5);
-        [DllImport("meii_model")]
+        [DllImport(import_module)]
         public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8);
-        [DllImport("meii_model")]
+        [DllImport(import_module)]
         public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d);
-        [DllImport("meii_model")]
+        [DllImport(import_module)]
         public static extern void get_positions(double[] positions);
     }
 

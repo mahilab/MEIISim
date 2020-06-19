@@ -24,6 +24,7 @@ using namespace mahi::robo;
 
 void simulation()
 {
+    enable_realtime();
     MelShare ms_gains("gains");
     MelShare ms_refs("refs");
     MelShare ms_times_out("times");
@@ -105,6 +106,7 @@ void simulation()
         t_last = t;
         t = timer.wait();
     }
+    disable_realtime();
 };
 
 EXPORT void stop()

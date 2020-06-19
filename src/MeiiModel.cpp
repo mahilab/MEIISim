@@ -31,6 +31,8 @@ MeiiModel::MeiiModel() :
     M(5,5),
     G(5),
     Tau(5),
+    B(5),
+    Fk(5),
     A(5,5),
     b(5),
     x(5)
@@ -255,31 +257,27 @@ void MeiiModel::update(Time t)
         comp_time = 0.0;
     }
 
-    // std::cout << "M:\n";
-    // std::cout << M(0,0) << ", " << M(0,1) << ", " << M(0,2) << ", " << M(0,3) << ", " << M(0,4) << std::endl;
-    // std::cout << M(1,0) << ", " << M(1,1) << ", " << M(1,2) << ", " << M(1,3) << ", " << M(1,4) << std::endl;
-    // std::cout << M(2,0) << ", " << M(2,1) << ", " << M(2,2) << ", " << M(2,3) << ", " << M(2,4) << std::endl;
-    // std::cout << M(3,0) << ", " << M(3,1) << ", " << M(3,2) << ", " << M(3,3) << ", " << M(3,4) << std::endl;
-    // std::cout << M(4,0) << ", " << M(4,1) << ", " << M(4,2) << ", " << M(4,3) << ", " << M(4,4) << std::endl;
-
-    // std::cout << "V:\n";
-    // std::cout << V(0,0) << ", " << V(0,1) << ", " << V(0,2) << ", " << V(0,3) << ", " << V(0,4) << std::endl;
-    // std::cout << V(1,0) << ", " << V(1,1) << ", " << V(1,2) << ", " << V(1,3) << ", " << V(1,4) << std::endl;
-    // std::cout << V(2,0) << ", " << V(2,1) << ", " << V(2,2) << ", " << V(2,3) << ", " << V(2,4) << std::endl;
-    // std::cout << V(3,0) << ", " << V(3,1) << ", " << V(3,2) << ", " << V(3,3) << ", " << V(3,4) << std::endl;
-    // std::cout << V(4,0) << ", " << V(4,1) << ", " << V(4,2) << ", " << V(4,3) << ", " << V(4,4) << std::endl;
-
-    // std::cout << "G:\n";
-    // std::cout << G(0) << std::endl;
-    // std::cout << G(1) << std::endl;
-    // std::cout << G(2) << std::endl;
-    // std::cout << G(3) << std::endl;
-    // std::cout << G(4) << std::endl;
-
     mat_calc_time = MatCalcClock.get_elapsed_time().as_microseconds();
 
+    /// Damping coefficients [Nm*s/rad]
+    constexpr double B_coef[5] = {0.1215, 0.1, 0.1, 0.1, 0.1};
+    /// Kinetic friction [Nm]
+    constexpr double Fk_coef[5] = {0.01, 0.01, 0.1, 0.1, 0.1};
+
+    B[0] = B_coef[0]*q1d*10.0;
+    B[1] = B_coef[1]*q2d*10.0;
+    B[2] = B_coef[2]*q3d*1000.0;
+    B[3] = B_coef[3]*q4d*1000.0;
+    B[4] = B_coef[4]*q5d*1000.0;
+
+    Fk[0] = Fk_coef[0]*std::tanh(q1d*10);
+    Fk[1] = Fk_coef[1]*std::tanh(q2d*10);
+    Fk[2] = Fk_coef[2]*std::tanh(q3d*100);
+    Fk[3] = Fk_coef[3]*std::tanh(q4d*100);
+    Fk[4] = Fk_coef[4]*std::tanh(q5d*100);
+
     A = M;// + M_mot;
-    b = Tau - V*qdot - G;// - B - Fk;
+    b = Tau - V*qdot - G - B - Fk;
     x = A.householderQr().solve(b);
 
     q1dd = x[0];
@@ -349,7 +347,7 @@ void MeiiModel::set_velocities(double _q1d, double _q2d, double _q3d, double _q4
 
 void MeiiModel::reset() {
     set_torques(0,0,0,0,0);
-    set_positions(0.0,0.0,0.1,0.1,0.1,1.0284436869069115694230731605785,1.0284436869069115694230731605785,1.0284436869069115694230731605785);
+    set_positions(-45*DEG2RAD,0.0,0.1,0.1,0.1,1.0284436869069115694230731605785,1.0284436869069115694230731605785,1.0284436869069115694230731605785);
     set_velocities(0,0,0,0,0,0,0,0);
 }
 
