@@ -328,9 +328,9 @@ rho  = subs(rho);
 %%
 % mass_props = [Ixxf Ixx Iyy Izz Mp Ml l_offset g];
 % mass_values = [0.01747099 0.00091827 0.00080377 0.00138661 0.36486131 0.14820004 0.08803884 9.81];
-q_q_dot_vals = [0.0, 0.0, 0.1, 0.1, 0.1, 1.0284, 1.0284, 1.0284, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+q_q_dot_vals = [0.0, 0.0, 0.1, 0.1, 0.1, 1.0284, 1.0284, 1.0284, 0.01, -0.01, 0.001, 0.001, 0.002, -0.001, 0.01, -0.02];
 q_ddot_vals = [0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00];
-test = subs(subs(Vpar),[qs q_dots q_d_dots], [q_q_dot_vals q_ddot_vals]);
+test = subs(subs(Vsquare),[qs q_dots q_d_dots], [q_q_dot_vals q_ddot_vals]);
 
 vpa(test,4)
 

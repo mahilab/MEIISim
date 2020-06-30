@@ -36,10 +36,6 @@ public class MeiiScript : MonoBehaviour {
     public GameObject PlatformZ;
     public GameObject PlatformX;
 
-    // [Header("Color Switching")]
-    // public GameObject[] whites;
-    // public GameObject[] colors;
-
     private Vector3 Elbow_Zero;
     private Vector3 Forearm_Zero;
     private Vector3 Rail1_Zero;

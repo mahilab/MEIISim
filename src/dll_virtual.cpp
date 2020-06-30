@@ -42,7 +42,7 @@ void simulation()
     Timer timer(hertz(1000), Timer::Hybrid);
     Time t;
     Time sim_time = 0_ms;
-    // enable_realtime();
+    enable_realtime();
     while (!g_stop)
     {
         if(!started){
@@ -89,7 +89,8 @@ void simulation()
         ms_posvel_5.write_data({q5,q5d});
         t = timer.wait();
     }
-};
+    disable_realtime();
+}
 
 EXPORT void stop()
 {
