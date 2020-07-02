@@ -69,7 +69,7 @@ public:
             q2 = ms_qs_data[6];
             q3 = ms_qs_data[7];
             q4 = ms_qs_data[8];
-            q4 = ms_qs_data[9];
+            q5 = ms_qs_data[9];
         }
         ImGui::Begin("PD Tuner");
         ImGui::BeginGroup();

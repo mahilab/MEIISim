@@ -1,0 +1,97 @@
+#pragma once
+#include <Mahi/Util.hpp>
+#include <Eigen/Dense>
+using namespace mahi::util;
+
+inline Eigen::MatrixXd get_psi_dq_dt(const std::vector<double>& qs){
+	Eigen::MatrixXd psi_dq_dt = Eigen::MatrixXd::Zero(14,14); 
+
+	double qe = qs[0];
+	double qf = qs[1];
+	double l1 = qs[2];
+	double l2 = qs[3];
+	double l3 = qs[4];
+	double theta1 = qs[5];
+	double theta2 = qs[6];
+	double theta3 = qs[7];
+	double P_p_x = qs[8];
+	double P_p_y = qs[9];
+	double P_p_z = qs[10];
+	double R_p_x = qs[11];
+	double R_p_y = qs[12];
+	double R_p_z = qs[13];
+	double qe_dot = qs[14];
+	double qf_dot = qs[15];
+	double l1_dot = qs[16];
+	double l2_dot = qs[17];
+	double l3_dot = qs[18];
+	double theta1_dot = qs[19];
+	double theta2_dot = qs[20];
+	double theta3_dot = qs[21];
+	double V_p_x = qs[22];
+	double V_p_y = qs[23];
+	double V_p_z = qs[24];
+	double w_p_x = qs[25];
+	double w_p_y = qs[26];
+	double w_p_z = qs[27];
+	double sinqe = sin(qe);
+	double cosqe = cos(qe);
+	double sinqf = sin(qf);
+	double cosqf = cos(qf);
+	double sintheta1 = sin(theta1);
+	double costheta1 = cos(theta1);
+	double sintheta2 = sin(theta2);
+	double costheta2 = cos(theta2);
+	double sintheta3 = sin(theta3);
+	double costheta3 = cos(theta3);
+	double sinR_p_x = sin(R_p_x);
+	double cosR_p_x = cos(R_p_x);
+	double sinR_p_y = sin(R_p_y);
+	double cosR_p_y = cos(R_p_y);
+	double sinR_p_z = sin(R_p_z);
+	double cosR_p_z = cos(R_p_z);
+
+	psi_dq_dt(0,2) = theta1_dot*costheta1;
+	psi_dq_dt(0,5) = l1_dot*costheta1-l1*theta1_dot*sintheta1*1.0;
+	psi_dq_dt(0,11) = w_p_y*cosR_p_x*cosR_p_y*-5.268051420404163E-2+w_p_x*cosR_p_x*sinR_p_y*4.608947781569839E-3+w_p_y*cosR_p_y*sinR_p_x*4.608947781569839E-3+w_p_x*sinR_p_x*sinR_p_y*5.268051420404163E-2-w_p_x*cosR_p_x*cosR_p_y*sinR_p_z*5.268051420404163E-2-w_p_z*cosR_p_y*cosR_p_z*sinR_p_x*5.268051420404163E-2+w_p_x*cosR_p_y*sinR_p_x*sinR_p_z*4.608947781569839E-3+w_p_y*cosR_p_x*sinR_p_y*sinR_p_z*4.608947781569839E-3+w_p_y*sinR_p_x*sinR_p_y*sinR_p_z*5.268051420404163E-2-w_p_z*cosR_p_x*cosR_p_y*cosR_p_z*4.608947781569839E-3;
+	psi_dq_dt(0,12) = w_p_x*cosR_p_x*cosR_p_y*-5.268051420404163E-2+w_p_x*cosR_p_y*sinR_p_x*4.608947781569839E-3+w_p_y*cosR_p_x*sinR_p_y*4.608947781569839E-3+w_p_y*sinR_p_x*sinR_p_y*5.268051420404163E-2-w_p_y*cosR_p_x*cosR_p_y*sinR_p_z*5.268051420404163E-2-w_p_z*cosR_p_x*cosR_p_z*sinR_p_y*5.268051420404163E-2+w_p_x*cosR_p_x*sinR_p_y*sinR_p_z*4.608947781569839E-3+w_p_y*cosR_p_y*sinR_p_x*sinR_p_z*4.608947781569839E-3+w_p_z*cosR_p_z*sinR_p_x*sinR_p_y*4.608947781569839E-3+w_p_x*sinR_p_x*sinR_p_y*sinR_p_z*5.268051420404163E-2;
+	psi_dq_dt(0,13) = w_p_x*sin(R_p_x+8.72664625997146E-2)*cosR_p_y*cosR_p_z*-5.288174521000144E-2-w_p_y*cos(R_p_x+8.72664625997146E-2)*cosR_p_z*sinR_p_y*5.288174521000144E-2-w_p_z*cos(R_p_x+8.72664625997146E-2)*cosR_p_y*sinR_p_z*5.288174521000144E-2;
+	psi_dq_dt(1,2) = theta1_dot*sintheta1*9.955366242634227E-1;
+	psi_dq_dt(1,5) = l1_dot*sintheta1*9.955366242634227E-1+l1*theta1_dot*costheta1*9.955366242634227E-1;
+	psi_dq_dt(1,11) = w_p_z*sin(R_p_x+8.72664625997146E-2)*sinR_p_z*-5.288174521000144E-2+w_p_x*cos(R_p_x+8.72664625997146E-2)*cosR_p_z*5.288174521000144E-2;
+	psi_dq_dt(1,13) = w_p_x*sin(R_p_x+8.72664625997146E-2)*sinR_p_z*-5.288174521000144E-2+w_p_z*cos(R_p_x+8.72664625997146E-2)*cosR_p_z*5.288174521000144E-2;
+	psi_dq_dt(2,2) = theta1_dot*sintheta1*9.437600198272378E-2;
+	psi_dq_dt(2,5) = l1_dot*sintheta1*9.437600198272378E-2+l1*theta1_dot*costheta1*9.437600198272378E-2;
+	psi_dq_dt(2,11) = w_p_x*cosR_p_x*cosR_p_y*4.608947781569839E-3+w_p_x*cosR_p_y*sinR_p_x*5.268051420404163E-2+w_p_y*cosR_p_x*sinR_p_y*5.268051420404163E-2-w_p_y*sinR_p_x*sinR_p_y*4.608947781569839E-3+w_p_y*cosR_p_x*cosR_p_y*sinR_p_z*4.608947781569839E-3+w_p_z*cosR_p_x*cosR_p_z*sinR_p_y*4.608947781569839E-3+w_p_x*cosR_p_x*sinR_p_y*sinR_p_z*5.268051420404163E-2+w_p_y*cosR_p_y*sinR_p_x*sinR_p_z*5.268051420404163E-2+w_p_z*cosR_p_z*sinR_p_x*sinR_p_y*5.268051420404163E-2-w_p_x*sinR_p_x*sinR_p_y*sinR_p_z*4.608947781569839E-3;
+	psi_dq_dt(2,12) = w_p_y*cosR_p_x*cosR_p_y*4.608947781569839E-3+w_p_x*cosR_p_x*sinR_p_y*5.268051420404163E-2+w_p_y*cosR_p_y*sinR_p_x*5.268051420404163E-2-w_p_x*sinR_p_x*sinR_p_y*4.608947781569839E-3+w_p_x*cosR_p_x*cosR_p_y*sinR_p_z*4.608947781569839E-3+w_p_z*cosR_p_y*cosR_p_z*sinR_p_x*4.608947781569839E-3+w_p_x*cosR_p_y*sinR_p_x*sinR_p_z*5.268051420404163E-2+w_p_y*cosR_p_x*sinR_p_y*sinR_p_z*5.268051420404163E-2-w_p_y*sinR_p_x*sinR_p_y*sinR_p_z*4.608947781569839E-3-w_p_z*cosR_p_x*cosR_p_y*cosR_p_z*5.268051420404163E-2;
+	psi_dq_dt(2,13) = w_p_y*cos(R_p_x+8.72664625997146E-2)*cosR_p_y*cosR_p_z*-5.288174521000144E-2+w_p_x*sin(R_p_x+8.72664625997146E-2)*cosR_p_z*sinR_p_y*5.288174521000144E-2+w_p_z*cos(R_p_x+8.72664625997146E-2)*sinR_p_y*sinR_p_z*5.288174521000144E-2;
+	psi_dq_dt(3,3) = theta2_dot*costheta2;
+	psi_dq_dt(3,6) = l2_dot*costheta2-l2*theta2_dot*sintheta2*1.0;
+	psi_dq_dt(3,11) = w_p_y*cosR_p_x*cosR_p_y*2.234879123846412E-2-w_p_x*cosR_p_x*sinR_p_y*4.792713747590938E-2-w_p_y*cosR_p_y*sinR_p_x*4.792713747590938E-2-w_p_x*sinR_p_x*sinR_p_y*2.234879123846412E-2+w_p_x*cosR_p_x*cosR_p_y*sinR_p_z*2.234879123846412E-2+w_p_z*cosR_p_y*cosR_p_z*sinR_p_x*2.234879123846412E-2-w_p_x*cosR_p_y*sinR_p_x*sinR_p_z*4.792713747590938E-2-w_p_y*cosR_p_x*sinR_p_y*sinR_p_z*4.792713747590938E-2-w_p_y*sinR_p_x*sinR_p_y*sinR_p_z*2.234879123846412E-2+w_p_z*cosR_p_x*cosR_p_y*cosR_p_z*4.792713747590938E-2;
+	psi_dq_dt(3,12) = w_p_x*cosR_p_x*cosR_p_y*2.234879123846412E-2-w_p_x*cosR_p_y*sinR_p_x*4.792713747590938E-2-w_p_y*cosR_p_x*sinR_p_y*4.792713747590938E-2-w_p_y*sinR_p_x*sinR_p_y*2.234879123846412E-2+w_p_y*cosR_p_x*cosR_p_y*sinR_p_z*2.234879123846412E-2+w_p_z*cosR_p_x*cosR_p_z*sinR_p_y*2.234879123846412E-2-w_p_x*cosR_p_x*sinR_p_y*sinR_p_z*4.792713747590938E-2-w_p_y*cosR_p_y*sinR_p_x*sinR_p_z*4.792713747590938E-2-w_p_z*cosR_p_z*sinR_p_x*sinR_p_y*4.792713747590938E-2-w_p_x*sinR_p_x*sinR_p_y*sinR_p_z*2.234879123846412E-2;
+	psi_dq_dt(3,13) = w_p_x*sin(R_p_x+1.134464013796105)*cosR_p_y*cosR_p_z*5.288174521000144E-2+w_p_y*cos(R_p_x+1.134464013796105)*cosR_p_z*sinR_p_y*5.288174521000144E-2+w_p_z*cos(R_p_x+1.134464013796105)*cosR_p_y*sinR_p_z*5.288174521000144E-2;
+	psi_dq_dt(4,3) = theta2_dot*sintheta2*-4.160362969072935E-1;
+	psi_dq_dt(4,6) = l2_dot*sintheta2*-4.160362969072935E-1-l2*theta2_dot*costheta2*4.160362969072935E-1;
+	psi_dq_dt(4,11) = w_p_z*sin(R_p_x+1.134464013796105)*sinR_p_z*5.288174521000144E-2-w_p_x*cos(R_p_x+1.134464013796105)*cosR_p_z*5.288174521000144E-2;
+	psi_dq_dt(4,13) = w_p_x*sin(R_p_x+1.134464013796105)*sinR_p_z*5.288174521000144E-2-w_p_z*cos(R_p_x+1.134464013796105)*cosR_p_z*5.288174521000144E-2;
+	psi_dq_dt(5,3) = theta2_dot*sintheta2*-9.093480080011886E-1;
+	psi_dq_dt(5,6) = l2_dot*sintheta2*-9.093480080011886E-1-l2*theta2_dot*costheta2*9.093480080011886E-1;
+	psi_dq_dt(5,11) = w_p_x*cosR_p_x*cosR_p_y*-4.792713747590938E-2-w_p_x*cosR_p_y*sinR_p_x*2.234879123846412E-2-w_p_y*cosR_p_x*sinR_p_y*2.234879123846412E-2+w_p_y*sinR_p_x*sinR_p_y*4.792713747590938E-2-w_p_y*cosR_p_x*cosR_p_y*sinR_p_z*4.792713747590938E-2-w_p_z*cosR_p_x*cosR_p_z*sinR_p_y*4.792713747590938E-2-w_p_x*cosR_p_x*sinR_p_y*sinR_p_z*2.234879123846412E-2-w_p_y*cosR_p_y*sinR_p_x*sinR_p_z*2.234879123846412E-2-w_p_z*cosR_p_z*sinR_p_x*sinR_p_y*2.234879123846412E-2+w_p_x*sinR_p_x*sinR_p_y*sinR_p_z*4.792713747590938E-2;
+	psi_dq_dt(5,12) = w_p_y*cosR_p_x*cosR_p_y*-4.792713747590938E-2-w_p_x*cosR_p_x*sinR_p_y*2.234879123846412E-2-w_p_y*cosR_p_y*sinR_p_x*2.234879123846412E-2+w_p_x*sinR_p_x*sinR_p_y*4.792713747590938E-2-w_p_x*cosR_p_x*cosR_p_y*sinR_p_z*4.792713747590938E-2-w_p_z*cosR_p_y*cosR_p_z*sinR_p_x*4.792713747590938E-2-w_p_x*cosR_p_y*sinR_p_x*sinR_p_z*2.234879123846412E-2-w_p_y*cosR_p_x*sinR_p_y*sinR_p_z*2.234879123846412E-2+w_p_y*sinR_p_x*sinR_p_y*sinR_p_z*4.792713747590938E-2+w_p_z*cosR_p_x*cosR_p_y*cosR_p_z*2.234879123846412E-2;
+	psi_dq_dt(5,13) = w_p_y*cos(R_p_x+1.134464013796105)*cosR_p_y*cosR_p_z*5.288174521000144E-2-w_p_x*sin(R_p_x+1.134464013796105)*cosR_p_z*sinR_p_y*5.288174521000144E-2-w_p_z*cos(R_p_x+1.134464013796105)*sinR_p_y*sinR_p_z*5.288174521000144E-2;
+	psi_dq_dt(6,4) = theta3_dot*costheta3;
+	psi_dq_dt(6,7) = l3_dot*costheta3-l3*theta3_dot*sintheta3*1.0;
+	psi_dq_dt(6,11) = w_p_y*cosR_p_x*cosR_p_y*3.033172296557396E-2+w_p_x*cosR_p_x*sinR_p_y*4.331818969433954E-2+w_p_y*cosR_p_y*sinR_p_x*4.331818969433954E-2-w_p_x*sinR_p_x*sinR_p_y*3.033172296557396E-2+w_p_x*cosR_p_x*cosR_p_y*sinR_p_z*3.033172296557396E-2+w_p_z*cosR_p_y*cosR_p_z*sinR_p_x*3.033172296557396E-2+w_p_x*cosR_p_y*sinR_p_x*sinR_p_z*4.331818969433954E-2+w_p_y*cosR_p_x*sinR_p_y*sinR_p_z*4.331818969433954E-2-w_p_y*sinR_p_x*sinR_p_y*sinR_p_z*3.033172296557396E-2-w_p_z*cosR_p_x*cosR_p_y*cosR_p_z*4.331818969433954E-2;
+	psi_dq_dt(6,12) = w_p_x*cosR_p_x*cosR_p_y*3.033172296557396E-2+w_p_x*cosR_p_y*sinR_p_x*4.331818969433954E-2+w_p_y*cosR_p_x*sinR_p_y*4.331818969433954E-2-w_p_y*sinR_p_x*sinR_p_y*3.033172296557396E-2+w_p_y*cosR_p_x*cosR_p_y*sinR_p_z*3.033172296557396E-2+w_p_z*cosR_p_x*cosR_p_z*sinR_p_y*3.033172296557396E-2+w_p_x*cosR_p_x*sinR_p_y*sinR_p_z*4.331818969433954E-2+w_p_y*cosR_p_y*sinR_p_x*sinR_p_z*4.331818969433954E-2+w_p_z*cosR_p_z*sinR_p_x*sinR_p_y*4.331818969433954E-2-w_p_x*sinR_p_x*sinR_p_y*sinR_p_z*3.033172296557396E-2;
+	psi_dq_dt(6,13) = w_p_x*cos(R_p_x+6.108652381980164E-1)*cosR_p_y*cosR_p_z*-5.288174521000144E-2+w_p_y*sin(R_p_x+6.108652381980164E-1)*cosR_p_z*sinR_p_y*5.288174521000144E-2+w_p_z*sin(R_p_x+6.108652381980164E-1)*cosR_p_y*sinR_p_z*5.288174521000144E-2;
+	psi_dq_dt(7,4) = theta3_dot*sintheta3*-5.795003273562997E-1;
+	psi_dq_dt(7,7) = l3_dot*sintheta3*-5.795003273562997E-1-l3*theta3_dot*costheta3*5.795003273562997E-1;
+	psi_dq_dt(7,11) = w_p_x*sin(R_p_x+6.108652381980164E-1)*cosR_p_z*-5.288174521000144E-2-w_p_z*cos(R_p_x+6.108652381980164E-1)*sinR_p_z*5.288174521000144E-2;
+	psi_dq_dt(7,13) = w_p_x*cos(R_p_x+6.108652381980164E-1)*sinR_p_z*-5.288174521000144E-2-w_p_z*sin(R_p_x+6.108652381980164E-1)*cosR_p_z*5.288174521000144E-2;
+	psi_dq_dt(8,4) = theta3_dot*sintheta3*8.149720060185928E-1;
+	psi_dq_dt(8,7) = l3_dot*sintheta3*8.149720060185928E-1+l3*theta3_dot*costheta3*8.149720060185928E-1;
+	psi_dq_dt(8,11) = w_p_x*cosR_p_x*cosR_p_y*4.331818969433954E-2-w_p_x*cosR_p_y*sinR_p_x*3.033172296557396E-2-w_p_y*cosR_p_x*sinR_p_y*3.033172296557396E-2-w_p_y*sinR_p_x*sinR_p_y*4.331818969433954E-2+w_p_y*cosR_p_x*cosR_p_y*sinR_p_z*4.331818969433954E-2+w_p_z*cosR_p_x*cosR_p_z*sinR_p_y*4.331818969433954E-2-w_p_x*cosR_p_x*sinR_p_y*sinR_p_z*3.033172296557396E-2-w_p_y*cosR_p_y*sinR_p_x*sinR_p_z*3.033172296557396E-2-w_p_z*cosR_p_z*sinR_p_x*sinR_p_y*3.033172296557396E-2-w_p_x*sinR_p_x*sinR_p_y*sinR_p_z*4.331818969433954E-2;
+	psi_dq_dt(8,12) = w_p_y*cosR_p_x*cosR_p_y*4.331818969433954E-2-w_p_x*cosR_p_x*sinR_p_y*3.033172296557396E-2-w_p_y*cosR_p_y*sinR_p_x*3.033172296557396E-2-w_p_x*sinR_p_x*sinR_p_y*4.331818969433954E-2+w_p_x*cosR_p_x*cosR_p_y*sinR_p_z*4.331818969433954E-2+w_p_z*cosR_p_y*cosR_p_z*sinR_p_x*4.331818969433954E-2-w_p_x*cosR_p_y*sinR_p_x*sinR_p_z*3.033172296557396E-2-w_p_y*cosR_p_x*sinR_p_y*sinR_p_z*3.033172296557396E-2-w_p_y*sinR_p_x*sinR_p_y*sinR_p_z*4.331818969433954E-2+w_p_z*cosR_p_x*cosR_p_y*cosR_p_z*3.033172296557396E-2;
+	psi_dq_dt(8,13) = w_p_x*cos(R_p_x+6.108652381980164E-1)*cosR_p_z*sinR_p_y*5.288174521000144E-2+w_p_y*sin(R_p_x+6.108652381980164E-1)*cosR_p_y*cosR_p_z*5.288174521000144E-2-w_p_z*sin(R_p_x+6.108652381980164E-1)*sinR_p_y*sinR_p_z*5.288174521000144E-2;
+	return psi_dq_dt;
+}

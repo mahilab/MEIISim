@@ -50,22 +50,25 @@ public class MeiiScript : MonoBehaviour {
 
     double[] qs = new double[14];
 
-    const string import_module = "virtual_meii";
-    // const string import_module = "meii_model";
+    // const string import_module = "virtual_meii";
+    const string import_module = "meii_model";
+
+    // bool printed = false;
 
     // Use this for initialization
     void Start () {
-        Elbow_Zero     = Elbow.transform.localEulerAngles;
-        Forearm_Zero   = Forearm.transform.localEulerAngles;
-        Rail1_Zero     = Rail1.transform.localPosition;
-        Rail2_Zero     = Rail2.transform.localPosition;
-        Rail3_Zero     = Rail3.transform.localPosition;
-        Slider1_Zero   = Slider1.transform.localEulerAngles;
-        Slider2_Zero   = Slider2.transform.localEulerAngles;
-        Slider3_Zero   = Slider3.transform.localEulerAngles;
-        PlatformY_Zero = PlatformY.transform.localEulerAngles;
-        PlatformZ_Zero = PlatformZ.transform.localEulerAngles;
-        PlatformX_Zero = PlatformX.transform.localEulerAngles;
+        // Elbow_Zero     = Elbow.transform.localEulerAngles;
+        // Forearm_Zero   = Forearm.transform.localEulerAngles;
+        // Rail1_Zero     = Rail1.transform.localPosition;
+        // Rail2_Zero     = Rail2.transform.localPosition;
+        // Rail3_Zero     = Rail3.transform.localPosition;
+        // Slider1_Zero   = Slider1.transform.localEulerAngles;
+        // Slider2_Zero   = Slider2.transform.localEulerAngles;
+        // Slider3_Zero   = Slider3.transform.localEulerAngles;
+        // PlatformY_Zero = PlatformY.transform.localEulerAngles;
+        // PlatformZ_Zero = PlatformZ.transform.localEulerAngles;
+        // PlatformX_Zero = PlatformX.transform.localEulerAngles;
+        // Dll.stop();
         Dll.start();
 	}
 
@@ -83,9 +86,28 @@ public class MeiiScript : MonoBehaviour {
         px     = (float)qs[8];
         py     = (float)qs[9];
         pz     = (float)qs[10];
-        alpha  = (float)qs[11];
-        beta   = (float)qs[12];
-        gamma  = (float)qs[13];
+        alpha  = (float)qs[12];
+        beta   = (float)qs[13];
+        gamma  = (float)qs[11];
+
+        // foreach (var q in qs){
+        //     Debug.Log(q);
+        // }
+
+        // Debug.Log(qe);
+        // Debug.Log(qf);
+        // Debug.Log(l1);
+        // Debug.Log(l2);
+        // Debug.Log(l3);
+        // Debug.Log(theta1);
+        // Debug.Log(theta2);
+        // Debug.Log(theta3);
+        // Debug.Log(px);
+        // Debug.Log(py);
+        // Debug.Log(pz);
+        // Debug.Log(alpha);
+        // Debug.Log(beta);
+        // Debug.Log(gamma);
         
         Elbow.transform.localEulerAngles     = new Vector3(0, 0, -qe*Mathf.Rad2Deg);
         Forearm.transform.localEulerAngles   = new Vector3(qf*Mathf.Rad2Deg, 0, 0);
@@ -117,12 +139,12 @@ public class MeiiScript : MonoBehaviour {
         public static extern void start();
         [DllImport(import_module)] 
         public static extern void stop();
-        [DllImport(import_module)] 
-        public static extern void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5);
-        [DllImport(import_module)]
-        public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8);
-        [DllImport(import_module)]
-        public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d);
+        // [DllImport(import_module)] 
+        // public static extern void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5);
+        // [DllImport(import_module)]
+        // public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8);
+        // [DllImport(import_module)]
+        // public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d);
         [DllImport(import_module)]
         public static extern void get_positions(double[] positions);
     }

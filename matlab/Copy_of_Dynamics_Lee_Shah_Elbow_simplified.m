@@ -15,7 +15,12 @@ syms qe qf l1 l2 l3 theta1 theta2 theta3...
      Ixx_l Iyy_l Izz_l Ml...
      Ixx_f Iyy_f Izz_f Mf...
      Ixx_e Iyy_e Izz_e Me...
-     g
+     g...
+     P_p_x P_p_y P_p_z R_p_x R_p_y R_p_z...
+     V_p_x V_p_y V_p_z w_p_x w_p_y w_p_z...
+     A_p_x A_p_y A_p_z a_p_x a_p_y a_p_z...
+     P_p_xt(t) P_p_yt(t) P_p_zt(t) R_p_xt(t) R_p_yt(t) R_p_zt(t)...
+     V_p_xt(t) V_p_yt(t) V_p_zt(t) w_p_xt(t) w_p_yt(t) w_p_zt(t)
  
 T = [n1 o1 a1 px;
      n2 o2 a2 py;
@@ -30,8 +35,8 @@ qs       = [      qe,       qf,       l1,       l2,       l3,       theta1,     
 q_dots   = [  qe_dot,   qf_dot,   l1_dot,   l2_dot,   l3_dot,   theta1_dot,   theta2_dot,   theta3_dot, V_p_x, V_p_y, V_p_z, w_p_x, w_p_y, w_p_z];
 q_d_dots = [qe_d_dot, qf_d_dot, l1_d_dot, l2_d_dot, l3_d_dot, theta1_d_dot, theta2_d_dot, theta3_d_dot, A_p_x, A_p_y, A_p_z, a_p_x, a_p_y, a_p_z];
 
-qst     = [    qet,     qft,     l1t,     l2t,     l3t,     theta1t,     theta2t,     theta3t, P_p_xt, P_p_yt, P_p_zt, R_p_xt, R_p_yt, R_p_zt];
-q_dotst = [qe_dott, qf_dott, l1_dott, l2_dott, l3_dott, theta1_dott, theta2_dott, theta3_dott, V_p_xt, V_p_yt, V_p_zt, w_p_xt, w_p_yt, w_p_zt];
+qst     = [      qet,      qft,      l1t,      l2t,      l3t,      theta1t,      theta2t,      theta3t, P_p_xt, P_p_yt, P_p_zt, R_p_xt, R_p_yt, R_p_zt];
+q_dotst = [  qe_dott,  qf_dott,  l1_dott,  l2_dott,  l3_dott,  theta1_dott,  theta2_dott,  theta3_dott, V_p_xt, V_p_yt, V_p_zt, w_p_xt, w_p_yt, w_p_zt];
  
 ls =     [l1,         l2,     l3];
 l_dots = [l1_dot, l2_dot, l3_dot];
@@ -210,24 +215,32 @@ fprintf("Calculating p_platform, v_platform given other joints\n");
 
 % w_p = R_f_p*w_f + [wx_solved,wy_solved,wz_solved].';
 
-P_f_o_com = Rz(qe)*TRANSx(a4)*Rx(qf);
-P_f_com = simplify(P_f_com_temp(1:3,4));
+P_f_o = Rz(qe)*TRANSx(a4)*Rx(qf);
+P_f_o = simplify(P_f_o(1:3,4));
 
-V_f_com = [0 0 0].';
+V_f_o = [0 0 0].';
 
+%velocity of forearm origin instead of the COM
 for i = 1:length(qs)
-    V_f_com = V_f_com + diff(P_f_com,qs(i))*q_dots(i);
+    V_f_o = V_f_o + diff(P_f_o,qs(i))*q_dots(i);
 end
 
-P_p_com = Rz(qe)*TRANSx(a4)*Rx(qf)*[P_p_x, P_p_y, P_p_z].';
-V_p_com = V_f[V_p_x, V_p_y, V_p_z].';
+% rotation from origin to the forearm
+R_origin_f = Rz(qe)*Rx(qf);
+P_p_com_temp = Rz(qe)*TRANSx(a4)*Rx(qf);
 
-% R_p_com = [R_p_x, R_p_y, R_p_z];
-W_p_com = R_f_p*w_f + [W_p_x, W_p_y, W_p_z].';
+P_p_com = P_p_com_temp(1:3,1:3)*[P_p_x, P_p_y, P_p_z].';
+P_p_com = P_p_com(1:3);
+V_p_com = V_f_o + R_origin_f(1:3,1:3)*[V_p_x, V_p_y, V_p_z].';
+
+R_p_com = [R_p_x, R_p_y, R_p_z];
+
+R_f_p = Ry(R_p_y)*Rz(R_p_z)*Rx(R_p_x);
+
+w_p = R_f_p(1:3,1:3)*w_f + [w_p_x, w_p_y, w_p_z].';
 
 %%
 fprintf("Calculating Lagrangian\n");
-
 
 T = 1/2*Mp*(V_p_com(1)^2 + V_p_com(2)^2 + V_p_com(3)^2)...
   + 1/2*(Ixx_p*w_p(1)^2 + Iyy_p*w_p(2)^2 + Izz_p*w_p(3)^2)...
@@ -245,7 +258,7 @@ T = 1/2*Mp*(V_p_com(1)^2 + V_p_com(2)^2 + V_p_com(3)^2)...
 P = g * (Mp*P_p_com(2) + Mf*P_f_com(2) + Me*P_e_com(2) + Ml*(P_l_com{1}(2)+P_l_com{2}(2)+P_l_com{3}(2)));
 
 L = T-P;
-L = subs(L,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs);
+% L = subs(L,[a1 a2 a3 o1 o2 o3 n1 n2 n3],unit_vecs);
 
 %% COMPUTING EOMS
 
@@ -284,19 +297,32 @@ end
 %%
 fprintf("Computing and incorporating Rho\n");
 
-fk(1,1) = simplify(expand(sqrt((B{1}(1)-B{2}(1))^2+(B{1}(2)-B{2}(2))^2+(B{1}(3)-B{2}(3))^2)-sqrt(3)*r));
-fk(2,1) = simplify(expand(sqrt((B{3}(1)-B{2}(1))^2+(B{3}(2)-B{2}(2))^2+(B{3}(3)-B{2}(3))^2)-sqrt(3)*r));
-fk(3,1) = simplify(expand(sqrt((B{3}(1)-B{1}(1))^2+(B{3}(2)-B{1}(2))^2+(B{3}(3)-B{1}(3))^2)-sqrt(3)*r));
+% fk(1,1) = simplify(expand(sqrt((B{1}(1)-B{2}(1))^2+(B{1}(2)-B{2}(2))^2+(B{1}(3)-B{2}(3))^2)-sqrt(3)*r));
+% fk(2,1) = simplify(expand(sqrt((B{3}(1)-B{2}(1))^2+(B{3}(2)-B{2}(2))^2+(B{3}(3)-B{2}(3))^2)-sqrt(3)*r));
+% fk(3,1) = simplify(expand(sqrt((B{3}(1)-B{1}(1))^2+(B{3}(2)-B{1}(2))^2+(B{3}(3)-B{1}(3))^2)-sqrt(3)*r));
 
-psi = [fk;qs(1:(length(qs)-3)).'];
+for i = 1:3
+    B_temp{i} = Rx(alpha_5 + gamma(i))*TRANSy(R)*TRANSz(-a56)*Rz(-pi/2+thetas(i))*TRANSx(ls(i));
+    B{i} = B_temp{i}(1:3,4);
+    b_temp{i} = Rx(alpha_13 + gamma(i))*TRANSy(r);
+    b{i} = b_temp{i}(1:3,4);
+    
+    fk(3*(i-1)+1:3*(i-1)+3,1) = B{i} - R_f_p(1:3,1:3)*b{i} - [P_p_x, P_p_y, P_p_z].';
+end
+
+psi = [fk;qs(1:(length(qs)-9)).'];
 psi_dq = simplify(jacobian(psi,qs));
-rho = simplify(inv(psi_dq)*[zeros(3,(length(qs)-3));eye((length(qs)-3),(length(qs)-3))]);
-rho_t = subs(rho,qs,qst);
-rho_dt = subs(diff(rho_t,t),[qst diff(qst,t)],[qs, q_dots]);
+psi_dq_t = subs(psi_dq,qs,qst);
+psi_dq_dt = subs(diff(psi_dq_t,t),[qst diff(qst,t)],[qs, q_dots]);
 
-Mpar = rho.'*M*rho;
-Vpar = rho.'*Vsquare*rho + rho.'*M*rho_dt;
-Gpar = rho.'*G;
+
+% rho = inv(psi_dq)*[zeros(9,(length(qs)-9));eye((length(qs)-9),(length(qs)-9))];
+% rho_t = subs(rho,qs,qst);
+% rho_dt = subs(diff(rho_t,t),[qst diff(qst,t)],[qs, q_dots]);
+
+% Mpar = rho.'*M*rho;
+% Vpar = rho.'*Vsquare*rho + rho.'*M*rho_dt;
+% Gpar = rho.'*G;
 
 %% Substitute in actual values
 fprintf("Substituting in values\n")
@@ -336,46 +362,57 @@ Izz_p = 0.00107519;
 Mp    = 0.36486131;
 
 % Substitute in real values
-Mpar    = subs(Mpar);
-Vpar    = subs(Vpar);
-Gpar    = subs(Gpar);
-M       = subs(M);
-Vsquare = subs(Vsquare);
-G       = subs(G);
-rho     = subs(rho);
-rho_dt  = subs(rho_dt);
+% Mpar    = subs(Mpar);
+% Vpar    = subs(Vpar);
+% Gpar    = subs(Gpar);
+M         = subs(M);
+Vsquare   = subs(Vsquare);
+G         = subs(G);
+psi       = subs(psi);
+psi_dq    = subs(psi_dq);
+psi_dq_dt = subs(psi_dq_dt);
+
+% rho     = subs(rho);
+% rho_dt  = subs(rho_dt);
 
 %%
 % mass_props = [Ixxf Ixx Iyy Izz Mp Ml l_offset g];
 % mass_values = [0.01747099 0.00091827 0.00080377 0.00138661 0.36486131 0.14820004 0.08803884 9.81];
-q_q_dot_vals = [0.0, 0.0, 0.1, 0.1, 0.1,1.02844,1.02844,1.02844, 0, 0, 0, 0, 0, 0, 0, 0];
-q_ddot_vals = [0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00];
-test = subs(subs(Vsquare),[qs q_dots q_d_dots], [q_q_dot_vals q_ddot_vals]);
+q_vals =      [0.0, 0.0, 0.1, 0.1, 0.1, 1.02844, 1.02844, 1.02844, .0856, 0,    0, 0,     0, 0];
+q_dot_vals  = [0.2, 0.1,   0,   0,   0,   -0.01,       0,       0,     0, 0, 0.02, 0, -0.01, 0];
+q_ddot_vals = [  0,   0,   0,   0,   0,       0,       0,       0,     0, 0,    0, 0,     0, 0];
+test = subs(M,[qs q_dots q_d_dots], [q_vals q_dot_vals q_ddot_vals]);
+% psi_dq_subs = subs(psi_dq,[qs q_dots q_d_dots], [q_vals q_dot_vals q_ddot_vals]);
+% psi_dq_dt_subs = subs(psi_dq_dt,[qs q_dots q_d_dots], [q_vals q_dot_vals q_ddot_vals]);
+% test2 = -inv(psi_dq_subs)*psi_dq_dt_subs*inv(psi_dq_subs)*[zeros(9,(length(qs)-9));eye((length(qs)-9),(length(qs)-9))];
 
 vpa(test,4)
+% vpa(test2,4)
 
 %% Write parallel structure to file
 
 fprintf("Writing to file\n");
 
-for i = 1:(length(qs))
-    for j = 1:(length(qs))
-        M_write = ccode(vpa(M(i,j),5));
-        fileID = fopen("DynamicEqs/M" + int2str(i) + int2str(j) + ".txt","w");
-        fprintf(fileID,M_write);
-        V_write = ccode(vpa(Vsquare(i,j),5));
-        fileID = fopen("DynamicEqs/V" + int2str(i) + int2str(j) + ".txt","w");
-        fprintf(fileID,V_write);
-    end
-    G_write = ccode(vpa(G(i),5));
-    fileID = fopen("DynamicEqs/G" + int2str(i) + ".txt","w");
-    fprintf(fileID,G_write);
-end
+M_write = ccode(vpa(M,5));
+fileID = fopen("DynamicEqs/M.txt","w");
+fprintf(fileID,M_write);
 
-rho_write = ccode(vpa(rho,3));
-fileID = fopen("DynamicEqs/rho.txt","w");
-fprintf(fileID,rho_write);
+V_write = ccode(vpa(Vsquare,5));
+fileID = fopen("DynamicEqs/V.txt","w");
+fprintf(fileID,V_write);
 
-rhodt_write = ccode(vpa(rho_dt,3));
-fileID = fopen("DynamicEqs/rhodt.txt","w");
-fprintf(fileID,rhodt_write);
+G_write = ccode(vpa(G,5));
+fileID = fopen("DynamicEqs/G.txt","w");
+fprintf(fileID,G_write);
+
+psi_write = ccode(vpa(psi,5));
+fileID = fopen("DynamicEqs/psi.txt","w");
+fprintf(fileID,psi_write);
+
+psi_dq_write = ccode(vpa(psi_dq,5));
+fileID = fopen("DynamicEqs/psi_dq.txt","w");
+fprintf(fileID,psi_dq_write );
+
+psi_dq_dt_write = ccode(vpa(psi_dq_dt,5));
+fileID = fopen("DynamicEqs/psi_dq_dt.txt","w");
+fprintf(fileID,psi_dq_dt_write);

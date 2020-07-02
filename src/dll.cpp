@@ -35,11 +35,11 @@ void simulation()
     double kdf = 2;
     double kpe = 30;
     double kde = 3;
-    double q_ref1 = 0.0;
-    double q_ref2 = 0.1;
+    double q_ref1 = -45*DEG2RAD;
+    double q_ref2 = 0.0;
     double q_ref3 = 0.1;
     double q_ref4 = 0.1;
-    double q_ref5 = 0.5;
+    double q_ref5 = 0.1;
     double q1, q2, q3, q4, q5;
     double tau1, tau2, tau3, tau4, tau5;
     double k_hard1 = 200;
@@ -96,6 +96,7 @@ void simulation()
             q3 = g_model.q3;
             q4 = g_model.q4;
             q5 = g_model.q5;
+            // print("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}",g_model.q3, g_model.q4, g_model.q5, g_model.q6, g_model.q7, g_model.q8, g_model.q9, g_model.q10, g_model.q11, g_model.q12, g_model.q13, g_model.q14);
             calc_time = g_model.mat_calc_time;
             setup_time = g_model.setup_time;
             comp_time = g_model.comp_time;
@@ -104,6 +105,7 @@ void simulation()
         ms_times_out.write_data({double((t-t_last).as_microseconds()),calc_time,setup_time,comp_time});
         ms_qs_out.write_data({tau1,tau2,tau3,tau4,tau5,q1,q2,q3,q4,q5});
         t_last = t;
+        // LOG(Info) << g_model.q1 << ", " << g_model.q2 << ", " << g_model.q3 << ", " << g_model.q4 << ", " << g_model.q5 << ", " << g_model.q6 << ", " << g_model.q7 << ", " << g_model.q8 << ", " << g_model.q9 << ", " << g_model.q10 << ", " << g_model.q11 << ", " << g_model.q12 << ", " << g_model.q13 << ", " << g_model.q14 ;
         t = timer.wait();
     }
     disable_realtime();
@@ -118,6 +120,7 @@ EXPORT void stop()
 
 EXPORT void start()
 {
+    // LOG(Info) << "Starting";
     stop();
     g_model.reset();
     g_stop = false;
@@ -130,16 +133,16 @@ EXPORT void set_torques(double tau1, double tau2, double tau3, double tau4, doub
     g_model.set_torques(tau1, tau2, tau3, tau4, tau5);
 }
 
-EXPORT void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8)
+EXPORT void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8, double q9, double q10, double q11, double q12, double q13, double q14)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
-    g_model.set_positions(q1, q2, q3, q4, q5, q6, q7, q8);
+    g_model.set_positions(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14);
 }
 
-EXPORT void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d)
+EXPORT void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d, double q9d, double q10d, double q11d, double q12d, double q13d, double q14d)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
-    g_model.set_velocities(q1d, q2d, q3d, q4d, q5d, q6d, q7d, q8d);
+    g_model.set_velocities(q1d, q2d, q3d, q4d, q5d, q6d, q7d, q8d, q9d, q10d, q11d, q12d, q13d, q14d);
 }
 
 EXPORT void get_positions(double *positions)

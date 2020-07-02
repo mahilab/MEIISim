@@ -213,14 +213,6 @@ w_p = R_f_p*w_f + [wx_solved,wy_solved,wz_solved].';
 %%
 fprintf("Calculating Lagrangian\n");
 
-P_p_com = [P_p_x, P_p_y, P_p_z];
-V_p_com = [V_p_x, V_p_y, V_p_z];
-
-% R_p_com = [R_p_x, R_p_y, R_p_z];
-W_p_com = [W_p_x, W_p_y, W_p_z];
-
-
-
 T = 1/2*Mp*(V_p_com(1)^2 + V_p_com(2)^2 + V_p_com(3)^2)...
   + 1/2*(Ixx_p*w_p(1)^2 + Iyy_p*w_p(2)^2 + Izz_p*w_p(3)^2)...
   + 1/2*Mf*(V_f_com(1)^2 + V_f_com(2)^2 + V_f_com(3)^2)...
