@@ -26,7 +26,6 @@ MeiiModel::MeiiModel() :
     lim3(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2)),
     lim4(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2)),
     lim5(tau3_mot_cont * eta3, tau3_mot_max * eta3, seconds(2)),
-    p(12),
     Tau(5),
     B(5),
     Fk(5),
@@ -39,6 +38,7 @@ MeiiModel::MeiiModel() :
 
 void MeiiModel::update(Time t)
 {
+    Clock CompTime;
     // get list of qs and q_dots
     std::vector<double> qs = {q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q1d, q2d, q3d, q4d, q5d, q6d, q7d, q8d, q9d, q10d, q11d, q12d, q13d, q14d};
 
@@ -47,13 +47,8 @@ void MeiiModel::update(Time t)
     qdot(1) = q2d;
     qdot(2) = q3d;
     qdot(3) = q4d;
-    qdot(4) = q5d;
+    qdot(4) = q5d;    
 
-    // Coriolis vector
-    Clock MatCalcClock;
-
-    // V Matrix
-    Clock SetupTime;
     VectorXd psi = get_psi(qs);
     MatrixXd psi_dq = get_psi_dq(qs);
     MatrixXd psi_dq_dt = get_psi_dq_dt(qs);
@@ -62,31 +57,6 @@ void MeiiModel::update(Time t)
     MatrixXd V = get_V(qs);
     VectorXd G = get_G(qs);
 
-    // std::cout << "M:\n";
-    // for(size_t i = 0; i < 14; i++){
-    //     for(size_t j = 0; j < 14; j++){
-    //         std::cout << M(i,j) << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
-    // std::cout << "\n";
-
-    // std::cout << "V:\n";
-    // for(size_t i = 0; i < 14; i++){
-    //     for(size_t j = 0; j < 14; j++){
-    //         std::cout << V(i,j) << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
-    // std::cout << "\n";
-
-    // std::cout << "G:\n";
-    // for(size_t i = 0; i < 14; i++){
-    //     std::cout << G(i) << ", ";
-    //     std::cout << "\n";
-    // }
-    // std::cout << "\n";
-
     MatrixXd ident(14,5);
     ident << MatrixXd::Zero(9,5) , MatrixXd::Identity(5,5);
 
@@ -94,86 +64,29 @@ void MeiiModel::update(Time t)
     MatrixXd rho        = psi_dq_inv*ident;
     MatrixXd rho_dt     = -psi_dq_inv*psi_dq_dt*psi_dq_inv*ident;
 
-    setup_time = double(SetupTime.get_elapsed_time().as_microseconds());
-    Clock CompTime;
-
     Tau[0] = tau1 + hardstop_torque(q1,q1d,q1min,q1max,Khard1,Bhard1);
     Tau[1] = tau2 + hardstop_torque(q2,q2d,q2min,q2max,Khard1,Bhard1);
     Tau[2] = tau3 + hardstop_torque(q3,q3d,q3min,q3max,Khard,Bhard);
     Tau[3] = tau4 + hardstop_torque(q4,q4d,q4min,q4max,Khard,Bhard);
     Tau[4] = tau5 + hardstop_torque(q5,q5d,q5min,q5max,Khard,Bhard);
 
-    // for(size_t i = 0; i < 14; i++){
-    //     for(size_t j = 0; j < 14; j++){
-    //         if(std::isnan(V(i,j))) V(i,j) = 0;
-    //     }
-    // }
-
     MatrixXd Mpar = rho.transpose()*M*rho;
     MatrixXd Vpar = rho.transpose()*V*rho + rho.transpose()*M*rho_dt;
     MatrixXd Gpar = rho.transpose()*G;
 
-    // std::cout << "M:\n";
-    // for(size_t i = 0; i < 5; i++){
-    //     for(size_t j = 0; j < 5; j++){
-    //         std::cout << Mpar(i,j) << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
-    // std::cout << "\n";
-
-    // LOG(Info) << "\nM:";
-    // LOG(Info) << Mpar(0,0) << ", " << Mpar(0,1) << ", " << Mpar(0,2) << ", " << Mpar(0,3) << ", " << Mpar(0,4);
-    // LOG(Info) << Mpar(1,0) << ", " << Mpar(1,1) << ", " << Mpar(1,2) << ", " << Mpar(1,3) << ", " << Mpar(1,4);
-    // LOG(Info) << Mpar(2,0) << ", " << Mpar(2,1) << ", " << Mpar(2,2) << ", " << Mpar(2,3) << ", " << Mpar(2,4);
-    // LOG(Info) << Mpar(3,0) << ", " << Mpar(3,1) << ", " << Mpar(3,2) << ", " << Mpar(3,3) << ", " << Mpar(3,4);
-    // LOG(Info) << Mpar(4,0) << ", " << Mpar(4,1) << ", " << Mpar(4,2) << ", " << Mpar(4,3) << ", " << Mpar(4,4);
-
-    // LOG(Info) << "\nV:";
-    // LOG(Info) << Vpar(0,0) << ", " << Vpar(0,1) << ", " << Vpar(0,2) << ", " << Vpar(0,3) << ", " << Vpar(0,4);
-    // LOG(Info) << Vpar(1,0) << ", " << Vpar(1,1) << ", " << Vpar(1,2) << ", " << Vpar(1,3) << ", " << Vpar(1,4);
-    // LOG(Info) << Vpar(2,0) << ", " << Vpar(2,1) << ", " << Vpar(2,2) << ", " << Vpar(2,3) << ", " << Vpar(2,4);
-    // LOG(Info) << Vpar(3,0) << ", " << Vpar(3,1) << ", " << Vpar(3,2) << ", " << Vpar(3,3) << ", " << Vpar(3,4);
-    // LOG(Info) << Vpar(4,0) << ", " << Vpar(4,1) << ", " << Vpar(4,2) << ", " << Vpar(4,3) << ", " << Vpar(4,4);
-
-    // LOG(Info) << "\nG:";
-    // LOG(Info) << Gpar(0) << ", " << Gpar(1) << ", " << Gpar(2) << ", " << Gpar(3) << ", " << Gpar(4);
-
-    // std::cout << "V:\n";
-    // for(size_t i = 0; i < 5; i++){
-    //     for(size_t j = 0; j < 5; j++){
-    //         std::cout << Vpar(i,j) << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
-    // std::cout << "\n";
-
-    // std::cout << "G:\n";
-    // for(size_t i = 0; i < 5; i++){
-    //     std::cout << Gpar(i) << ", ";
-    // }
-    // std::cout << "\n";
-
-    for(size_t i = 0; i < 5; i++){
-        for(size_t j = 0; j < 5; j++){
-            if(std::isnan(Vpar(i,j))) Vpar(i,j) = 0;
-            if(std::isnan(Mpar(i,j))) Mpar(i,j) = 0;
-        }
-        if(std::isnan(Gpar(i))) Gpar(i) = 0;
-    }
-
-    mat_calc_time = MatCalcClock.get_elapsed_time().as_microseconds();
-
     /// Damping coefficients [Nm*s/rad]
-    constexpr double B_coef[5] = {0.1215, 0.1, 0.1, 0.1, 0.1};
+    // constexpr double B_coef[5] = {0.1215, 0.1, 0.1, 0.1, 0.1};
     /// Kinetic friction [Nm]
-    constexpr double Fk_coef[5] = {0.01, 0.01, 0.05, 0.05, 0.05};
+    // constexpr double Fk_coef[5] = {0.01, 0.01, 0.05, 0.05, 0.05};
+
+    constexpr double B_coef[5] = {0.5, 0.1, 0.3, 0.3, 0.3};
+    constexpr double Fk_coef[5] = {0.1, 0.01, 0.2, 0.2, 0.2};
 
     B[0] = B_coef[0]*q1d*10.0;
     B[1] = B_coef[1]*q2d*10.0;
-    B[2] = B_coef[2]*q3d*1000.0;
-    B[3] = B_coef[3]*q4d*1000.0;
-    B[4] = B_coef[4]*q5d*1000.0;
+    B[2] = B_coef[2]*q3d*100.0;
+    B[3] = B_coef[3]*q4d*100.0;
+    B[4] = B_coef[4]*q5d*100.0;
 
     Fk[0] = Fk_coef[0]*std::tanh(q1d*10);
     Fk[1] = Fk_coef[1]*std::tanh(q2d*10);
@@ -191,8 +104,6 @@ void MeiiModel::update(Time t)
     q4dd = x[3];
     q5dd = x[4];
 
-    // LOG(Info) << "\nqdd:\n" << x[0] << ", " << x[1] << ", " << x[2] << ", " << x[3] << ", " << x[4];
-
     // integrate acclerations to find velocities
     q1d = q1dd_q1d.update(q1dd, t);
     q2d = q2dd_q2d.update(q2dd, t);
@@ -209,7 +120,8 @@ void MeiiModel::update(Time t)
 
     calc_dependent_joint_values();
 
-    // print("{}, {}, {}, {}, {}",q1, q2, q3, q4, q5);
+    comp_time = CompTime.get_elapsed_time().as_microseconds();
+
 }
 
 void MeiiModel::set_torques(double _tau1, double _tau2, double _tau3, double _tau4, double _tau5) {
@@ -264,6 +176,7 @@ void MeiiModel::reset() {
     set_torques(0,0,0,0,0);
     set_positions(-45*DEG2RAD,0.0,0.1,0.1,0.1,1.02844,1.02844,1.02844,0.0856,0.0,0.0,0.0,0.0,0.0);
     set_velocities(0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+    logged = false;
 }
 
 void MeiiModel::calc_dependent_joint_values() {
@@ -324,10 +237,12 @@ void MeiiModel::calc_dependent_joint_values() {
     qds(3) = q4d;
     qds(4) = q5d;
 
-    VectorXd psi = get_psi(qs);
+    MatrixXd psi_dq = get_psi_dq(qs);
     MatrixXd ident(14,5);
     ident << MatrixXd::Zero(9,5) , MatrixXd::Identity(5,5);
-    MatrixXd rho = psi.householderQr().solve(ident);
+
+    MatrixXd psi_dq_inv = psi_dq.inverse();
+    MatrixXd rho        = psi_dq_inv*ident;
 
     VectorXd qd = rho*qds;
 

@@ -38,8 +38,6 @@ public:
         tau3.AddPoint(t,0);
         tau4.AddPoint(t,0);
         tau5.AddPoint(t,0);
-        calcTime.AddPoint(t,0);
-        setupTime.AddPoint(t,0);
         compTime.AddPoint(t,0);
     }
 
@@ -55,10 +53,8 @@ public:
         if(!ms_times_data.empty()) {
             sim_rate.AddPoint(t,ms_times_data[0]);
             des_rate.AddPoint(t,1000.0f);
-            calcTime.AddPoint(t,ms_times_data[1]);
+            compTime.AddPoint(t,ms_times_data[1]);
             calc_times_1s.push_back(ms_times_data[1]);
-            setupTime.AddPoint(t,ms_times_data[2]);
-            compTime.AddPoint(t,ms_times_data[3]);
 
             tau1.AddPoint(t,ms_qs_data[0]);
             tau2.AddPoint(t,ms_qs_data[1]);
@@ -97,8 +93,6 @@ public:
             ImGui::DragDouble("Link 3 pos (m)",&q5,0.0001f,0.03,0.15,"%.4f");
             ImGui::PopItemWidth();
         ImGui::EndGroup();
-        ImGui::Checkbox("Threadpooled", &tp);    
-        ImGui::SliderInt("Number of Threads", &nthread, 1, 40);
         int mean_calc_time = int(mean(calc_times_1s.get_vector()));
         ImGui::InputInt("Mean Calc Time",&mean_calc_time);
 
@@ -106,9 +100,7 @@ public:
         if(ImPlot::BeginPlot("##Sim Time", "Time (s)", "Sim Rate (us)", {-1,300}, ImPlotFlags_Default, rt_axis, rt_axis)){
             ImPlot::PlotLine("Sim Loop Time", &sim_rate.Data[0].x, &sim_rate.Data[0].y, sim_rate.Data.size(), sim_rate.Offset, 2 * sizeof(float));
             ImPlot::PlotLine("Desired Sim Loop Time", &des_rate.Data[0].x, &des_rate.Data[0].y, des_rate.Data.size(), des_rate.Offset, 2 * sizeof(float));
-            ImPlot::PlotLine("Total Calc Time", &calcTime.Data[0].x, &calcTime.Data[0].y, calcTime.Data.size(), calcTime.Offset, 2 * sizeof(float));
-            ImPlot::PlotLine("Setup Time (thread only)", &setupTime.Data[0].x, &setupTime.Data[0].y, setupTime.Data.size(), setupTime.Offset, 2 * sizeof(float));
-            ImPlot::PlotLine("Comp Time (thread only)", &compTime.Data[0].x, &compTime.Data[0].y, compTime.Data.size(), compTime.Offset, 2 * sizeof(float));
+            ImPlot::PlotLine("Comp Time", &compTime.Data[0].x, &compTime.Data[0].y, compTime.Data.size(), compTime.Offset, 2 * sizeof(float));
             ImPlot::EndPlot();
         }
 
@@ -124,9 +116,8 @@ public:
 
         t += ImGui::GetIO().DeltaTime;
         ImGui::End();
-        double tp_double = tp ? 1.0 : 0.0;
         ms_gains.write_data({kp, kd, kpe, kde, kpf, kdf, k_hard, b_hard});
-        ms_refs.write_data({q_ref1, q_ref2, q_ref3, q_ref4, q_ref5, tp_double, double(nthread)});
+        ms_refs.write_data({q_ref1, q_ref2, q_ref3, q_ref4, q_ref5});
     }
 
     // Member Variables
@@ -138,26 +129,23 @@ public:
     ScrollingData tau3;
     ScrollingData tau4;
     ScrollingData tau5;
-    ScrollingData calcTime;
-    ScrollingData setupTime;
     ScrollingData compTime;
     float t = 0;
     bool tp = true;
     bool enabled = false;
     double k_hard = 200;
     double b_hard = 10;
-    double kp = 600;
-    double kd = 15;
-    double kpe = 30;
-    double kde = 3;
-    double kpf = 20;
-    double kdf = 2;
-    double q_ref1 = 0.0;
+    double kp = 2200;
+    double kd = 30;
+    double kpe = 100;
+    double kde = 1.25;
+    double kpf = 28;
+    double kdf = 0.2;
+    double q_ref1 = -mahi::util::PI/4;
     double q_ref2 = 0.0;
     double q_ref3 = 0.1;
     double q_ref4 = 0.1;
     double q_ref5 = 0.1;
-    int nthread = 12;
     double q1 = 0.0;
     double q2 = 0.0;
     double q3 = 0.1;

@@ -4,7 +4,7 @@
 #include <Mahi/Util/Math/Integrator.hpp>
 #include <Mahi/Robo/Control/Limiter.hpp>
 #include <Eigen/Dense>
-#include <ctpl_stl.h>
+// #include <ctpl_stl.h>
 
 /// Dynamic Model of the OpenWrist
 class MeiiModel {
@@ -119,7 +119,9 @@ public:
     // Gravity Constant [m/s^2]
     const double g = 9.80665;
 
-    ctpl::thread_pool p;
+    // ctpl::thread_pool p;
+
+    bool logged = false;
 
 private:
     // torque limiters
@@ -128,12 +130,6 @@ private:
     // Integrators
     mahi::util::Integrator q1dd_q1d, q2dd_q2d, q3dd_q3d, q4dd_q4d, q5dd_q5d, q1d_q1, q2d_q2, q3d_q3, q4d_q4, q5d_q5;
 
-    // Eigen::MatrixXd V;
-    // Eigen::MatrixXd M;
-    // Eigen::VectorXd G;
-    // Eigen::VectorXd psi;
-    // Eigen::MatrixXd psi_dq;
-    // Eigen::MatrixXd psi_dq_dt;
     Eigen::VectorXd Tau;
     Eigen::VectorXd B;
     Eigen::VectorXd Fk;

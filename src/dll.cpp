@@ -1,22 +1,9 @@
-#include "MeiiModel.hpp"
-#include <Mahi/Com.hpp>
-#include <Mahi/Util.hpp>
-#include <Mahi/Robo.hpp>
-#include <thread>
-#include <mutex>
-#include <atomic>
+#include <dll.hpp>
 
 // This is the dll that drives the model in the Unity OpenWristSim visualization
 // Unity intefaces via the the C methods below, mostly just to start/stop the simulation, and read joint positions
 // End-users inteface through the MelShares or at a higher level, through OpenWristSim.hpp/cpp in their own C++ code
 // This was all sort of hastily put together...it could be better!
-
-#define EXPORT extern "C" __declspec(dllexport)
-
-MeiiModel g_model;
-std::thread g_thread;
-std::mutex g_mtx;
-std::atomic_bool g_stop;
 
 using namespace mahi::com;
 using namespace mahi::util;
@@ -49,11 +36,7 @@ void simulation()
     Time t;
     Time t_last;
     Time sim_time = 0_ms;
-    double calc_time = 0;
-    double setup_time = 0;
     double comp_time = 0;
-    int n_threads = 12;
-    int n_threads_last = n_threads;
     while (!g_stop)
     {
         auto ms_gain_data = ms_gains.read_data();
@@ -73,15 +56,9 @@ void simulation()
             q_ref3 = ms_ref_data[2]; 
             q_ref4 = ms_ref_data[3]; 
             q_ref5 = ms_ref_data[4]; 
-            
-            threadpooling = ms_ref_data[5];
-            n_threads = int(ms_ref_data[6]);
         }
         {
             std::lock_guard<std::mutex> lock(g_mtx);
-            g_model.threadpool = (threadpooling > 0.5) ? true : false;
-            if (n_threads != n_threads_last) g_model.p.resize(n_threads);
-            n_threads_last = n_threads;
             tau1 = kpe * (q_ref1 - g_model.q1) - kde * g_model.q1d;
             tau2 = kpf * (q_ref2 - g_model.q2) - kdf * g_model.q2d;
             tau3 = kp  * (q_ref3 - g_model.q3) - kd  * g_model.q3d;
@@ -96,29 +73,25 @@ void simulation()
             q3 = g_model.q3;
             q4 = g_model.q4;
             q5 = g_model.q5;
-            // print("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}",g_model.q3, g_model.q4, g_model.q5, g_model.q6, g_model.q7, g_model.q8, g_model.q9, g_model.q10, g_model.q11, g_model.q12, g_model.q13, g_model.q14);
-            calc_time = g_model.mat_calc_time;
-            setup_time = g_model.setup_time;
             comp_time = g_model.comp_time;
         }
         sim_time += 1_ms;
-        ms_times_out.write_data({double((t-t_last).as_microseconds()),calc_time,setup_time,comp_time});
+        ms_times_out.write_data({double((t-t_last).as_microseconds()),comp_time});
         ms_qs_out.write_data({tau1,tau2,tau3,tau4,tau5,q1,q2,q3,q4,q5});
         t_last = t;
-        // LOG(Info) << g_model.q1 << ", " << g_model.q2 << ", " << g_model.q3 << ", " << g_model.q4 << ", " << g_model.q5 << ", " << g_model.q6 << ", " << g_model.q7 << ", " << g_model.q8 << ", " << g_model.q9 << ", " << g_model.q10 << ", " << g_model.q11 << ", " << g_model.q12 << ", " << g_model.q13 << ", " << g_model.q14 ;
         t = timer.wait();
     }
     disable_realtime();
-};
+}
 
-EXPORT void stop()
+void stop()
 {
     g_stop = true;
     if (g_thread.joinable())
         g_thread.join();
 }
 
-EXPORT void start()
+void start()
 {
     // LOG(Info) << "Starting";
     stop();
@@ -127,25 +100,25 @@ EXPORT void start()
     g_thread = std::thread(simulation);
 }
 
-EXPORT void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5)
+void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
     g_model.set_torques(tau1, tau2, tau3, tau4, tau5);
 }
 
-EXPORT void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8, double q9, double q10, double q11, double q12, double q13, double q14)
+void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8, double q9, double q10, double q11, double q12, double q13, double q14)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
     g_model.set_positions(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14);
 }
 
-EXPORT void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d, double q9d, double q10d, double q11d, double q12d, double q13d, double q14d)
+void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d, double q9d, double q10d, double q11d, double q12d, double q13d, double q14d)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
     g_model.set_velocities(q1d, q2d, q3d, q4d, q5d, q6d, q7d, q8d, q9d, q10d, q11d, q12d, q13d, q14d);
 }
 
-EXPORT void get_positions(double *positions)
+void get_positions(double *positions)
 {
     std::lock_guard<std::mutex> lock(g_mtx);
     positions[0] = g_model.q1;

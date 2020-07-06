@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using System;
 
 using fts;
 
@@ -53,7 +54,25 @@ public class MeiiScript : MonoBehaviour {
     // const string import_module = "virtual_meii";
     const string import_module = "meii_model";
 
+    static IntPtr nativeLibraryPtr;
+ 
+    delegate void start();
+    delegate void stop();
+
+    delegate void get_positions(double[] positions);
+
     // bool printed = false;
+
+    void Awake()
+    {
+        if (nativeLibraryPtr != IntPtr.Zero) return;
+ 
+        nativeLibraryPtr = Native.LoadLibrary(import_module);
+        if (nativeLibraryPtr == IntPtr.Zero)
+        {
+            Debug.LogError("Failed to load native library");
+        }
+    }
 
     // Use this for initialization
     void Start () {
@@ -69,12 +88,14 @@ public class MeiiScript : MonoBehaviour {
         // PlatformZ_Zero = PlatformZ.transform.localEulerAngles;
         // PlatformX_Zero = PlatformX.transform.localEulerAngles;
         // Dll.stop();
-        Dll.start();
+        // Dll.start();
+        Native.Invoke<start>(nativeLibraryPtr);
 	}
 
 	// Update is called once per frame
 	void Update () {
-        Dll.get_positions(qs);
+        // Dll.get_positions(qs);
+        Native.Invoke<get_positions>(nativeLibraryPtr, qs);
         qe     = (float)qs[0];
         qf     = (float)qs[1];
         l1     = (float)qs[2];
@@ -124,30 +145,38 @@ public class MeiiScript : MonoBehaviour {
     
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Dll.stop();
-            Dll.start();
+            // Dll.stop();
+            // Dll.start();
+            Native.Invoke<stop>(nativeLibraryPtr);
+            Native.Invoke<start>(nativeLibraryPtr);
         }
     }
 
     void OnApplicationQuit() {
-        Dll.stop();
+        // Dll.stop();
+        Native.Invoke<stop>(nativeLibraryPtr);
+        if (nativeLibraryPtr == IntPtr.Zero) return;
+ 
+        Debug.Log(Native.FreeLibrary(nativeLibraryPtr)
+                      ? "Native library successfully unloaded."
+                      : "Native library could not be unloaded.");
     }
 
     // Dll Imports
-    public class Dll {
-        [DllImport(import_module)] 
-        public static extern void start();
-        [DllImport(import_module)] 
-        public static extern void stop();
-        // [DllImport(import_module)] 
-        // public static extern void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5);
-        // [DllImport(import_module)]
-        // public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8);
-        // [DllImport(import_module)]
-        // public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d);
-        [DllImport(import_module)]
-        public static extern void get_positions(double[] positions);
-    }
+    // public class Dll {
+    //     [DllImport(import_module)] 
+    //     public static extern void start();
+    //     [DllImport(import_module)] 
+    //     public static extern void stop();
+    //     // [DllImport(import_module)] 
+    //     // public static extern void set_torques(double tau1, double tau2, double tau3, double tau4, double tau5);
+    //     // [DllImport(import_module)]
+    //     // public static extern void set_positions(double q1, double q2, double q3, double q4, double q5, double q6, double q7, double q8);
+    //     // [DllImport(import_module)]
+    //     // public static extern void set_velocities(double q1d, double q2d, double q3d, double q4d, double q5d, double q6d, double q7d, double q8d);
+    //     [DllImport(import_module)]
+    //     public static extern void get_positions(double[] positions);
+    // }
 
     // [PluginAttr("meii_model")]
     // public static class Dll

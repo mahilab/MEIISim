@@ -11,23 +11,14 @@ FetchContent_MakeAvailable(mahi-gui)
 
 include_directories(include)
 
-add_executable(test src/test.cpp)
-target_link_libraries(test mahi::util mahi::robo)
+# add_executable(test src/test.cpp)
+# target_link_libraries(test mahi::util mahi::robo)
 
-# add_executable(sim src/sim.cpp include/MeiiModel.hpp src/MeiiModel.cpp)
-# target_link_libraries(sim mahi::robo mahi::com)
-
-add_executable(dll_dup src/dll_dup.cpp include/MeiiModel.hpp src/MeiiModel.cpp)
-target_link_libraries(dll_dup mahi::robo mahi::com)
-
-add_library(meii_model SHARED include/MeiiModel.hpp src/MeiiModel.cpp src/dll.cpp)
+add_library(meii_model SHARED include/MeiiModel.hpp src/MeiiModel.cpp src/dll.cpp include/dll.hpp)
 target_link_libraries(meii_model mahi::robo mahi::com)
 
 add_library(virtual_meii SHARED include/MeiiModel.hpp src/MeiiModel.cpp src/dll_virtual.cpp)
 target_link_libraries(virtual_meii mahi::robo mahi::com)
-
-# add_executable(virtual_meii_ex include/MeiiModel.hpp src/MeiiModel.cpp src/virtual_test.cpp)
-# target_link_libraries(virtual_meii_ex mahi::robo mahi::com)
 
 add_executable(tuner src/tuner.cpp)
 target_link_libraries(tuner mahi::gui mahi::com)
