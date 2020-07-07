@@ -1,0 +1,175 @@
+2020-07-06 11:45:47.079 INFO  [3352] Logger 0 Initialized
+2020-07-06 11:45:47.681 WARN  [25144] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:45:47.681 WARN  [25144] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:45:47.681 WARN  [25144] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:45:47.681 WARN  [25144] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:06.696 WARN  [9400] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:06.696 WARN  [9400] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:06.697 WARN  [9400] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:06.697 WARN  [9400] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:07.296 WARN  [4208] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:07.296 WARN  [4208] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:07.296 WARN  [4208] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:07.297 WARN  [4208] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:08.079 WARN  [11592] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:08.079 WARN  [11592] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:08.079 WARN  [11592] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:08.079 WARN  [11592] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:08.329 WARN  [21688] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:08.330 WARN  [21688] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:08.330 WARN  [21688] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:08.330 WARN  [21688] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:08.546 WARN  [20136] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:08.546 WARN  [20136] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:08.546 WARN  [20136] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:08.546 WARN  [20136] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:08.730 WARN  [23696] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:08.730 WARN  [23696] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:08.730 WARN  [23696] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:08.730 WARN  [23696] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:08.913 WARN  [21208] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:08.913 WARN  [21208] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:08.913 WARN  [21208] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:08.913 WARN  [21208] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:09.347 WARN  [25204] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:09.347 WARN  [25204] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:09.347 WARN  [25204] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:09.347 WARN  [25204] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:09.880 WARN  [18188] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:09.880 WARN  [18188] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:09.880 WARN  [18188] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:18.403 INFO  [9356] Logger 0 Initialized
+2020-07-06 11:46:18.999 WARN  [12912] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:18.999 WARN  [12912] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:18.999 WARN  [12912] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:18.999 WARN  [12912] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:22.397 WARN  [26456] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:22.397 WARN  [26456] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:22.397 WARN  [26456] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:22.397 WARN  [26456] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:23.062 WARN  [22560] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:23.063 WARN  [22560] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:23.063 WARN  [22560] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:23.063 WARN  [22560] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 11:46:30.430 WARN  [23116] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 11:46:30.430 WARN  [23116] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 11:46:30.430 WARN  [23116] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 11:46:30.430 WARN  [23116] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 12:27:43.280 INFO  [27360] Logger 0 Initialized
+2020-07-06 12:41:13.312 INFO  [26852] Logger 0 Initialized
+2020-07-06 12:41:14.616 WARN  [26852] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 12:41:14.616 WARN  [26852] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 12:41:14.616 WARN  [26852] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 12:41:14.616 WARN  [26852] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 17:13:40.009 INFO  [14824] Logger 0 Initialized
+2020-07-06 17:16:06.727 INFO  [19524] Logger 0 Initialized
+2020-07-06 17:16:46.624 INFO  [14536] Logger 0 Initialized
+2020-07-06 17:19:14.499 INFO  [18516] Logger 0 Initialized
+2020-07-06 17:19:41.690 INFO  [20960] Logger 0 Initialized
+2020-07-06 17:27:08.388 INFO  [13140] Logger 0 Initialized
+2020-07-06 17:27:08.988 WARN  [10900] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-06 17:27:08.988 WARN  [10900] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-06 17:27:08.988 WARN  [10900] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-06 17:27:08.988 WARN  [10900] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-06 17:31:55.952 INFO  [13092] Logger 0 Initialized
+2020-07-06 17:36:23.335 INFO  [2936] Logger 0 Initialized
+2020-07-07 09:55:45.952 INFO  [13484] Logger 0 Initialized
+2020-07-07 10:00:56.688 INFO  [22508] Logger 0 Initialized
+2020-07-07 10:05:17.284 INFO  [22436] Logger 0 Initialized
+2020-07-07 10:05:17.865 WARN  [19596] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-07 10:05:17.866 WARN  [19596] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-07 10:05:17.866 WARN  [19596] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-07 10:05:17.866 WARN  [19596] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-07 10:06:35.985 INFO  [8340] Logger 0 Initialized
+2020-07-07 10:57:58.176 INFO  [6812] Logger 0 Initialized
+2020-07-07 10:58:01.290 WARN  [21624] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.295 WARN  [21624] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.297 WARN  [21624] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.299 WARN  [21624] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.301 WARN  [21624] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.303 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.305 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.307 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.309 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.311 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.313 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.315 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.317 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.319 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.321 WARN  [21624] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.323 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.325 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.327 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.329 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.331 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.333 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.335 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.337 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.339 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.341 WARN  [21624] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.342 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.344 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.346 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.348 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.350 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.352 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.354 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.357 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.358 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.361 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.363 WARN  [21624] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.364 WARN  [21624] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.366 WARN  [21624] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.368 WARN  [21624] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.370 WARN  [21624] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.372 WARN  [21624] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:01.374 WARN  [21624] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:09.850 INFO  [9808] Logger 0 Initialized
+2020-07-07 10:58:12.636 WARN  [22188] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.638 WARN  [22188] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.640 WARN  [22188] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.642 WARN  [22188] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.644 WARN  [22188] Timer miss rate of 1.001 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.646 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.648 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.650 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.652 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.654 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.656 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.658 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.660 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.662 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.664 WARN  [22188] Timer miss rate of 1.00099 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.666 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.668 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.670 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.672 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.674 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.676 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.678 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.680 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.682 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.684 WARN  [22188] Timer miss rate of 1.00098 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.686 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.688 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.690 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.692 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.694 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.696 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.698 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.700 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.702 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.704 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.708 WARN  [22188] Timer miss rate of 1.00097 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.712 WARN  [22188] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.715 WARN  [22188] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.719 WARN  [22188] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.721 WARN  [22188] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.724 WARN  [22188] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:12.727 WARN  [22188] Timer miss rate of 1.00096 exceeded acceptable rate of 0.01
+2020-07-07 10:58:15.751 INFO  [19316] Logger 0 Initialized
+2020-07-07 10:58:16.716 WARN  [19316] Opened an existing mutex when trying to create NamedMutex gains_mutex
+2020-07-07 10:58:16.716 WARN  [19316] Opened an existing mutex when trying to create NamedMutex refs_mutex
+2020-07-07 10:58:16.716 WARN  [19316] Opened an existing mutex when trying to create NamedMutex times_mutex
+2020-07-07 10:58:16.716 WARN  [19316] Opened an existing mutex when trying to create NamedMutex qs_mutex
+2020-07-07 11:01:29.353 INFO  [3596] Logger 0 Initialized
