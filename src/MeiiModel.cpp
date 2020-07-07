@@ -38,7 +38,6 @@ MeiiModel::MeiiModel() :
 
 void MeiiModel::update(Time t)
 {
-    Clock CompTime;
     // get list of qs and q_dots
     std::vector<double> qs = {q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q1d, q2d, q3d, q4d, q5d, q6d, q7d, q8d, q9d, q10d, q11d, q12d, q13d, q14d};
 
@@ -52,6 +51,8 @@ void MeiiModel::update(Time t)
     VectorXd psi = get_psi(qs);
     MatrixXd psi_dq = get_psi_dq(qs);
     MatrixXd psi_dq_dt = get_psi_dq_dt(qs);
+
+    Clock CompTime;
 
     MatrixXd M = get_M(qs);
     MatrixXd V = get_V(qs);
@@ -73,6 +74,7 @@ void MeiiModel::update(Time t)
     MatrixXd Mpar = rho.transpose()*M*rho;
     MatrixXd Vpar = rho.transpose()*V*rho + rho.transpose()*M*rho_dt;
     MatrixXd Gpar = rho.transpose()*G;
+
 
     /// Damping coefficients [Nm*s/rad]
     // constexpr double B_coef[5] = {0.1215, 0.1, 0.1, 0.1, 0.1};
@@ -96,7 +98,7 @@ void MeiiModel::update(Time t)
 
     A = Mpar;// + M_mot;
     b = Tau - Vpar*qdot - Gpar - B - Fk;
-    x = A.householderQr().solve(b);
+    x = A.inverse()*b;
 
     q1dd = x[0];
     q2dd = x[1];
@@ -118,8 +120,8 @@ void MeiiModel::update(Time t)
     q4 = q4d_q4.update(q4d, t);
     q5 = q5d_q5.update(q5d, t);
 
-    calc_dependent_joint_values();
-
+    calc_dependent_joint_values();    
+    
     comp_time = CompTime.get_elapsed_time().as_microseconds();
 
 }
@@ -205,7 +207,7 @@ void MeiiModel::calc_dependent_joint_values() {
 
         VectorXd psi_bar = psi - to_psi_bar;
 
-        q_guess -= get_psi_dq(q_guess_double).fullPivLu().solve(psi_bar);
+        q_guess -= get_psi_dq(q_guess_double).inverse()*psi_bar;
 
         // update the error. this ends up being sqrt of sum of squares
         err = 0;
