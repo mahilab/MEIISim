@@ -41,12 +41,12 @@ The orientation is then controlled through the script [MeiiScript.cs][12] which 
 Two different versions have been built to use as a standalone .exe in its respective folder.
 
 ### **MEII Virtual**
-The *[Virtual][13]* folder in the Build subfolder of the unity project can be used in combination with a virtual MEII object in the [MEII codebase][1].
+The **Virtual** folder in the [Build subfolder][13] of the unity project can be used in combination with a virtual MEII object in the [MEII codebase][1].
 This uses the `virtual_meii.dll` codebase to simulate and communicate between the sim and MEII script.
 This will run a standard MEII script and show the output on the simulation of the MEII. 
 
 ### **MEII Tuner**
-The *[Tuner][13]* folder in the Build subfolder of the unity project can be used in combination with a virtual MEII object in the [MEII codebase][1].
+The **Tuner** folder in the [Build subfolder][13] of the unity project can be used in combination with a virtual MEII object in the [MEII codebase][1].
 This uses the `meii_model.dll` codebase to simulate and communicate with the `tuner.exe` file located in the same folder.
 This tuner can be used to play with control parameters and to adjust reference positions to see how the exo responds.
 
@@ -73,4 +73,4 @@ This tuner can be used to play with control parameters and to adjust reference p
 [10]: https://github.com/mahilab/MEIISim/tree/master/include
 [11]: https://forum.solidworks.com/thread/54270
 [12]: https://github.com/mahilab/MEIISim/blob/master/unity/MEIISim/Assets/MeiiScript.cs
-[12]: https://github.com/mahilab/MEIISim/blob/master/unity/MEIISim/Build
+[13]: https://github.com/mahilab/MEIISim/blob/master/unity/MEIISim/Build
