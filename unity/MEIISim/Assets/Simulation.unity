@@ -319,7 +319,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &360587233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,6 +337,10 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: a113c4c213d91264da45344ec90e70ca, type: 2}
+  m_PreviousLayer: 0
+  m_PreviousPriority: 0
+  m_InternalProfile: {fileID: 0}
+  m_TempColliders: []
 --- !u!4 &360587234
 Transform:
   m_ObjectHideFlags: 0
@@ -414,6 +418,18 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3326fd4658fc1e44b9e25fa3d7d4d9f8, type: 2}
+    - target: {fileID: 2300008, guid: 563973cd49922ac45ad713ea546611b0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d8589e93cefbaa04d9316968e2f8d3e6, type: 2}
+    - target: {fileID: 2300012, guid: 563973cd49922ac45ad713ea546611b0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d8589e93cefbaa04d9316968e2f8d3e6, type: 2}
+    - target: {fileID: 2300016, guid: 563973cd49922ac45ad713ea546611b0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d8589e93cefbaa04d9316968e2f8d3e6, type: 2}
     - target: {fileID: 2300018, guid: 563973cd49922ac45ad713ea546611b0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -720,7 +736,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1006520045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -738,6 +754,10 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: be81eff0855977e469d6e550f68f737b, type: 2}
+  m_PreviousLayer: 0
+  m_PreviousPriority: 0
+  m_InternalProfile: {fileID: 0}
+  m_TempColliders: []
 --- !u!4 &1006520046
 Transform:
   m_ObjectHideFlags: 0
@@ -1078,6 +1098,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d8589e93cefbaa04d9316968e2f8d3e6, type: 2}
+    - target: {fileID: 2300002, guid: f42a116e1e9d10a468ac948c536268a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6f42ce77184f7b94ca433e80bfb813ec, type: 2}
     - target: {fileID: 2300004, guid: f42a116e1e9d10a468ac948c536268a6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1344,7 +1368,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1505581094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1362,6 +1386,10 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 6e9aceefc488a7649b11e0624518a5ed, type: 2}
+  m_PreviousLayer: 0
+  m_PreviousPriority: 0
+  m_InternalProfile: {fileID: 0}
+  m_TempColliders: []
 --- !u!4 &1505581095
 Transform:
   m_ObjectHideFlags: 0
@@ -1684,11 +1712,15 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+  m_Camera: {fileID: 1963703031}
   clearColorMode: 0
-  backgroundColorHDR: {r: 0, g: 0, b: 0, a: 0}
+  backgroundColorHDR:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
   clearDepth: 1
   volumeLayerMask:
-    serializedVersion: 2
     m_Bits: 1
   volumeAnchorOverride: {fileID: 0}
   antialiasing: 3
@@ -1710,13 +1742,11 @@ MonoBehaviour:
   customRenderingSettings: 0
   invertFaceCulling: 0
   probeLayerMask:
-    serializedVersion: 2
     m_Bits: 4294967295
   hasPersistentHistory: 0
+  probeCustomFixedExposure: 1
   m_RenderingPathCustomFrameSettings:
-    bitDatas:
-      data1: 70280697347917
-      data2: 4539628424926265344
+    bitDatas: {}
     lodBias: 1
     lodBiasMode: 0
     lodBiasQualityLevel: 0
@@ -1725,10 +1755,11 @@ MonoBehaviour:
     maximumLODLevelQualityLevel: 0
     materialQuality: 0
   renderingPathCustomFrameSettingsOverrideMask:
-    mask:
-      data1: 0
-      data2: 0
+    mask: {}
   defaultFrameSettings: 0
+  m_IsDebugRegistered: 0
+  m_CameraRegisterName: Main Camera
+  <isEditorCameraPreview>k__BackingField: 0
 --- !u!20 &1963703031
 Camera:
   m_ObjectHideFlags: 0
@@ -1793,7 +1824,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1963703027}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a39c9ca2c829a5c4d876560b3b1ae3a0, type: 3}
   m_Name: 
@@ -1900,7 +1931,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 4.38
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1976,6 +2007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Version: 9
+  m_LightLayers: 1
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -2010,10 +2042,18 @@ MonoBehaviour:
   m_InteractsWithSky: 1
   m_AngularDiameter: 50
   m_FlareSize: 2
-  m_FlareTint: {r: 1, g: 1, b: 1, a: 1}
+  m_FlareTint:
+    r: 1
+    g: 1
+    b: 1
+    a: 1
   m_FlareFalloff: 4
   m_SurfaceTexture: {fileID: 0}
-  m_SurfaceTint: {r: 1, g: 1, b: 1, a: 1}
+  m_SurfaceTint:
+    r: 1
+    g: 1
+    b: 1
+    a: 1
   m_Distance: 1.5e+11
   m_UseRayTracedShadows: 0
   m_NumRayTracingSamples: 4
@@ -2046,7 +2086,11 @@ MonoBehaviour:
     m_UseOverride: 1
     m_Level: 1
   m_RayTracedContactShadow: 0
-  m_ShadowTint: {r: 0, g: 0, b: 0, a: 1}
+  m_ShadowTint:
+    r: 0
+    g: 0
+    b: 0
+    a: 1
   m_PenumbraTint: 0
   m_NormalBias: 0.75
   m_SlopeBias: 0.5
@@ -2069,6 +2113,19 @@ MonoBehaviour:
   useVolumetric: 1
   featuresFoldout: 1
   showAdditionalSettings: 0
+  m_WillRenderShadowMap: 1
+  m_WillRenderScreenSpaceShadow: 0
+  m_WillRenderRayTracedShadow: 0
+  m_ShadowRequestIndices: 000000000100000002000000030000000000000000000000
+  m_ShadowMapRenderedSinceLastRequest: 1
+  m_CachedShadowResolution: {x: 2048, y: 2048}
+  m_CachedViewPos: {x: -0.444, y: 0.551, z: -0.416}
+  m_CachedResolutionRequestIndices: ffffffffffffffffffffffffffffffff0000000000000000
+  m_CachedDataIsValid: 0
+  m_AtlasShapeID: -1
+  m_Light: {fileID: 2042924663}
+  m_EmissiveMeshRenderer: {fileID: 0}
+  m_EmissiveMeshFilter: {fileID: 0}
 --- !u!1 &2126406227
 GameObject:
   m_ObjectHideFlags: 0

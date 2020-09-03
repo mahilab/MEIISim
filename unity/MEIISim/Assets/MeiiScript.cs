@@ -51,8 +51,8 @@ public class MeiiScript : MonoBehaviour {
 
     double[] qs = new double[14];
 
-    // const string import_module = "virtual_meii";
-    const string import_module = "meii_model";
+    const string import_module = "virtual_meii";
+    // const string import_module = "meii_model";
 
     static IntPtr nativeLibraryPtr;
  

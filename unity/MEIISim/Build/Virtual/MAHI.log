@@ -46,3 +46,159 @@
 2020-07-06 12:16:35.051 WARN  [17860] Timer miss rate of 0.0153257 exceeded acceptable rate of 0.01
 2020-07-06 12:16:35.065 WARN  [17860] Timer miss rate of 0.0162679 exceeded acceptable rate of 0.01
 2020-07-06 12:16:35.106 WARN  [17860] Timer miss rate of 0.0172084 exceeded acceptable rate of 0.01
+2020-08-25 14:24:49.502 INFO  [14660] Logger 0 Initialized
+2020-08-25 15:04:17.582 INFO  [9028] Logger 0 Initialized
+2020-08-25 15:07:00.985 INFO  [13264] Logger 0 Initialized
+2020-08-25 16:19:03.090 INFO  [15440] Logger 0 Initialized
+2020-08-25 16:21:00.755 INFO  [8544] Logger 0 Initialized
+2020-08-25 16:38:03.760 INFO  [24768] Logger 0 Initialized
+2020-08-25 16:49:44.240 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-08-25 16:49:44.242 WARN  [19204] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-08-25 16:49:46.191 WARN  [23188] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-08-25 16:49:49.089 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-08-25 16:49:49.090 WARN  [16900] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-08-25 16:49:51.654 WARN  [16900] Timer miss rate of 0.0101635 exceeded acceptable rate of 0.01
+2020-08-26 10:32:46.628 INFO  [11448] Logger 0 Initialized
+2020-08-26 11:30:14.166 INFO  [18268] Logger 0 Initialized
+2020-08-26 13:46:46.406 INFO  [3500] Logger 0 Initialized
+2020-08-26 13:47:06.933 INFO  [14904] Logger 0 Initialized
+2020-08-26 13:47:32.365 INFO  [24396] Logger 0 Initialized
+2020-08-26 13:53:42.890 INFO  [19704] Logger 0 Initialized
+2020-08-26 14:09:40.000 INFO  [14872] Logger 0 Initialized
+2020-08-26 15:02:57.538 INFO  [8244] Logger 0 Initialized
+2020-08-27 13:35:30.950 INFO  [10972] Logger 0 Initialized
+2020-08-27 14:02:54.844 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-08-27 14:02:54.846 WARN  [21788] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-08-27 15:40:45.486 WARN  [22256] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-08-27 15:40:46.651 WARN  [15944] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-08-27 15:40:47.500 WARN  [22108] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-08-27 15:40:47.500 WARN  [22108] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-08-27 15:40:47.500 WARN  [22108] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-08-27 15:40:47.500 WARN  [22108] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-08-27 15:40:47.500 WARN  [22108] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-08-27 15:40:47.500 WARN  [22108] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 13:21:17.782 INFO  [11932] Logger 0 Initialized
+2020-09-01 13:33:16.080 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-09-01 13:33:16.083 WARN  [22192] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-09-01 13:40:42.198 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-09-01 13:40:42.199 WARN  [10540] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-09-01 16:17:37.240 INFO  [1668] Logger 0 Initialized
+2020-09-01 16:20:34.190 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-09-01 16:20:34.190 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-09-01 16:20:34.190 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-09-01 16:20:34.190 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-09-01 16:20:34.190 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-09-01 16:20:34.190 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 16:20:34.190 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-09-01 16:20:34.191 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-09-01 16:20:34.191 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-09-01 16:20:34.191 WARN  [2092] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-09-01 16:20:36.140 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-09-01 16:20:36.141 WARN  [22172] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-09-01 16:20:37.175 WARN  [21940] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-09-01 16:33:37.925 WARN  [14976] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-09-01 16:33:37.925 WARN  [14976] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-09-01 16:33:37.925 WARN  [14976] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-09-01 16:33:37.925 WARN  [14976] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-09-01 16:33:37.925 WARN  [14976] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-09-01 16:33:37.925 WARN  [14976] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 16:33:37.925 WARN  [14976] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-09-01 16:33:45.192 INFO  [20876] Logger 0 Initialized
+2020-09-01 17:21:36.367 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_torque_1_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_torque_2_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_torque_3_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_torque_4_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_torque_5_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_posvel_1_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_posvel_2_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_posvel_3_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_posvel_4_mutex
+2020-09-01 17:21:36.368 WARN  [11124] Opened an existing mutex when trying to create NamedMutex ms_posvel_5_mutex
+2020-09-03 10:38:54.265 INFO  [17732] Logger 0 Initialized
+2020-09-03 10:55:19.135 INFO  [19300] Logger 0 Initialized
+2020-09-03 10:57:31.918 INFO  [16992] Logger 0 Initialized
+2020-09-03 11:58:42.296 INFO  [11124] Logger 0 Initialized
