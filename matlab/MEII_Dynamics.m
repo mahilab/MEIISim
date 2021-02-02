@@ -8,7 +8,7 @@ syms qe qf l1 l2 l3 theta1 theta2 theta3...
      qet(t) qft(t) l1t(t) l2t(t) l3t(t) theta1t(t) theta2t(t) theta3t(t)...
      qe_dott(t) qf_dott(t) l1_dott(t) l2_dott(t) l3_dott(t) theta1_dott(t) theta2_dott(t) theta3_dott(t)...
      wx wy wz vx vy vz px py pz...
-     r R alpha_5 a4 a56 alpha_13 l_offset...
+     r R a4 l_offset... % alpha_5 a56 alpha_13 
      T1 T2 F3 F4 F5...
      n1 n2 n3 o1 o2 o3 a1 a2 a3...
      Ixx_p Iyy_p Izz_p Mp...
@@ -21,6 +21,11 @@ syms qe qf l1 l2 l3 theta1 theta2 theta3...
      A_p_x A_p_y A_p_z a_p_x a_p_y a_p_z...
      P_p_xt(t) P_p_yt(t) P_p_zt(t) R_p_xt(t) R_p_yt(t) R_p_zt(t)...
      V_p_xt(t) V_p_yt(t) V_p_zt(t) w_p_xt(t) w_p_yt(t) w_p_zt(t)
+ 
+ % defining constants to be 0 to test how equations will trun out
+ alpha_5 = 0;
+ a56 = 0;
+ alpha_13 = 0;
  
 T = [n1 o1 a1 px;
      n2 o2 a2 py;
@@ -317,13 +322,26 @@ psi_dq_t = subs(psi_dq,qs,qst);
 psi_dq_dt = subs(diff(psi_dq_t,t),[qst diff(qst,t)],[qs, q_dots]);
 
 
-% rho = inv(psi_dq)*[zeros(9,(length(qs)-9));eye((length(qs)-9),(length(qs)-9))];
-% rho_t = subs(rho,qs,qst);
-% rho_dt = subs(diff(rho_t,t),[qst diff(qst,t)],[qs, q_dots]);
+rho = inv(psi_dq)*[zeros(9,(length(qs)-9));eye((length(qs)-9),(length(qs)-9))];
+for i = 6:14
+    for j = 1:5
+        [i, j]
+        rho(i,j) = simplify(rho(i,j));
+    end
+end
+rho_t = subs(rho,qs,qst);
+rho_dt = subs(diff(rho_t,t),[qst diff(qst,t)],[qs, q_dots]);
 
-% Mpar = rho.'*M*rho;
-% Vpar = rho.'*Vsquare*rho + rho.'*M*rho_dt;
-% Gpar = rho.'*G;
+for i = 6:14
+    for j = 1:5
+        [i, j]
+        rho_dt(i,j) = simplify(rho_dt(i,j));
+    end
+end
+
+Mpar = rho.'*M*rho;
+Vpar = rho.'*Vsquare*rho + rho.'*M*rho_dt;
+Gpar = rho.'*G;
 
 %% Substitute in actual values
 fprintf("Substituting in values\n")
@@ -363,15 +381,15 @@ Izz_p = 0.00107519;
 Mp    = 0.36486131;
 
 % Substitute in real values
-% Mpar    = subs(Mpar);
-% Vpar    = subs(Vpar);
-% Gpar    = subs(Gpar);
-M         = subs(M);
-Vsquare   = subs(Vsquare);
-G         = subs(G);
-psi       = subs(psi);
-psi_dq    = subs(psi_dq);
-psi_dq_dt = subs(psi_dq_dt);
+Mpar    = simplify(subs(Mpar));
+Vpar    = simplify(subs(Vpar));
+Gpar    = simplify(subs(Gpar));
+M         = simplify(subs(M));
+Vsquare   = simplify(subs(Vsquare));
+G         = simplify(subs(G));
+psi       = simplify(subs(psi));
+psi_dq    = simplify(subs(psi_dq));
+psi_dq_dt = simplify(subs(psi_dq_dt));
 
 % rho     = subs(rho);
 % rho_dt  = subs(rho_dt);
@@ -419,3 +437,20 @@ fprintf(fileID,psi_dq_write );
 psi_dq_dt_write = ccode(vpa(psi_dq_dt,5));
 fileID = fopen("DynamicEqs/psi_dq_dt.txt","w");
 fprintf(fileID,psi_dq_dt_write);
+
+%% Write parallel structure to file
+
+fprintf("Writing to file\n");
+
+ccode(vpa(Mpar,5),'File','DynamicEqs/Mpar.cpp');
+fileID = fopen("DynamicEqs/Mpar.txt","w");
+fprintf(fileID,Mpar_write);
+
+ccode(vpa(Vpar,5),'File','DynamicEqs/Vpar.cpp');
+fileID = fopen("DynamicEqs/Vpar.txt","w");
+fprintf(fileID,Vpar_write);
+
+% Gpar_write = ccode(vpa(Gpar,5));
+ccode(vpa(Gpar,5),'File','DynamicEqs/Gpar.cpp');
+fileID = fopen("DynamicEqs/Gpar.txt","w");
+fprintf(fileID,Gpar_write);
